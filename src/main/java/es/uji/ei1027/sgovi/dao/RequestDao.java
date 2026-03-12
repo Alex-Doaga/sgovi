@@ -24,7 +24,7 @@ public class RequestDao {
     public void addRequest(Request request) {
         jdbcTemplate.update(
                 "INSERT INTO request (id_request, ovi_user_id, request_date, start_date, duration, type_pa, type_service, age_pa, hobbies, required_gender, schedule, state, comments) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 request.getIdRequest(), request.getOviUserId(), request.getRequestDate(), request.getStartDate(),
                 request.getDuration(), request.getTypePA().name(), request.getTypeService().name(),
                 request.getAgePA(), request.getHobbies(), request.getRequiredGender(),
