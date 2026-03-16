@@ -1,7 +1,7 @@
 package es.uji.ei1027.sgovi.dao;
 
-import es.uji.ei1027.sgovi.enums.TypePa;
-import es.uji.ei1027.sgovi.model.PA;
+import es.uji.ei1027.sgovi.modelo.enums.TypePa;
+import es.uji.ei1027.sgovi.modelo.PA;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

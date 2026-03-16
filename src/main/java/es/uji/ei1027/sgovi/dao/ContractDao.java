@@ -23,9 +23,9 @@ public class ContractDao {
     /* Añade un contrato a la base de datos */
     public void addContract(Contract contract) {
         jdbcTemplate.update(
-                "INSERT INTO contract (id_contract,request_id, pa_id, start_date, end_date, contract_document) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)",
-                contract.getIdContract(), contract.getRequestId(), contract.getPaId(),
+                "INSERT INTO contract (request_id, pa_id, start_date, end_date, contract_document) " +
+                        "VALUES (?, ?, ?, ?, ?)",
+                contract.getRequestId(), contract.getPaId(),
                 contract.getStartDate(), contract.getEndDate(), contract.getContractDocument()
         );
     }

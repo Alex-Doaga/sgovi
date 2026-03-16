@@ -1,6 +1,6 @@
 package es.uji.ei1027.sgovi.dao;
 
-import es.uji.ei1027.sgovi.model.Message;
+import es.uji.ei1027.sgovi.modelo.Message;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

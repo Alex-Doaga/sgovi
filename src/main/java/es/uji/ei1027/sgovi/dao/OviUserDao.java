@@ -22,9 +22,9 @@ public class OviUserDao {
     /* Añade un oviUser a la base de datos */
     public void addOviUser(OviUser user) {
         jdbcTemplate.update(
-                "INSERT INTO ovi_user (id_ovi_user, name, surname, dni_nie, birth_date, address, city, postal_code, email, phone, entity, name_tutor, dni_nie_tutor, has_depen_degree, depen_degree, project_life_doc, social_service_center) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                user.getIdOviUser(), user.getName(), user.getSurname(), user.getDniNie(), user.getBirthDate(),
+                "INSERT INTO ovi_user ( name, surname, dni_nie, birth_date, address, city, postal_code, email, phone, entity, name_tutor, dni_nie_tutor, has_depen_degree, depen_degree, project_life_doc, social_service_center) " +
+                        "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                user.getName(), user.getSurname(), user.getDniNie(), user.getBirthDate(),
                 user.getAddress(), user.getCity(), user.getPostalCode(), user.getEmail(), user.getPhone(),
                 user.getEntity(), user.getNameTutor(), user.getDniNieTutor(), user.getHasDepenDegree(),
                 user.getDepenDegree(), user.getProjectLifeDoc(), user.getSocialServiceCenter()

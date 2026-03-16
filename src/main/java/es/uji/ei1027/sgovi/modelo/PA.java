@@ -1,6 +1,6 @@
-package es.uji.ei1027.sgovi.model;
+package es.uji.ei1027.sgovi.modelo;
 
-import es.uji.ei1027.sgovi.enums.TypePa;
+import es.uji.ei1027.sgovi.modelo.enums.TypePa;
 
 import java.sql.Date;
 

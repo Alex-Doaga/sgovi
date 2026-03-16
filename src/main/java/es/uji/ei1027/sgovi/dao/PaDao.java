@@ -1,11 +1,9 @@
 package es.uji.ei1027.sgovi.dao;
 
-import es.uji.ei1027.sgovi.model.PA;
-import org.springframework.beans.factory.annotation.Autowired;
+import es.uji.ei1027.sgovi.modelo.PA;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 

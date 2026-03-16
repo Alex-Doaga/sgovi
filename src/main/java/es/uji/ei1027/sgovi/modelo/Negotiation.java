@@ -1,4 +1,4 @@
-package es.uji.ei1027.sgovi.model;
+package es.uji.ei1027.sgovi.modelo;
 
 import java.time.LocalDate;
 

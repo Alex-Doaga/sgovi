@@ -16,7 +16,7 @@ public final class InscriptionRowMapper implements RowMapper<Inscription> {
         inscription.setActivityId(rs.getInt("activity_id"));
         inscription.setOviUserId(rs.getInt("ovi_user_id"));
         inscription.setPaId(rs.getInt("pa_id"));
-        inscription.setDate(rs.getDate("date"));
+        inscription.setDate(rs.getDate("date").toLocalDate());
 
 
         return inscription;

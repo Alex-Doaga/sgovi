@@ -1,8 +1,8 @@
 package es.uji.ei1027.sgovi.dao;
 import es.uji.ei1027.sgovi.modelo.Request;
-import es.uji.ei1027.sgovi.modelo.State;
-import es.uji.ei1027.sgovi.modelo.TypeAccompaniment;
-import es.uji.ei1027.sgovi.modelo.TypePa;
+import es.uji.ei1027.sgovi.modelo.enums.State;
+import es.uji.ei1027.sgovi.modelo.enums.TypeAccompaniment;
+import es.uji.ei1027.sgovi.modelo.enums.TypePa;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;

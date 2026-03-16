@@ -16,7 +16,7 @@ public final class ActivityRowMapper implements RowMapper<Activity> {
         activity.setInstructorId(rs.getInt("instructor_id"));
         activity.setName(rs.getString("name"));
         activity.setDescripcion(rs.getString("descripcion"));
-        activity.setDate(rs.getDate("date"));
+        activity.setDate(rs.getDate("date").toLocalDate());
         activity.setPlace(rs.getString("place"));
         activity.setNumberOfParticipants(rs.getInt("number_of_participants"));
         return activity;

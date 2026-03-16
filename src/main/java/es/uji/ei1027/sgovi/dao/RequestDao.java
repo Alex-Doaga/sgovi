@@ -1,7 +1,7 @@
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.modelo.Request;
-import es.uji.ei1027.sgovi.modelo.State;
+import es.uji.ei1027.sgovi.modelo.enums.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,9 +23,9 @@ public class RequestDao {
     /* CREATE: Añade una nueva solicitud a la base de datos */
     public void addRequest(Request request) {
         jdbcTemplate.update(
-                "INSERT INTO request (id_request, ovi_user_id, request_date, start_date, duration, type_pa, type_service, age_pa, hobbies, required_gender, schedule, state, comments) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                request.getIdRequest(), request.getOviUserId(), request.getRequestDate(), request.getStartDate(),
+                "INSERT INTO request ( ovi_user_id, request_date, start_date, duration, type_pa, type_service, age_pa, hobbies, required_gender, schedule, state, comments) " +
+                        "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                request.getOviUserId(), request.getRequestDate(), request.getStartDate(),
                 request.getDuration(), request.getTypePA().name(), request.getTypeService().name(),
                 request.getAgePA(), request.getHobbies(), request.getRequiredGender(),
                 request.getSchedule(), request.getState().name(), request.getComments()

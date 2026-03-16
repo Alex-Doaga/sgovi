@@ -1,5 +1,9 @@
 package es.uji.ei1027.sgovi.modelo;
 
+import es.uji.ei1027.sgovi.modelo.enums.State;
+import es.uji.ei1027.sgovi.modelo.enums.TypeAccompaniment;
+import es.uji.ei1027.sgovi.modelo.enums.TypePa;
+
 import java.time.LocalDate;
 
 public class Request {
