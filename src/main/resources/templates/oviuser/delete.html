@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8" />
+    <title>Confirmar Esborrat - SgOVI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+<main class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h1 class="h4 mb-0">Atenció: Confirmació d'Esborrat</h1>
+                </div>
+                <div class="card-body text-center">
+
+                    <p class="fs-5 text-dark">Estàs segur que vols esborrar a aquesta persona usuària?</p>
+
+                    <div class="alert alert-warning text-dark" role="alert">
+                        <strong>DNI/NIE:</strong> <span th:text="${oviuser.dniNie}">12345678A</span><br/>
+                        <strong>Nom:</strong> <span th:text="${oviuser.name} + ' ' + ${oviuser.surname}">Nom Cognom</span>
+                    </div>
+
+                    <p class="text-muted small">Aquesta acció no es pot desfer.</p>
+
+                    <form action="#" th:action="@{/oviuser/delete/{id}(id=${oviuser.idOviUser})}" method="post">
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a th:href="@{/oviuser/list}" class="btn btn-secondary text-white" aria-label="Cancel·lar i tornar al llistat">Cancel·lar</a>
+                            <button type="submit" class="btn btn-danger" aria-label="Confirmar i esborrar usuari">Sí, Esborrar Usuari</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

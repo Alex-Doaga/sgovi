@@ -63,7 +63,16 @@ public class OviUserController {
         return "redirect:list";
     }
 
-    @RequestMapping(value="/delete/{id_ovi_user}")
+    // 1. Mostrar la página de confirmación de borrado (GET)
+    @RequestMapping(value="/delete/{id_ovi_user}", method = RequestMethod.GET)
+    public String confirmDelete(Model model, @PathVariable int id_ovi_user) {
+        // Buscamos al usuario para mostrar sus datos
+        model.addAttribute("oviuser", oviUserDao.getOviUser(id_ovi_user));
+        return "oviuser/delete";
+    }
+
+    // 2. Ejecutar el borrado real tras confirmar (POST)
+    @RequestMapping(value="/delete/{id_ovi_user}", method = RequestMethod.POST)
     public String processDelete(@PathVariable int id_ovi_user) {
         oviUserDao.deleteOviUser(id_ovi_user);
         return "redirect:../list";
