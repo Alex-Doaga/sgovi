@@ -1,5 +1,7 @@
 package es.uji.ei1027.sgovi.modelo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 
@@ -8,6 +10,7 @@ public class OviUser {
     private String name;
     private String surname;
     private String dniNie;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private String address;
     private String city;

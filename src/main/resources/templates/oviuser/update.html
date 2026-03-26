@@ -20,41 +20,94 @@
 
                         <input type="hidden" th:field="*{idOviUser}" />
 
-                        <div class="mb-3">
-                            <label for="dniNie" class="form-label text-dark fw-bold">DNI / NIE</label>
-                            <input type="text" class="form-control" th:field="*{dniNie}" id="dniNie" required />
-                        </div>
+                        <fieldset class="border p-3 mb-4 rounded">
+                            <legend class="w-auto h6 fw-bold px-2 text-primary">Dades Personals</legend>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label text-dark fw-bold">Nom</label>
-                                <input type="text" class="form-control" th:field="*{name}" id="name" required />
+                            <div class="mb-3">
+                                <label for="dniNie" class="form-label text-dark fw-bold">DNI / NIE</label>
+                                <input type="text" class="form-control" th:field="*{dniNie}" id="dniNie" required />
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="surname" class="form-label text-dark fw-bold">Cognoms</label>
-                                <input type="text" class="form-control" th:field="*{surname}" id="surname" required />
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="birthDate" class="form-label text-dark fw-bold">Data de Naixement</label>
-                            <input type="date" class="form-control" th:field="*{birthDate}" id="birthDate" required />
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label text-dark fw-bold">Correu Electrònic</label>
-                                <input type="email" class="form-control" th:field="*{email}" id="email" required />
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label text-dark fw-bold">Nom</label>
+                                    <input type="text" class="form-control" th:field="*{name}" id="name" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="surname" class="form-label text-dark fw-bold">Cognoms</label>
+                                    <input type="text" class="form-control" th:field="*{surname}" id="surname" required />
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="phone" class="form-label text-dark fw-bold">Telèfon</label>
-                                <input type="tel" class="form-control" th:field="*{phone}" id="phone" />
+                            <div class="mb-3">
+                                <label for="birthDate" class="form-label text-dark fw-bold">Data de Naixement</label>
+                                <input type="date" class="form-control" th:field="*{birthDate}" id="birthDate" required />
                             </div>
-                        </div>
+                        </fieldset>
 
-                        <fieldset class="border p-3 mt-4 mb-4 rounded">
+                        <fieldset class="border p-3 mb-4 rounded">
+                            <legend class="w-auto h6 fw-bold px-2 text-primary">Contacte i Adreça</legend>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label text-dark fw-bold">Adreça</label>
+                                <input type="text" class="form-control" th:field="*{address}" id="address" required />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="city" class="form-label text-dark fw-bold">Població</label>
+                                    <input type="text" class="form-control" th:field="*{city}" id="city" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="postalCode" class="form-label text-dark fw-bold">Codi Postal</label>
+                                    <input type="text" class="form-control" th:field="*{postalCode}" id="postalCode" required />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label text-dark fw-bold">Correu Electrònic</label>
+                                    <input type="email" class="form-control" th:field="*{email}" id="email" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label text-dark fw-bold">Telèfon</label>
+                                    <input type="tel" class="form-control" th:field="*{phone}" id="phone" required />
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="border p-3 mb-4 rounded">
+                            <legend class="w-auto h6 fw-bold px-2 text-primary">Tutor i Altres Dades</legend>
+
+                            <div class="mb-3">
+                                <label for="entity" class="form-label text-dark fw-bold">Entitat</label>
+                                <input type="text" class="form-control" th:field="*{entity}" id="entity" />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nameTutor" class="form-label text-dark fw-bold">Nom del Tutor (Opcional)</label>
+                                    <input type="text" class="form-control" th:field="*{nameTutor}" id="nameTutor" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="dniNieTutor" class="form-label text-dark fw-bold">DNI/NIE del Tutor (Opcional)</label>
+                                    <input type="text" class="form-control" th:field="*{dniNieTutor}" id="dniNieTutor" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="projectLifeDoc" class="form-label text-dark fw-bold">Projecte de Vida (Doc)</label>
+                                    <input type="text" class="form-control" th:field="*{projectLifeDoc}" id="projectLifeDoc" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="socialServiceCenter" class="form-label text-dark fw-bold">Centre Serveis Socials</label>
+                                    <input type="text" class="form-control" th:field="*{socialServiceCenter}" id="socialServiceCenter" />
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="border p-3 mb-4 rounded">
                             <legend class="w-auto h6 fw-bold px-2 text-warning text-dark">Dades de Dependència</legend>
 
                             <div class="form-check mb-2">
