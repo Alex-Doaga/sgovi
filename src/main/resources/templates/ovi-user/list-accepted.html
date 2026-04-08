@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Usuaris Acceptats</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Usuaris OVI Acceptats</h1>
+
+    <div class="mb-3">
+        <a th:href="@{/ovi-user/list}" class="btn btn-outline-secondary btn-sm">Tots</a>
+        <a th:href="@{/ovi-user/list/pending}" class="btn btn-outline-warning btn-sm">Pendents</a>
+        <a th:href="@{/ovi-user/list/accepted}" class="btn btn-success btn-sm">Acceptats</a>
+        <a th:href="@{/ovi-user/list/refused}" class="btn btn-outline-danger btn-sm">Rebutjats</a>
+    </div>
+
+    <div th:each="oviUser : ${oviUsers}" class="card mb-3">
+        <div class="card-header">
+            <strong th:text="${oviUser.name + ' ' + oviUser.surname}"></strong>
+            <span class="text-muted ms-2"
+                  th:text="${oviUser.dniNie}"></span>
+        </div>
+        <div class="card-body">
+            <p class="mb-1">
+                <strong>Email:</strong>
+                <span th:text="${oviUser.email}"></span>
+            </p>
+            <p class="mb-2">
+                <strong>Telèfon:</strong>
+                <span th:text="${oviUser.phone}"></span>
+            </p>
+
+            <!-- Contractes d'aquest OviUser -->
+            <h6>Contractes:</h6>
+            <a th:href="@{/contract/list/ovi-user/{id}(id=${oviUser.idOviUser})}"
+               class="btn btn-outline-primary btn-sm">
+                Veure contractes
+            </a>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="btn btn-secondary mt-2">Tornar</a>
+</main>
+</body>
+</html>

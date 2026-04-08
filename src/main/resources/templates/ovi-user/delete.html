@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Eliminar Usuari OVI</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Eliminar Usuari OVI</h1>
+
+    <div class="alert alert-danger" role="alert">
+        Esteu segur que voleu eliminar aquest usuari?
+        Aquesta acció no es pot desfer.
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Nom:</strong>
+                <span th:text="${oviUser.name}"></span>
+                <span th:text="${oviUser.surname}"></span>
+            </p>
+            <p><strong>DNI/NIE:</strong>
+                <span th:text="${oviUser.dniNie}"></span>
+            </p>
+            <p><strong>Email:</strong>
+                <span th:text="${oviUser.email}"></span>
+            </p>
+        </div>
+    </div>
+
+    <form th:action="@{/ovi-user/delete}"
+          th:object="${oviUser}"
+          method="post">
+
+        <input type="hidden" th:field="*{idOviUser}"/>
+
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a th:href="@{/ovi-user/list}" class="btn btn-secondary ms-2">Cancel·lar</a>
+    </form>
+</main>
+</body>
+</html>

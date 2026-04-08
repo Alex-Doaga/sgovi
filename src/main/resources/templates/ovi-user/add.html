@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Nou Usuari OVI</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Nou Usuari OVI</h1>
+
+    <form th:action="@{/ovi-user/add}"
+          th:object="${oviUser}"
+          method="post">
+
+        <h2 class="h5 mt-3">Dades personals</h2>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="name"
+                   th:field="*{name}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="surname" class="form-label">Cognoms</label>
+            <input type="text" class="form-control" id="surname"
+                   th:field="*{surname}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="dniNie" class="form-label">DNI/NIE</label>
+            <input type="text" class="form-control" id="dniNie"
+                   th:field="*{dniNie}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="birthDate" class="form-label">Data de naixement</label>
+            <input type="date" class="form-control" id="birthDate"
+                   th:field="*{birthDate}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email"
+                   th:field="*{email}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Telèfon</label>
+            <input type="tel" class="form-control" id="phone"
+                   th:field="*{phone}" required/>
+        </div>
+
+        <h2 class="h5 mt-3">Adreça</h2>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Adreça</label>
+            <input type="text" class="form-control" id="address"
+                   th:field="*{address}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="city" class="form-label">Ciutat</label>
+            <input type="text" class="form-control" id="city"
+                   th:field="*{city}" required/>
+        </div>
+        <div class="mb-3">
+            <label for="postalCode" class="form-label">Codi postal</label>
+            <input type="text" class="form-control" id="postalCode"
+                   th:field="*{postalCode}" required/>
+        </div>
+
+        <h2 class="h5 mt-3">Dades addicionals</h2>
+
+        <div class="mb-3">
+            <label for="entity" class="form-label">Entitat</label>
+            <input type="text" class="form-control" id="entity"
+                   th:field="*{entity}"/>
+        </div>
+        <div class="mb-3">
+            <label for="nameTutor" class="form-label">Nom tutor/a</label>
+            <input type="text" class="form-control" id="nameTutor"
+                   th:field="*{nameTutor}"/>
+        </div>
+        <div class="mb-3">
+            <label for="dniNieTutor" class="form-label">DNI/NIE tutor/a</label>
+            <input type="text" class="form-control" id="dniNieTutor"
+                   th:field="*{dniNieTutor}"/>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="hasDepenDegree"
+                   th:field="*{hasDepenDegree}"/>
+            <label for="hasDepenDegree" class="form-check-label">
+                Té grau de dependència
+            </label>
+        </div>
+        <div class="mb-3">
+            <label for="depenDegree" class="form-label">Grau de dependència</label>
+            <input type="number" class="form-control" id="depenDegree"
+                   th:field="*{depenDegree}" min="1" max="3"/>
+        </div>
+        <div class="mb-3">
+            <label for="socialServiceCenter" class="form-label">
+                Centre de serveis socials
+            </label>
+            <input type="text" class="form-control" id="socialServiceCenter"
+                   th:field="*{socialServiceCenter}"/>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contrasenya inicial</label>
+            <input type="password" class="form-control" id="password"
+                   th:field="*{password}" required/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a th:href="@{/ovi-user/list}" class="btn btn-secondary ms-2">Cancel·lar</a>
+    </form>
+</main>
+</body>
+</html>
