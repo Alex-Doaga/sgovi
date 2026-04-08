@@ -22,12 +22,15 @@ public class OviUserDao {
     /* Añade un oviUser a la base de datos */
     public void addOviUser(OviUser user) {
         jdbcTemplate.update(
-                "INSERT INTO ovi_user ( name, surname, dni_nie, birth_date, address, city, postal_code, email, phone, entity, name_tutor, dni_nie_tutor, has_depen_degree, depen_degree, project_life_doc, social_service_center) " +
-                        "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO ovi_user (name, surname, dni_nie, birth_date, address, city, " +
+                        "postal_code, email, phone, entity, name_tutor, dni_nie_tutor, " +
+                        "has_depen_degree, depen_degree, project_life_doc, social_service_center, password) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 user.getName(), user.getSurname(), user.getDniNie(), user.getBirthDate(),
-                user.getAddress(), user.getCity(), user.getPostalCode(), user.getEmail(), user.getPhone(),
-                user.getEntity(), user.getNameTutor(), user.getDniNieTutor(), user.getHasDepenDegree(),
-                user.getDepenDegree(), user.getProjectLifeDoc(), user.getSocialServiceCenter()
+                user.getAddress(), user.getCity(), user.getPostalCode(), user.getEmail(),
+                user.getPhone(), user.getEntity(), user.getNameTutor(), user.getDniNieTutor(),
+                user.getHasDepenDegree(), user.getDepenDegree(), user.getProjectLifeDoc(),
+                user.getSocialServiceCenter(), user.getPassword()
         );
     }
 
@@ -72,4 +75,30 @@ public class OviUserDao {
             return new ArrayList<OviUser>();
         }
     }
+
+    // Útil para el técnico: filtra por estado los ovi_user (pending/accepted/refused)
+    // Si han sido aceptado para iniciar sesión o no
+    public List<OviUser> getOviUsersByState(String state) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM ovi_user WHERE ovi_user_state = CAST(? AS state_enum) " +
+                            "ORDER BY surname, name",
+                    new OviUserRowMapper(), state
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Útil para el técnico para aceptar o rechazar a un OviUser
+    public void updateOviUserState(int idOviUser, String state, String rejectionReason) {
+        jdbcTemplate.update(
+                "UPDATE ovi_user SET " +
+                        "ovi_user_state = CAST(? AS state_enum), rejection_reason = ? " +
+                        "WHERE id_ovi_user = ?",
+                state, rejectionReason, idOviUser
+        );
+    }
+
+
 }

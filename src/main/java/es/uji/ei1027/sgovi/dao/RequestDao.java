@@ -1,7 +1,6 @@
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.modelo.Request;
-import es.uji.ei1027.sgovi.modelo.enums.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,12 +22,26 @@ public class RequestDao {
     /* CREATE: Añade una nueva solicitud a la base de datos */
     public void addRequest(Request request) {
         jdbcTemplate.update(
-                "INSERT INTO request ( ovi_user_id, request_date, start_date, duration, type_pa, type_service, age_pa, hobbies, required_gender, schedule, state, comments) " +
-                        "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                request.getOviUserId(), request.getRequestDate(), request.getStartDate(),
-                request.getDuration(), request.getTypePA().name(), request.getTypeService().name(),
-                request.getAgePA(), request.getHobbies(), request.getRequiredGender(),
-                request.getSchedule(), request.getState().name(), request.getComments()
+                "INSERT INTO request (ovi_user_id, request_date, start_date, " +
+                        "duration, type_pa, type_service, age_pa, city, hobbies, " +
+                        "required_gender, experience, education, comments) " +
+                        "VALUES (?, ?, ?, ?, " +
+                        "CAST(? AS type_pa_enum), " +
+                        "CAST(? AS type_accompaniment_enum), " +
+                        "?, ?, ?, ?, ?, ?, ?)",
+                request.getOviUserId(),
+                request.getRequestDate(),
+                request.getStartDate(),
+                request.getDuration(),
+                request.getTypePa(),
+                request.getTypeService(),
+                request.getAgePa(),
+                request.getCity(),
+                request.getHobbies(),
+                request.getRequiredGender(),
+                request.getExperience(),
+                request.getEducation(),
+                request.getComments()
         );
     }
 
@@ -42,12 +55,24 @@ public class RequestDao {
     /* UPDATE: Modifica una solicitud completa */
     public void updateRequest(Request request) {
         jdbcTemplate.update(
-                "UPDATE request SET ovi_user_id=?, request_date=?, start_date=?, duration=?, type_pa=?, type_service=?, age_pa=?, hobbies=?, required_gender=?, schedule=?, state=?, comments=? " +
-                        "WHERE id_request=?",
-                request.getOviUserId(), request.getRequestDate(), request.getStartDate(),
-                request.getDuration(), request.getTypePA().name(), request.getTypeService().name(),
-                request.getAgePA(), request.getHobbies(), request.getRequiredGender(),
-                request.getSchedule(), request.getState().name(), request.getComments(),
+                "UPDATE request SET " +
+                        "start_date = ?, duration = ?, " +
+                        "type_pa = CAST(? AS type_pa_enum), " +
+                        "type_service = CAST(? AS type_accompaniment_enum), " +
+                        "age_pa = ?, city = ?, hobbies = ?, required_gender = ?, " +
+                        "experience = ?, education = ?, comments = ? " +
+                        "WHERE id_request = ?",
+                request.getStartDate(),
+                request.getDuration(),
+                request.getTypePa(),
+                request.getTypeService(),
+                request.getAgePa(),
+                request.getCity(),
+                request.getHobbies(),
+                request.getRequiredGender(),
+                request.getExperience(),
+                request.getEducation(),
+                request.getComments(),
                 request.getIdRequest()
         );
     }
@@ -75,11 +100,43 @@ public class RequestDao {
         }
     }
 
+    // Obtiene todas las solicitudes de un usuario
+    public List<Request> getRequestsByOviUser(int oviUserId) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM request WHERE ovi_user_id = ? " +
+                            "ORDER BY request_date DESC",
+                    new RequestRowMapper(),
+                    oviUserId
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Obtiene las solicitudes con un estado(pending/accepted/refused/)
+    public List<Request> getRequestsByState(String state) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM request " +
+                            "WHERE state = CAST(? AS state_enum) " +
+                            "ORDER BY request_date DESC",
+                    new RequestRowMapper(),
+                    state
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+
     /* Actualiza el estado de una solicitud  */
-    public void updateRequestStatus(int idRequest, State newState) {
+    public void updateRequestState(int idRequest, String state) {
         jdbcTemplate.update(
-                "UPDATE request SET state=? WHERE id_request=?",
-                newState.name(), idRequest
+                "UPDATE request SET state = CAST(? AS state_enum) " +
+                        "WHERE id_request = ?",
+                state,
+                idRequest
         );
     }
 }

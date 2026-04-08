@@ -26,9 +26,11 @@ public final class OviUserRowMapper implements RowMapper<OviUser> {
         oviUser.setNameTutor(rs.getString("name_tutor"));
         oviUser.setDniNieTutor(rs.getString("dni_nie_tutor"));
         oviUser.setHasDepenDegree(rs.getBoolean("has_depen_degree"));
-        oviUser.setDepenDegree(rs.getInt("depen_degree"));
+        oviUser.setDepenDegree((Integer) rs.getObject("depen_degree"));
         oviUser.setProjectLifeDoc(rs.getString("project_life_doc"));
         oviUser.setSocialServiceCenter(rs.getString("social_service_center"));
+        oviUser.setOviUserState(rs.getString("ovi_user_state"));
+        oviUser.setRejectionReason(rs.getString("rejection_reason"));
         return oviUser;
     }
 

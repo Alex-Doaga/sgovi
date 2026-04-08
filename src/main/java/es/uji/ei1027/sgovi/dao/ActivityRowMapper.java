@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public final class ActivityRowMapper implements RowMapper<Activity> {
 
@@ -13,12 +14,14 @@ public final class ActivityRowMapper implements RowMapper<Activity> {
         Activity activity = new Activity();
 
         activity.setIdActivity(rs.getInt("id_activity"));
-        activity.setInstructorId(rs.getInt("instructor_id"));
+        activity.setTypeActivity(rs.getString("type_activity"));
+        activity.setIdInstructor(rs.getInt("id_instructor"));
         activity.setName(rs.getString("name"));
-        activity.setDescripcion(rs.getString("descripcion"));
-        activity.setDate(rs.getDate("date").toLocalDate());
+        activity.setDescription(rs.getString("description"));
+        activity.setDate(rs.getObject("date", LocalDate.class));
         activity.setPlace(rs.getString("place"));
-        activity.setNumberOfParticipants(rs.getInt("number_of_participants"));
+        activity.setNumberOfParticipants((Integer) rs.getObject("number_of_participants"));
         return activity;
     }
 }
+

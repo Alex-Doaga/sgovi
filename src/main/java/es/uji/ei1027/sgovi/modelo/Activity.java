@@ -1,12 +1,16 @@
 package es.uji.ei1027.sgovi.modelo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class Activity {
     private Integer idActivity;
-    private Integer instructorId;
+    private String typeActivity;
+    private Integer idInstructor;
     private String name;
-    private String descripcion;
+    private String description;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String place;
     private Integer numberOfParticipants;
@@ -22,13 +26,13 @@ public class Activity {
         this.idActivity = idActivity;
     }
 
-    public Integer getInstructorId() {
-        return instructorId;
-    }
+    public String getTypeActivity() {return typeActivity;}
 
-    public void setInstructorId(Integer instructorId) {
-        this.instructorId = instructorId;
-    }
+    public void setTypeActivity(String typeActivity) {this.typeActivity = typeActivity;}
+
+    public Integer getIdInstructor() { return idInstructor; }
+
+    public void setIdInstructor(Integer idInstructor) { this.idInstructor = idInstructor; }
 
     public String getName() {
         return name;
@@ -38,13 +42,9 @@ public class Activity {
         this.name = name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescription() {return description;}
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public void setDescription(String description) {this.description = description;}
 
     public LocalDate getDate() {
         return date;
@@ -74,9 +74,10 @@ public class Activity {
     public String toString() {
         return "Activity{" +
                 "idActivity=" + idActivity +
-                ", instructorId=" + instructorId +
+                ", typeActivity='" + typeActivity + '\'' +
+                ", idInstructor=" + idInstructor +
                 ", name='" + name + '\'' +
-                ", descripcion='" + descripcion + '\'' +
+                ", description='" + description + '\'' +
                 ", date=" + date +
                 ", place='" + place + '\'' +
                 ", numberOfParticipants=" + numberOfParticipants +

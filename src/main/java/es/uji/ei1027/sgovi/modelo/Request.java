@@ -1,30 +1,35 @@
 package es.uji.ei1027.sgovi.modelo;
 
-import es.uji.ei1027.sgovi.modelo.enums.State;
-import es.uji.ei1027.sgovi.modelo.enums.TypeAccompaniment;
-import es.uji.ei1027.sgovi.modelo.enums.TypePa;
+
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 public class Request {
     private Integer idRequest;
     private Integer oviUserId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate requestDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private Integer duration;
-    private TypePa typePA; // Enum
-    private TypeAccompaniment typeService; // Enum
-    private Integer agePA;
+    private String typePa;
+    private String typeService;
+    private Integer agePa;
+    private String city;
     private String hobbies;
     private String requiredGender;
-    private String schedule;
-    private State state; // Enum
+    private String experience;
+    private String education;
+    private String state;
     private String comments;
 
 
     //Constructor
     public Request() {
     }
+
 
     public Integer getIdRequest() {
         return idRequest;
@@ -66,28 +71,36 @@ public class Request {
         this.duration = duration;
     }
 
-    public TypePa getTypePA() {
-        return typePA;
+    public String getTypePa() {
+        return typePa;
     }
 
-    public void setTypePA(TypePa typePA) {
-        this.typePA = typePA;
+    public void setTypePa(String typePa) {
+        this.typePa = typePa;
     }
 
-    public TypeAccompaniment getTypeService() {
+    public String getTypeService() {
         return typeService;
     }
 
-    public void setTypeService(TypeAccompaniment typeService) {
+    public void setTypeService(String typeService) {
         this.typeService = typeService;
     }
 
-    public Integer getAgePA() {
-        return agePA;
+    public Integer getAgePa() {
+        return agePa;
     }
 
-    public void setAgePA(Integer agePA) {
-        this.agePA = agePA;
+    public void setAgePa(Integer agePA) {
+        this.agePa = agePA;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getHobbies() {
@@ -106,19 +119,27 @@ public class Request {
         this.requiredGender = requiredGender;
     }
 
-    public String getSchedule() {
-        return schedule;
+    public String getExperience() {
+        return experience;
     }
 
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 
-    public State getState() {
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(String state) {
         this.state = state;
     }
 
@@ -138,13 +159,15 @@ public class Request {
                 ", requestDate=" + requestDate +
                 ", startDate=" + startDate +
                 ", duration=" + duration +
-                ", typePA=" + typePA +
-                ", typeService=" + typeService +
-                ", agePA=" + agePA +
+                ", typePa='" + typePa + '\'' +
+                ", typeService='" + typeService + '\'' +
+                ", agePA=" + agePa +
+                ", city='" + city + '\'' +
                 ", hobbies='" + hobbies + '\'' +
                 ", requiredGender='" + requiredGender + '\'' +
-                ", schedule='" + schedule + '\'' +
-                ", state=" + state +
+                ", experience='" + experience + '\'' +
+                ", education='" + education + '\'' +
+                ", state='" + state + '\'' +
                 ", comments='" + comments + '\'' +
                 '}';
     }

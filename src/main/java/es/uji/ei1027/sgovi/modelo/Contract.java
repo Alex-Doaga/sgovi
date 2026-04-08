@@ -1,19 +1,25 @@
 package es.uji.ei1027.sgovi.modelo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class Contract {
     private Integer idContract;
-    private Integer requestId;
-    private Integer paId;
+    private Integer idRequest;
+    private Integer idPa;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private String contractDocument;
+    private String contractState;
 
 
     //Constructor
     public Contract() {
     }
+
 
     public Integer getIdContract() {
         return idContract;
@@ -23,20 +29,20 @@ public class Contract {
         this.idContract = idContract;
     }
 
-    public Integer getRequestId() {
-        return requestId;
+    public Integer getIdRequest() {
+        return idRequest;
     }
 
-    public void setRequestId(Integer requestId) {
-        this.requestId = requestId;
+    public void setIdRequest(Integer idRequest) {
+        this.idRequest = idRequest;
     }
 
-    public Integer getPaId() {
-        return paId;
+    public Integer getIdPa() {
+        return idPa;
     }
 
-    public void setPaId(Integer paId) {
-        this.paId = paId;
+    public void setIdPa(Integer idPa) {
+        this.idPa = idPa;
     }
 
     public LocalDate getStartDate() {
@@ -63,15 +69,24 @@ public class Contract {
         this.contractDocument = contractDocument;
     }
 
+    public String getContractState() {
+        return contractState;
+    }
+
+    public void setContractState(String contractState) {
+        this.contractState = contractState;
+    }
+
     @Override
     public String toString() {
         return "Contract{" +
                 "idContract=" + idContract +
-                ", requestId=" + requestId +
-                ", paId=" + paId +
+                ", idRequest=" + idRequest +
+                ", idPa=" + idPa +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", contractDocument='" + contractDocument + '\'' +
+                ", contractState='" + contractState + '\'' +
                 '}';
     }
 }

@@ -1,34 +1,42 @@
 package es.uji.ei1027.sgovi.modelo;
 
-import es.uji.ei1027.sgovi.modelo.enums.TypePa;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class PA {
-    private String idPa;
+    private Integer idPa;
     private String dniNie;
     private String name;
     private String surname;
     private String email;
-    private TypePa typePa;
+    private String phone;
+    private String typePa;
+    private String typeService;
     private String address;
     private String education;
     private String entity;
-    private Boolean hasExperience;
     private String experience;
-    private Date birthDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     private String city;
+    private String gender;
     private String postalCode;
     private String hobbies;
     private String comments;
     private String cv;
+    private String paState;
+    private String rejectionReason;
+    private String password;
 
     public PA() {
     }
 
-    public String getIdPa() { return idPa; }
+    public Integer getIdPa() {
+        return idPa;
+    }
 
-    public void setIdPa(String idPa) {
+    public void setIdPa(Integer idPa) {
         this.idPa = idPa;
     }
 
@@ -64,11 +72,11 @@ public class PA {
         this.email = email;
     }
 
-    public TypePa getTypePa() {
+    public String getTypePa() {
         return typePa;
     }
 
-    public void setTypePa(TypePa typePa) {
+    public void setTypePa(String typePa) {
         this.typePa = typePa;
     }
 
@@ -96,14 +104,6 @@ public class PA {
         this.entity = entity;
     }
 
-    public Boolean getHasExperience() {
-        return hasExperience;
-    }
-
-    public void setHasExperience(Boolean hasExperience) {
-        this.hasExperience = hasExperience;
-    }
-
     public String getExperience() {
         return experience;
     }
@@ -112,11 +112,10 @@ public class PA {
         this.experience = experience;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
-
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -154,6 +153,54 @@ public class PA {
         this.cv = cv;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getTypeService() {
+        return typeService;
+    }
+
+    public void setTypeService(String typeService) {
+        this.typeService = typeService;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getPaState() {
+        return paState;
+    }
+
+    public void setPaState(String paState) {
+        this.paState = paState;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "PA{" +
@@ -162,18 +209,22 @@ public class PA {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", typePa=" + typePa +
+                ", typeService='" + typeService + '\'' +
                 ", address='" + address + '\'' +
                 ", education='" + education + '\'' +
                 ", entity='" + entity + '\'' +
-                ", hasExperience=" + hasExperience +
                 ", experience='" + experience + '\'' +
                 ", birthDate=" + birthDate +
                 ", city='" + city + '\'' +
+                ", gender='" + gender + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", hobbies='" + hobbies + '\'' +
                 ", comments='" + comments + '\'' +
                 ", cv='" + cv + '\'' +
+                ", paState='" + paState + '\'' +
+                ", rejectionReason='" + rejectionReason + '\'' +
                 '}';
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class MessageRowMapper implements RowMapper<Message> {
 
@@ -14,10 +15,10 @@ public class MessageRowMapper implements RowMapper<Message> {
         Message message = new Message();
 
         message.setIdMessage(rs.getInt("id_message"));
-        message.setNegotiationId(rs.getInt("negotiation_id"));
-        message.setSenderId(rs.getInt("sender_id"));
+        message.setIdNegotiation(rs.getInt("id_negotiation"));
+        message.setSenderType(rs.getString("sender_type"));
         message.setMessageText(rs.getString("message_text"));
-        message.setDateMsg(rs.getDate("date_msg").toLocalDate());
+        message.setDateMsg(rs.getObject("date_msg", LocalDateTime.class));
 
         return message;
     }

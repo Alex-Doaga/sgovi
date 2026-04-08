@@ -24,11 +24,12 @@ public class NegotiationDao {
     /* CREATE: Añade una nueva negociación a la base de datos */
     public void addNegotiation(Negotiation negotiation) {
         jdbcTemplate.update(
-                "INSERT INTO negotiation (id_negotiation, request_id, pa_id, start_date) VALUES (?, ?, ?, ?)",
-                negotiation.getIdNegotiation(),
-                negotiation.getRequestId(),
-                negotiation.getPaId(),
-                negotiation.getStartDate()
+                "INSERT INTO negotiation (id_request, id_pa, start_date, negotiation_state) " +
+                        "VALUES (?, ?, ?, CAST(? AS negotiation_state_enum))",
+                negotiation.getIdRequest(),
+                negotiation.getIdPa(),
+                negotiation.getStartDate(),
+                negotiation.getNegotiationState()
         );
     }
 
@@ -43,9 +44,9 @@ public class NegotiationDao {
     /* UPDATE: Modifica una negociación completa */
     public void updateNegotiation(Negotiation negotiation) {
         jdbcTemplate.update(
-                "UPDATE negotiation SET request_id=?, pa_id=?, start_date=? WHERE id_negotiation=?",
-                negotiation.getRequestId(),
-                negotiation.getPaId(),
+                "UPDATE negotiation SET id_request=?, id_pa=?, start_date=? WHERE id_negotiation=?",
+                negotiation.getIdRequest(),
+                negotiation.getIdPa(),
                 negotiation.getStartDate(),
                 negotiation.getIdNegotiation()
         );
@@ -75,4 +76,45 @@ public class NegotiationDao {
             return new ArrayList<Negotiation>();
         }
     }
+
+    // Todas las negociaciones de una solicitud concreta
+    public List<Negotiation> getNegotiationsByRequest(int idRequest) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM negotiation WHERE id_request = ? " +
+                            "ORDER BY start_date DESC",
+                    new NegotiationRowMapper(),
+                    idRequest
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Todas las negociaciones de un PA
+    public List<Negotiation> getNegotiationsByPa(int idPa) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM negotiation WHERE id_pa = ? " +
+                            "ORDER BY start_date DESC",
+                    new NegotiationRowMapper(),
+                    idPa
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Cambio de estado de la negociación (hablando/sinHablar)
+    public void updateNegotiationState(int idNegotiation, String state) {
+        jdbcTemplate.update(
+                "UPDATE negotiation SET " +
+                        "negotiation_state = CAST(? AS negotiation_state_enum) " +
+                        "WHERE id_negotiation = ?",
+                state,
+                idNegotiation
+        );
+    }
+
+
 }

@@ -1,40 +1,43 @@
 package es.uji.ei1027.sgovi.modelo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Message {
 
-    private int idMessage;
-    private int negotiationId;
-    private int senderId;
+    public static final String SENDER_OVI_USER = "ovi_user";
+    public static final String SENDER_PA = "pa";
+
+    private Integer idMessage;
+    private Integer idNegotiation;
+    private String senderType;
     private String messageText;
-    private LocalDate dateMsg;
+    private LocalDateTime dateMsg;
 
     public Message() {
     }
 
-    public int getIdMessage() {
+    public Integer getIdMessage() {
         return idMessage;
     }
 
-    public void setIdMessage(int idMessage) {
+    public void setIdMessage(Integer idMessage) {
         this.idMessage = idMessage;
     }
 
-    public int getNegotiationId() {
-        return negotiationId;
+    public Integer getIdNegotiation() {
+        return idNegotiation;
     }
 
-    public void setNegotiationId(int negotiationId) {
-        this.negotiationId = negotiationId;
+    public void setIdNegotiation(Integer idNegotiation) {
+        this.idNegotiation = idNegotiation;
     }
 
-    public int getSenderId() {
-        return senderId;
+    public String getSenderType() {
+        return senderType;
     }
 
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
+    public void setSenderType(String senderType) {
+        this.senderType = senderType;
     }
 
     public String getMessageText() {
@@ -45,11 +48,11 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public LocalDate getDateMsg() {
+    public LocalDateTime getDateMsg() {
         return dateMsg;
     }
 
-    public void setDateMsg(LocalDate dateMsg) {
+    public void setDateMsg(LocalDateTime dateMsg) {
         this.dateMsg = dateMsg;
     }
 
@@ -57,8 +60,8 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "idMessage=" + idMessage +
-                ", negotiationId=" + negotiationId +
-                ", senderId=" + senderId +
+                ", idNegotiation=" + idNegotiation +
+                ", senderType='" + senderType + '\'' +
                 ", messageText='" + messageText + '\'' +
                 ", dateMsg=" + dateMsg +
                 '}';

@@ -24,12 +24,11 @@ public class MessageDao {
     /* CREATE: Añade un nuevo mensaje a la base de datos */
     public void addMessage(Message message) {
         jdbcTemplate.update(
-                "INSERT INTO message (id_message, negotiation_id, sender_id, message_text, date_msg) VALUES (?, ?, ?, ?, ?)",
-                message.getIdMessage(),
-                message.getNegotiationId(),
-                message.getSenderId(),
-                message.getMessageText(),
-                message.getDateMsg()
+                "INSERT INTO message (id_negotiation, sender_type, message_text) " +
+                        "VALUES (?, ?, ?)",
+                message.getIdNegotiation(),
+                message.getSenderType(),
+                message.getMessageText()
         );
     }
 
@@ -44,11 +43,8 @@ public class MessageDao {
     /* UPDATE: Modifica un mensaje completo */
     public void updateMessage(Message message) {
         jdbcTemplate.update(
-                "UPDATE message SET negotiation_id=?, sender_id=?, message_text=?, date_msg=? WHERE id_message=?",
-                message.getNegotiationId(),
-                message.getSenderId(),
+                "UPDATE message SET message_text=? WHERE id_message=?",
                 message.getMessageText(),
-                message.getDateMsg(),
                 message.getIdMessage()
         );
     }
@@ -77,4 +73,28 @@ public class MessageDao {
             return new ArrayList<Message>();
         }
     }
+
+    // Obtiene todos los mensajes de una negociación
+    public List<Message> getMessagesByNegotiation(int idNegotiation) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM message WHERE id_negotiation = ? " +
+                            "ORDER BY date_msg ASC",
+                    new MessageRowMapper(),
+                    idNegotiation
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Borrar todos los mensajes de una negociación
+    public void deleteMessagesByNegotiation(int idNegotiation) {
+        jdbcTemplate.update(
+                "DELETE FROM message WHERE id_negotiation = ?",
+                idNegotiation
+        );
+    }
+
+
 }

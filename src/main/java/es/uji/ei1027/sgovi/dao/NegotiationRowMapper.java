@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class NegotiationRowMapper implements RowMapper<Negotiation> {
 
@@ -14,9 +15,10 @@ public class NegotiationRowMapper implements RowMapper<Negotiation> {
         Negotiation negotiation = new Negotiation();
 
         negotiation.setIdNegotiation(rs.getInt("id_negotiation"));
-        negotiation.setRequestId(rs.getInt("request_id"));
-        negotiation.setPaId(rs.getInt("pa_id"));
-        negotiation.setStartDate(rs.getDate("start_date").toLocalDate());
+        negotiation.setIdRequest(rs.getInt("id_request"));
+        negotiation.setIdPa(rs.getInt("id_pa"));
+        negotiation.setStartDate(rs.getObject("start_date", LocalDate.class));
+        negotiation.setNegotiationState(rs.getString("negotiation_state"));
 
         return negotiation;
     }

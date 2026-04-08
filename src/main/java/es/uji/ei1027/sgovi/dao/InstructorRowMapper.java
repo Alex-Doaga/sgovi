@@ -20,7 +20,7 @@ public final class InstructorRowMapper implements RowMapper<Instructor> {
         instructor.setAddress(rs.getString("address"));
         instructor.setEmail(rs.getString("email"));
         instructor.setPhone(rs.getString("phone"));
-        instructor.setSpecialization("specialization");
+        instructor.setSpecialization(rs.getString("specialization"));
         return instructor;
     }
 

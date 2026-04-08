@@ -1,7 +1,6 @@
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.modelo.Contract;
-import es.uji.ei1027.sgovi.modelo.OviUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,10 +22,16 @@ public class ContractDao {
     /* Añade un contrato a la base de datos */
     public void addContract(Contract contract) {
         jdbcTemplate.update(
-                "INSERT INTO contract (request_id, pa_id, start_date, end_date, contract_document) " +
-                        "VALUES (?, ?, ?, ?, ?)",
-                contract.getRequestId(), contract.getPaId(),
-                contract.getStartDate(), contract.getEndDate(), contract.getContractDocument()
+                "INSERT INTO contract " +
+                        "(id_request, id_pa, start_date, end_date, " +
+                        "contract_document, contract_state) " +
+                        "VALUES (?, ?, ?, ?, ?, CAST(? AS contract_state_enum))",
+                contract.getIdRequest(),
+                contract.getIdPa(),
+                contract.getStartDate(),
+                contract.getEndDate(),
+                contract.getContractDocument(),
+                contract.getContractState()
         );
     }
 
@@ -40,10 +45,15 @@ public class ContractDao {
     // UPDATE: Modifica un contrato
     public void updateContract(Contract contract) {
         jdbcTemplate.update(
-                "UPDATE contract SET request_id=?, pa_id=?, start_date=?, end_date=?, contract_document=? " +
-                        "WHERE id_contract=?",
-                contract.getRequestId(), contract.getPaId(), contract.getStartDate(),
-                contract.getEndDate(), contract.getContractDocument(),
+                "UPDATE contract SET " +
+                        "start_date = ?, end_date = ?, " +
+                        "contract_document = ?, " +
+                        "contract_state = CAST(? AS contract_state_enum) " +
+                        "WHERE id_contract = ?",
+                contract.getStartDate(),
+                contract.getEndDate(),
+                contract.getContractDocument(),
+                contract.getContractState(),
                 contract.getIdContract()
         );
     }
@@ -70,5 +80,58 @@ public class ContractDao {
             return new ArrayList<Contract>();
         }
     }
+
+    // El contrato asociado a una solicitud concreta
+    public Contract getContractByRequest(int idRequest) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM contract WHERE id_request = ?",
+                    new ContractRowMapper(),
+                    idRequest
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    // Todos los contratos de un PA
+    public List<Contract> getContractsByPa(int idPa) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM contract WHERE id_pa = ? " +
+                            "ORDER BY start_date DESC",
+                    new ContractRowMapper(),
+                    idPa
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Contractes actius o finalitzats
+    public List<Contract> getContractsByState(String state) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM contract " +
+                            "WHERE contract_state = CAST(? AS contract_state_enum) " +
+                            "ORDER BY start_date DESC",
+                    new ContractRowMapper(),
+                    state
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void updateContractState(int idContract, String state) {
+        jdbcTemplate.update(
+                "UPDATE contract SET " +
+                        "contract_state = CAST(? AS contract_state_enum) " +
+                        "WHERE id_contract = ?",
+                state,
+                idContract
+        );
+    }
+
 }
 

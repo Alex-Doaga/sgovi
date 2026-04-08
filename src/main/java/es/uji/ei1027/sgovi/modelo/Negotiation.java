@@ -1,39 +1,44 @@
 package es.uji.ei1027.sgovi.modelo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class Negotiation {
 
-    private int idNegotiation;
-    private int requestId;
-    private int paId;
+    private Integer idNegotiation;
+    private Integer idRequest;
+    private Integer idPa;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    private String negotiationState;
 
     public Negotiation() {
     }
 
-    public int getIdNegotiation() {
+
+    public Integer getIdNegotiation() {
         return idNegotiation;
     }
 
-    public void setIdNegotiation(int idNegotiation) {
+    public void setIdNegotiation(Integer idNegotiation) {
         this.idNegotiation = idNegotiation;
     }
 
-    public int getRequestId() {
-        return requestId;
+    public Integer getIdRequest() {
+        return idRequest;
     }
 
-    public void setRequestId(int requestId) {
-        this.requestId = requestId;
+    public void setIdRequest(Integer idRequest) {
+        this.idRequest = idRequest;
     }
 
-    public int getPaId() {
-        return paId;
+    public Integer getIdPa() {
+        return idPa;
     }
 
-    public void setPaId(int paId) {
-        this.paId = paId;
+    public void setIdPa(Integer idPa) {
+        this.idPa = idPa;
     }
 
     public LocalDate getStartDate() {
@@ -44,13 +49,22 @@ public class Negotiation {
         this.startDate = startDate;
     }
 
+    public String getNegotiationState() {
+        return negotiationState;
+    }
+
+    public void setNegotiationState(String negotiationState) {
+        this.negotiationState = negotiationState;
+    }
+
     @Override
     public String toString() {
         return "Negotiation{" +
                 "idNegotiation=" + idNegotiation +
-                ", requestId=" + requestId +
-                ", paId=" + paId +
+                ", idRequest=" + idRequest +
+                ", idPa=" + idPa +
                 ", startDate=" + startDate +
+                ", negotiationState='" + negotiationState + '\'' +
                 '}';
     }
 }

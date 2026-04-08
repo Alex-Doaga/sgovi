@@ -24,7 +24,9 @@ public class OviUser {
     private Integer depenDegree;
     private String projectLifeDoc;
     private String socialServiceCenter;
-
+    private String oviUserState;
+    private String rejectionReason;
+    private String password;
 
     //Constructor
     public OviUser() {
@@ -166,6 +168,19 @@ public class OviUser {
         this.socialServiceCenter = socialServiceCenter;
     }
 
+    public String getOviUserState() {return oviUserState;}
+
+    public void setOviUserState(String oviUserState) {this.oviUserState = oviUserState;}
+
+    public String getRejectionReason() {return rejectionReason;}
+
+    public void setRejectionReason(String rejectionReason) {this.rejectionReason = rejectionReason;}
+
+    public String getPassword() {return password;}
+
+    public void setPassword(String password) {this.password = password;}
+
+
     @Override
     public String toString() {
         return "OviUser{" +
@@ -186,6 +201,8 @@ public class OviUser {
                 ", depenDegree=" + depenDegree +
                 ", projectLifeDoc='" + projectLifeDoc + '\'' +
                 ", socialServiceCenter='" + socialServiceCenter + '\'' +
+                ", oviUserState='" + oviUserState + '\'' +
+                ", rejectionReason='" + rejectionReason + '\'' +
                 '}';
     }
 }

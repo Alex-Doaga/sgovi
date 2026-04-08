@@ -22,11 +22,13 @@ public class ActivityDao {
 
     public void addActivity(Activity activity) {
         jdbcTemplate.update(
-                "INSERT INTO Activity (id_activity, instructor_id, name, descripcion, date, place, number_of_participants) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                activity.getIdActivity(),
-                activity.getInstructorId(),
+                "INSERT INTO activity (type_activity, id_instructor, name, description, " +
+                        "date, place, number_of_participants) " +
+                        "VALUES (CAST(? AS type_activity_enum), ?, ?, ?, ?, ?, ?)",
+                activity.getTypeActivity(),
+                activity.getIdInstructor(),
                 activity.getName(),
-                activity.getDescripcion(),
+                activity.getDescription(),
                 activity.getDate(),
                 activity.getPlace(),
                 activity.getNumberOfParticipants()
@@ -39,10 +41,15 @@ public class ActivityDao {
 
     public void updateActivity(Activity activity) {
         jdbcTemplate.update(
-                "UPDATE Activity SET instructor_id = ?, name = ?, descripcion = ?, date = ?, place = ?, number_of_participants = ? WHERE id_activity = ?",
-                activity.getInstructorId(),
+                "UPDATE activity SET " +
+                        "type_activity = CAST(? AS type_activity_enum), " +
+                        "id_instructor = ?, name = ?, description = ?, " +
+                        "date = ?, place = ?, number_of_participants = ? " +
+                        "WHERE id_activity = ?",
+                activity.getTypeActivity(),
+                activity.getIdInstructor(),
                 activity.getName(),
-                activity.getDescripcion(),
+                activity.getDescription(),
                 activity.getDate(),
                 activity.getPlace(),
                 activity.getNumberOfParticipants(),
@@ -53,7 +60,7 @@ public class ActivityDao {
     public Activity getActivity(int idActivity) {
         try {
             return jdbcTemplate.queryForObject(
-                    "SELECT * FROM Activity WHERE id_activity = ?",
+                    "SELECT * FROM activity WHERE id_activity = ?",
                     new ActivityRowMapper(),
                     idActivity
             );
@@ -66,11 +73,42 @@ public class ActivityDao {
     public List<Activity> getActivities() {
         try {
             return jdbcTemplate.query(
-                    "SELECT * FROM Activity",
+                    "SELECT * FROM activity",
                     new ActivityRowMapper()
             );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<Activity>(); // Devuelve lista vacía en vez de null para evitar NullPointerExceptions
         }
     }
+
+    // Muestra actividades de Formación o Divulgación
+    public List<Activity> getActivitiesByType(String typeActivity) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM activity " +
+                            "WHERE type_activity = CAST(? AS type_activity_enum) " +
+                            "ORDER BY date DESC",
+                    new ActivityRowMapper(),
+                    typeActivity
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Muestra el historias de actividades de un instructor
+    public List<Activity> getActivitiesByInstructor(int idInstructor) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM activity WHERE id_instructor = ? " +
+                            "ORDER BY date DESC",
+                    new ActivityRowMapper(),
+                    idInstructor
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+
 }
