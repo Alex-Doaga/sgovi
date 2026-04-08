@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Eliminar Formador</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Eliminar Formador</h1>
+
+    <div class="alert alert-danger" role="alert">
+        Esteu segur que voleu eliminar aquest formador?
+        Aquesta acció no es pot desfer.
+    </div>
+
+    <!-- Mostra les dades del formador a eliminar -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Nom:</strong>
+                <span th:text="${instructor.name}"></span>
+                <span th:text="${instructor.surname}"></span>
+            </p>
+            <p><strong>DNI/NIE:</strong>
+                <span th:text="${instructor.dniNie}"></span>
+            </p>
+            <p><strong>Email:</strong>
+                <span th:text="${instructor.email}"></span>
+            </p>
+            <p><strong>Especialització:</strong>
+                <span th:text="${instructor.specialization}"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Formulari de confirmació — envia la PK per POST -->
+    <form th:action="@{/instructor/delete}"
+          th:object="${instructor}"
+          method="post">
+
+        <!-- ESSENCIAL: preserva la PK per saber qui esborrar -->
+        <input type="hidden" th:field="*{idInstructor}"/>
+
+        <button type="submit" class="btn btn-danger">
+            Sí, eliminar
+        </button>
+        <a th:href="@{/instructor/list}" class="btn btn-secondary ms-2">Cancel·lar</a>
+    </form>
+</main>
+</body>
+</html>

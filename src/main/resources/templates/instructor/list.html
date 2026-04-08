@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Gestió de Formadors</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Llista de Formadors</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Cognoms</th>
+            <th scope="col">DNI/NIE</th>
+            <th scope="col">Email</th>
+            <th scope="col">Telèfon</th>
+            <th scope="col">Especialització</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="instructor : ${instructors}">
+            <td th:text="${instructor.name}"></td>
+            <td th:text="${instructor.surname}"></td>
+            <td th:text="${instructor.dniNie}"></td>
+            <td th:text="${instructor.email}"></td>
+            <td th:text="${instructor.phone}"></td>
+            <td th:text="${instructor.specialization}"></td>
+            <td>
+                <a th:href="@{/instructor/update/{id}(id=${instructor.idInstructor})}"
+                   class="btn btn-warning btn-sm">Edita</a>
+            </td>
+            <td>
+                <a th:href="@{/instructor/delete/{id}(id=${instructor.idInstructor})}"
+                   class="btn btn-danger btn-sm">Esborra</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/instructor/add}" class="btn btn-success">Afegeix formador</a>
+    <a th:href="@{/}" class="btn btn-secondary ms-2">Tornar</a>
+</main>
+</body>
+</html>
