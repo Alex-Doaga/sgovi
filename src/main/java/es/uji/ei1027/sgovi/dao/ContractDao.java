@@ -133,5 +133,19 @@ public class ContractDao {
         );
     }
 
+    public List<Contract> getContractsByOviUser(int idOviUser) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT c.* FROM contract c " +
+                            "JOIN request r ON c.id_request = r.id_request " +
+                            "WHERE r.ovi_user_id = ? ORDER BY c.start_date DESC",
+                    new ContractRowMapper(),
+                    idOviUser
+            );
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            return new java.util.ArrayList<>();
+        }
+    }
+
 }
 
