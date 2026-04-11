@@ -35,39 +35,59 @@ public class OviUserController {
         return "ovi-user/list-" + state;
     }
 
-    // Crear oviUser
+
+    // Formulario de añadir usuario
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String add(Model model) {
+    public String addOviUser(Model model) {
         model.addAttribute("oviUser", new OviUser());
         return "ovi-user/add";
     }
 
+    // Procesar el formulario de añadir con VALIDACIÓN
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAdd(
-            @ModelAttribute("oviUser") OviUser oviUser,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+    public String processAddSubmit(@ModelAttribute("oviUser") OviUser oviUser,
+                                   BindingResult bindingResult) {
+
+        // 1. Instanciar y ejecutar el validador
+        OviUserValidator oviUserValidator = new OviUserValidator();
+        oviUserValidator.validate(oviUser, bindingResult);
+
+        // 2. Si hay errores, volvemos a la vista del formulario
+        if (bindingResult.hasErrors()) {
             return "ovi-user/add";
+        }
+
+        // 3. Si no hay errores, guardamos
         oviUserDao.addOviUser(oviUser);
-        return "redirect:list";
+        return "redirect:/ovi-user/list/pending";
     }
 
-    // Modificar oviuser
+    // Mostrar formulario de edición
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String edit(Model model, @PathVariable int id) {
+    public String editOviUser(Model model, @PathVariable int id) {
         model.addAttribute("oviUser", oviUserDao.getOviUser(id));
         return "ovi-user/update";
     }
 
+    // Procesar el formulario de edición con VALIDACIÓN
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdate(
-            @ModelAttribute("oviUser") OviUser oviUser,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+    public String processUpdateSubmit(@ModelAttribute("oviUser") OviUser oviUser,
+                                      BindingResult bindingResult) {
+
+        // 1. Instanciar y ejecutar el validador
+        OviUserValidator oviUserValidator = new OviUserValidator();
+        oviUserValidator.validate(oviUser, bindingResult);
+
+        // 2. Si hay errores en la edición, volvemos a la vista de update
+        if (bindingResult.hasErrors()) {
             return "ovi-user/update";
+        }
+
+        // 3. Si todo es correcto, actualizamos
         oviUserDao.updateOviUser(oviUser);
-        return "redirect:list";
+        return "redirect:/ovi-user/list/accepted";
     }
+
 
     // ==========================================
     //   NUEVO: GESTIÓN DE ACEPTAR / RECHAZAR
