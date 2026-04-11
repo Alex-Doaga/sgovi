@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Gestió d'Activitats</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Llista d'Activitats</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Tipus</th>
+            <th scope="col">Descripció</th>
+            <th scope="col">Data</th>
+            <th scope="col">Lloc</th>
+            <th scope="col">Participants</th>
+            <th scope="col">ID Formador</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="activity : ${activities}">
+            <td th:text="${activity.name}"></td>
+            <td th:text="${activity.typeActivity}"></td>
+            <td th:text="${activity.description}"></td>
+            <td th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></td>
+            <td th:text="${activity.place}"></td>
+            <td th:text="${activity.numberOfParticipants}"></td>
+            <td th:text="${activity.idInstructor}"></td>
+            <td>
+                <a th:href="@{/activity/update/{id}(id=${activity.idActivity})}"
+                   class="btn btn-warning btn-sm">Edita</a>
+            </td>
+            <td>
+                <a th:href="@{/activity/delete/{id}(id=${activity.idActivity})}"
+                   class="btn btn-danger btn-sm">Esborra</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/activity/add}" class="btn btn-success">Afegeix activitat</a>
+    <a th:href="@{/}" class="btn btn-secondary ms-2">Tornar</a>
+</main>
+</body>
+</html>
