@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("/contract")
@@ -39,23 +40,28 @@ public class ContractController {
     public String addContract(Model model, @PathVariable int idRequest) {
         Contract contract = new Contract();
         contract.setIdRequest(idRequest);
-        contract.setContractState("activo"); // Estado inicial por defecto
+        contract.setContractState("activo"); // Estado por defecto
         model.addAttribute("contract", contract);
         return "contract/add";
     }
 
-    // Procesar el formulario de añadir
+    // Procesar el formulario de añadir con VALIDACIÓN
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAdd(@ModelAttribute("contract") Contract contract) {
-        contractDao.addContract(contract);
-        return "redirect:/contract/list";
-    }
+    public String processAddSubmit(@ModelAttribute("contract") Contract contract,
+                                   BindingResult bindingResult) {
 
-    // Eliminar contrato
-    @RequestMapping(value = "/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        contractDao.deleteContract(id);
-        return "redirect:/contract/list";
+        // 1. Instanciar y ejecutar el validador
+        ContractValidator contractValidator = new ContractValidator();
+        contractValidator.validate(contract, bindingResult);
+
+        // 2. Si hay errores, volvemos a la vista del formulario
+        if (bindingResult.hasErrors()) {
+            return "contract/add";
+        }
+
+        // 3. Si no hay errores, guardamos
+        contractDao.addContract(contract);
+        return "redirect:/contract/list/ovi-user/" + contract.getIdRequest();
     }
 
     // Mostrar formulario de edición
@@ -65,11 +71,29 @@ public class ContractController {
         return "contract/update";
     }
 
-    // Procesar el formulario de edición
+    // Procesar el formulario de edición con VALIDACIÓN
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("contract") Contract contract) {
+    public String processUpdateSubmit(@ModelAttribute("contract") Contract contract,
+                                      BindingResult bindingResult) {
+
+        // 1. Instanciar y ejecutar el validador (reutilizamos el mismo)
+        ContractValidator contractValidator = new ContractValidator();
+        contractValidator.validate(contract, bindingResult);
+
+        // 2. Si hay errores en la edición, volvemos a la vista de update
+        if (bindingResult.hasErrors()) {
+            return "contract/update";
+        }
+
+        // 3. Si todo es correcto, actualizamos
         contractDao.updateContract(contract);
-        // Te redirige a la lista general (puedes ajustar esta ruta si lo necesitas)
+        return "redirect:/contract/list";
+    }
+
+    // Eliminar contrato
+    @RequestMapping(value = "/delete/{id}")
+    public String processDelete(@PathVariable int id) {
+        contractDao.deleteContract(id);
         return "redirect:/contract/list";
     }
 

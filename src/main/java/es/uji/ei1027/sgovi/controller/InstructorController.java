@@ -34,12 +34,21 @@ public class InstructorController {
         return "instructor/add";
     }
 
+    // AÑADIDO: Llamada al validador antes de comprobar errores
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAdd(
             @ModelAttribute("instructor") Instructor instructor,
             BindingResult bindingResult) {
+
+        // 1. Validar
+        InstructorValidator instructorValidator = new InstructorValidator();
+        instructorValidator.validate(instructor, bindingResult);
+
+        // 2. Comprobar errores
         if (bindingResult.hasErrors())
             return "instructor/add";
+
+        // 3. Guardar
         instructorDao.addInstructor(instructor);
         return "redirect:list";
     }
@@ -50,12 +59,21 @@ public class InstructorController {
         return "instructor/update";
     }
 
+    // AÑADIDO: Llamada al validador antes de comprobar errores
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdate(
             @ModelAttribute("instructor") Instructor instructor,
             BindingResult bindingResult) {
+
+        // 1. Validar
+        InstructorValidator instructorValidator = new InstructorValidator();
+        instructorValidator.validate(instructor, bindingResult);
+
+        // 2. Comprobar errores
         if (bindingResult.hasErrors())
             return "instructor/update";
+
+        // 3. Guardar
         instructorDao.updateInstructor(instructor);
         return "redirect:list";
     }

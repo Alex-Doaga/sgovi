@@ -14,36 +14,60 @@
         <input type="hidden" th:field="*{idContract}" />
         <input type="hidden" th:field="*{idRequest}" />
 
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <label for="idPa" class="form-label">ID Assistent Personal (PA)</label>
-            <input type="number" class="form-control" id="idPa" th:field="*{idPa}" required/>
+            <input type="number"
+                   th:class="${#fields.hasErrors('idPa')} ? 'form-control is-invalid' : 'form-control'"
+                   id="idPa" th:field="*{idPa}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('idPa')}" th:errors="*{idPa}">
+                Error en el ID del PA
+            </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <label for="contractState" class="form-label">Estat del contracte</label>
-            <select class="form-select" id="contractState" th:field="*{contractState}">
+            <select th:class="${#fields.hasErrors('contractState')} ? 'form-select is-invalid' : 'form-select'"
+                    id="contractState" th:field="*{contractState}">
                 <option value="activo">Actiu</option>
                 <option value="finalizado">Finalitzat</option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('contractState')}" th:errors="*{contractState}">
+                Error en l'estat
+            </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <label for="startDate" class="form-label">Data d'Inici</label>
-            <input type="date" class="form-control" id="startDate" th:field="*{startDate}" required/>
+            <input type="date"
+                   th:class="${#fields.hasErrors('startDate')} ? 'form-control is-invalid' : 'form-control'"
+                   id="startDate" th:field="*{startDate}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">
+                Error en la data d'inici
+            </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <label for="endDate" class="form-label">Data de Finalització</label>
-            <input type="date" class="form-control" id="endDate" th:field="*{endDate}"/>
+            <input type="date"
+                   th:class="${#fields.hasErrors('endDate')} ? 'form-control is-invalid' : 'form-control'"
+                   id="endDate" th:field="*{endDate}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">
+                Error en la data de finalització
+            </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12 mb-3">
             <label for="contractDocument" class="form-label">URL del Document (PDF/Drive)</label>
-            <input type="text" class="form-control" id="contractDocument" th:field="*{contractDocument}"/>
+            <input type="text"
+                   th:class="${#fields.hasErrors('contractDocument')} ? 'form-control is-invalid' : 'form-control'"
+                   id="contractDocument" th:field="*{contractDocument}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('contractDocument')}" th:errors="*{contractDocument}">
+                Error en el document
+            </div>
         </div>
 
         <div class="col-12 mt-4">
-            <button type="submit" class="btn btn-warning">Guardar Canvis</button>
+            <button type="submit" class="btn btn-warning">Actualitzar Contracte</button>
             <a th:href="@{/contract/list}" class="btn btn-outline-secondary">Cancel·lar</a>
         </div>
     </form>

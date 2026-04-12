@@ -16,54 +16,70 @@
 
     <div class="mb-3">
       <label for="name" class="form-label">Nom</label>
-      <input type="text" class="form-control" id="name"
-             th:field="*{name}" required/>
+      <input type="text"
+             th:class="${#fields.hasErrors('name')} ? 'form-control is-invalid' : 'form-control'"
+             id="name" th:field="*{name}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
     </div>
 
     <div class="mb-3">
       <label for="surname" class="form-label">Cognoms</label>
-      <input type="text" class="form-control" id="surname"
-             th:field="*{surname}" required/>
+      <input type="text"
+             th:class="${#fields.hasErrors('surname')} ? 'form-control is-invalid' : 'form-control'"
+             id="surname" th:field="*{surname}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
     </div>
 
     <div class="mb-3">
       <label for="dniNie" class="form-label">DNI/NIE</label>
-      <input type="text" class="form-control" id="dniNie"
-             th:field="*{dniNie}" required/>
+      <input type="text"
+             th:class="${#fields.hasErrors('dniNie')} ? 'form-control is-invalid' : 'form-control'"
+             id="dniNie" th:field="*{dniNie}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('dniNie')}" th:errors="*{dniNie}"></div>
     </div>
 
     <div class="mb-3">
       <label for="birthDate" class="form-label">Data de naixement</label>
-      <input type="date" class="form-control" id="birthDate"
-             th:field="*{birthDate}" required/>
+      <input type="date"
+             th:class="${#fields.hasErrors('birthDate')} ? 'form-control is-invalid' : 'form-control'"
+             id="birthDate" th:field="*{birthDate}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email"
-             th:field="*{email}" required/>
+      <input type="email"
+             th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid' : 'form-control'"
+             id="email" th:field="*{email}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
     </div>
 
     <div class="mb-3">
       <label for="address" class="form-label">Adreça</label>
-      <input type="text" class="form-control" id="address"
-             th:field="*{address}" required/>
+      <input type="text"
+             th:class="${#fields.hasErrors('address')} ? 'form-control is-invalid' : 'form-control'"
+             id="address" th:field="*{address}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
     </div>
 
     <div class="mb-3">
       <label for="phone" class="form-label">Telèfon</label>
-      <input type="tel" class="form-control" id="phone"
-             th:field="*{phone}" required/>
+      <input type="tel"
+             th:class="${#fields.hasErrors('phone')} ? 'form-control is-invalid' : 'form-control'"
+             id="phone" th:field="*{phone}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
     </div>
 
     <div class="mb-3">
-      <label for="specialization" class="form-label">Especialització</label>
-      <input type="text" class="form-control" id="specialization"
-             th:field="*{specialization}" required/>
+      <label for="specialization" class="form-label">Especialitat</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('specialization')} ? 'form-control is-invalid' : 'form-control'"
+             id="specialization" th:field="*{specialization}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"></div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="list" class="btn btn-secondary ms-2">Cancel·lar</a>
+    <button type="submit" class="btn btn-primary">Crear Formador</button>
+    <a th:href="@{/instructor/list}" class="btn btn-outline-secondary">Cancel·lar</a>
   </form>
 </main>
 </body>

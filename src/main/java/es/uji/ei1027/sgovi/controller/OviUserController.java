@@ -19,7 +19,11 @@ public class OviUserController {
         this.oviUserDao = oviUserDao;
     }
 
-    // Operacions: Crear, llistar, actualitzar, esborrar
+    // Operacions: llistar, crear, actualitzar, esborrar
+
+    // ==========================================
+    //   LISTAR Ovi Users
+    // ==========================================
 
     //Operación listar todos los oviUsers
     @RequestMapping("/list")
@@ -35,52 +39,78 @@ public class OviUserController {
         return "ovi-user/list-" + state;
     }
 
-    // Crear oviUser
+    // ==========================================
+    //   CREAR/AÑADIR Ovi User
+    // ==========================================
+
+    // Formulario de añadir usuario
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String add(Model model) {
+    public String addOviUser(Model model) {
         model.addAttribute("oviUser", new OviUser());
         return "ovi-user/add";
     }
 
+    // Procesar el formulario de añadir con VALIDACIÓN
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAdd(
-            @ModelAttribute("oviUser") OviUser oviUser,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+    public String processAddSubmit(@ModelAttribute("oviUser") OviUser oviUser,
+                                   BindingResult bindingResult) {
+
+        // Instanciar y ejecutar el validador
+        OviUserValidator oviUserValidator = new OviUserValidator();
+        oviUserValidator.validate(oviUser, bindingResult);
+
+        // Si hay errores, volvemos a la vista del formulario
+        if (bindingResult.hasErrors()) {
             return "ovi-user/add";
+        }
+
+        // Si no hay errores, guardamos
         oviUserDao.addOviUser(oviUser);
-        return "redirect:list";
+        return "redirect:/ovi-user/list/pending";
     }
 
-    // Modificar oviuser
+    // ==========================================
+    //   MODIFICAR/ACTUALIZAR Ovi User
+    // ==========================================
+
+    // Mostrar formulario de edición
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String edit(Model model, @PathVariable int id) {
+    public String editOviUser(Model model, @PathVariable int id) {
         model.addAttribute("oviUser", oviUserDao.getOviUser(id));
         return "ovi-user/update";
     }
 
+    // Procesar el formulario de edición con VALIDACIÓN
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdate(
-            @ModelAttribute("oviUser") OviUser oviUser,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+    public String processUpdateSubmit(@ModelAttribute("oviUser") OviUser oviUser,
+                                      BindingResult bindingResult) {
+
+        // Instanciar y ejecutar el validador
+        OviUserValidator oviUserValidator = new OviUserValidator();
+        oviUserValidator.validate(oviUser, bindingResult);
+
+        // Si hay errores en la edición, volvemos a la vista de update
+        if (bindingResult.hasErrors()) {
             return "ovi-user/update";
+        }
+
+        // Si todo es correcto, actualizamos
         oviUserDao.updateOviUser(oviUser);
-        return "redirect:list";
+        return "redirect:/ovi-user/list/accepted";
     }
 
     // ==========================================
-    //   NUEVO: GESTIÓN DE ACEPTAR / RECHAZAR
+    //   GESTIÓN DE ACEPTAR / RECHAZAR
     // ==========================================
 
-    // 1. Aceptar solicitud directamente (POST para mayor seguridad)
+    // Aceptar solicitud directamente
     @RequestMapping(value = "/accept/{id}", method = RequestMethod.POST)
     public String acceptOviUser(@PathVariable int id) {
         oviUserDao.updateOviUserState(id, "accepted", "");
         return "redirect:/ovi-user/list/pending";
     }
 
-    // 2. Mostrar formulario para rechazar (Pide el motivo)
+    // Mostrar formulario para rechazar (Pide el motivo)
     @RequestMapping(value = "/reject/{id}", method = RequestMethod.GET)
     public String rejectOviUserForm(Model model, @PathVariable int id) {
         OviUser oviUser = new OviUser();
@@ -89,7 +119,7 @@ public class OviUserController {
         return "ovi-user/reject";
     }
 
-    // 3. Procesar el rechazo guardando el motivo
+    // Procesar el rechazo guardando el motivo
     @RequestMapping(value = "/reject", method = RequestMethod.POST)
     public String processRejectOviUser(@ModelAttribute("oviUser") OviUser oviUser) {
         oviUserDao.updateOviUserState(
@@ -104,14 +134,14 @@ public class OviUserController {
     //   BORRADO DE OVI USER
     // ==========================================
 
-    // 1. Mostrar la página de confirmación de borrado (GET)
+    // Mostrar la página de confirmación de borrado (GET)
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteConfirm(Model model, @PathVariable int id) {
         model.addAttribute("oviUser", oviUserDao.getOviUser(id));
         return "ovi-user/delete";
     }
 
-    // 2. Ejecutar el borrado real tras confirmar (POST)
+    // Ejecutar el borrado real tras confirmar (POST)
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String processDelete(
             @ModelAttribute("oviUser") OviUser oviUser) {
