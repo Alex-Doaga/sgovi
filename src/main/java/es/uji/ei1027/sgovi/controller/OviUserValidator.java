@@ -72,26 +72,26 @@ public class OviUserValidator implements Validator {
             errors.rejectValue("postalCode", "format", "El codi postal ha de tindre exactament 5 números");
         }
 
-        // Validar Entitat (si en tu lógica de negocio es obligatoria)
+        // Validar Entitat
         if (oviUser.getEntity() == null || oviUser.getEntity().trim().isEmpty()) {
             errors.rejectValue("entity", "obligatori", "L'entitat és obligatòria");
         }
 
-        // Validar DNI/NIE del Tutor (Opcional, pero si se pone, format de 9 caràcters)
+        // Validar DNI/NIE del Tutor si se pone
         if (oviUser.getDniNieTutor() != null && !oviUser.getDniNieTutor().trim().isEmpty()) {
             if (oviUser.getDniNieTutor().trim().length() != 9) {
                 errors.rejectValue("dniNieTutor", "format", "El DNI/NIE del tutor ha de tindre exactament 9 caràcters");
             }
         }
 
-        // Validar Grau de Dependència (Si marca que en té, el valor ha de ser 1, 2 o 3)
+        // Validar Grau de Dependència (entre 1 y 3 si marca que tiene)
         if (Boolean.TRUE.equals(oviUser.getHasDepenDegree())) {
             if (oviUser.getDepenDegree() == null || oviUser.getDepenDegree() < 1 || oviUser.getDepenDegree() > 3) {
                 errors.rejectValue("depenDegree", "format", "Si tens grau de dependència, has d'indicar un valor entre 1 i 3");
             }
         }
 
-        // Validar URL del Projecte de Vida (Opcional, però si hi ha text ha de ser un enllaç)
+        // Validar URL del Projecte de Vida si se pone
         if (oviUser.getProjectLifeDoc() != null && !oviUser.getProjectLifeDoc().trim().isEmpty()) {
             String url = oviUser.getProjectLifeDoc().trim().toLowerCase();
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
