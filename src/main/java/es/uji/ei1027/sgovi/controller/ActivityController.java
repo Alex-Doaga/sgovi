@@ -3,6 +3,7 @@ package es.uji.ei1027.sgovi.controller;
 import es.uji.ei1027.sgovi.dao.ActivityDao;
 import es.uji.ei1027.sgovi.modelo.Activity;
 import es.uji.ei1027.sgovi.modelo.Instructor;
+import es.uji.ei1027.sgovi.validadores.ActivityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,11 +34,15 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAdd(
-            @ModelAttribute("activity") Activity activity,
-            BindingResult bindingResult) {
+    public String processAdd(@ModelAttribute("activity") Activity activity,
+                             BindingResult bindingResult) {
+        // Seguimos tu ejemplo: instanciar y validar manualmente
+        ActivityValidator activityValidator = new ActivityValidator();
+        activityValidator.validate(activity, bindingResult);
+
         if (bindingResult.hasErrors())
             return "activity/add";
+
         activityDao.addActivity(activity);
         return "redirect:list";
     }
@@ -48,12 +53,22 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdate(
-            @ModelAttribute("activity") Activity activity,
-            BindingResult bindingResult) {
+    public String processUpdate(@ModelAttribute("activity") Activity activity,
+                                BindingResult bindingResult) {
+        // Validamos también en el update como en los ejemplos de clase
+        ActivityValidator activityValidator = new ActivityValidator();
+        activityValidator.validate(activity, bindingResult);
+
         if (bindingResult.hasErrors())
             return "activity/update";
+
         activityDao.updateActivity(activity);
         return "redirect:list";
+    }
+
+    @RequestMapping(value = "/delete/{id}")
+    public String processDelete(@PathVariable int id) {
+        activityDao.deleteActivity(id);
+        return "redirect:../list";
     }
 }
