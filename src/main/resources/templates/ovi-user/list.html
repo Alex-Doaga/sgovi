@@ -3,57 +3,91 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Gestió d'Usuaris OVI</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <main class="container mt-4">
     <h1>Llista d'Usuaris OVI</h1>
 
-    <!-- Filtre per estat -->
     <div class="mb-3">
-        <a th:href="@{/ovi-user/list}" class="btn btn-outline-secondary btn-sm">Tots</a>
-        <a th:href="@{/ovi-user/list/pending}" class="btn btn-outline-warning btn-sm">Pendents</a>
-        <a th:href="@{/ovi-user/list/accepted}" class="btn btn-outline-success btn-sm">Acceptats</a>
-        <a th:href="@{/ovi-user/list/refused}" class="btn btn-outline-danger btn-sm">Rebutjats</a>
+        <a th:href="@{/ovi-user/list/pending}" class="btn btn-sm"
+           th:classappend="${currentState == 'pending' ? 'btn-warning' : 'btn-outline-warning'}">Pendents</a>
+
+        <a th:href="@{/ovi-user/list/accepted}" class="btn btn-sm"
+           th:classappend="${currentState == 'accepted' ? 'btn-success' : 'btn-outline-success'}">Acceptats</a>
+
+        <a th:href="@{/ovi-user/list/refused}" class="btn btn-sm"
+           th:classappend="${currentState == 'refused' ? 'btn-danger' : 'btn-outline-danger'}">Rebutjats</a>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped align-middle">
         <thead>
         <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Cognoms</th>
-            <th scope="col">DNI/NIE</th>
-            <th scope="col">Email</th>
-            <th scope="col">Telèfon</th>
-            <th scope="col">Estat</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-        </tr>
+            <th>Nom</th>
+            <th>Cognoms</th>
+            <th>DNI/NIE</th>
+            <th>Contacte</th>
+            <th>Accions</th> </tr>
         </thead>
         <tbody>
         <tr th:each="oviUser : ${oviUsers}">
             <td th:text="${oviUser.name}"></td>
             <td th:text="${oviUser.surname}"></td>
             <td th:text="${oviUser.dniNie}"></td>
-            <td th:text="${oviUser.email}"></td>
-            <td th:text="${oviUser.phone}"></td>
-            <td th:text="${oviUser.oviUserState}"></td>
             <td>
-                <a th:href="@{/ovi-user/update/{id}(id=${oviUser.idOviUser})}"
-                   class="btn btn-warning btn-sm">Edita</a>
+                <div th:text="${oviUser.email}"></div>
+                <small class="text-muted" th:text="${oviUser.phone}"></small>
             </td>
+
             <td>
-                <a th:href="@{/ovi-user/delete/{id}(id=${oviUser.idOviUser})}"
-                   class="btn btn-danger btn-sm">Esborra</a>
+                <div class="d-flex gap-2">
+                    <th:block th:if="${currentState == 'pending'}">
+                        <form th:action="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Acceptar</button>
+                        </form>
+                        <a th:href="@{/ovi-user/reject/{id}(id=${oviUser.idOviUser})}" class="btn btn-danger btn-sm">Rebutjar</a>
+                    </th:block>
+
+                    <th:block th:if="${currentState == 'accepted'}">
+                        <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}"
+                           class="btn btn-info btn-sm text-white">Ver Contractes</a>
+                    </th:block>
+
+                    <th:block th:if="${currentState == 'refused'}">
+                        <button type="button" class="btn btn-secondary btn-sm"
+                                data-bs-toggle="modal"
+                                th:data-bs-target="'#modalMotivo' + ${oviUser.idOviUser}">
+                            Ver Motiu
+                        </button>
+
+                        <div class="modal fade" th:id="'modalMotivo' + ${oviUser.idOviUser}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title">Motiu del Rebuig</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Usuari:</strong> <span th:text="${oviUser.name + ' ' + oviUser.surname}"></span></p>
+                                        <hr>
+                                        <p th:text="${oviUser.rejectionReason}"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
+                                        <a th:href="@{/ovi-user/update/{id}(id=${oviUser.idOviUser})}" class="btn btn-warning">Editar dades</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a href="add" class="btn btn-success">Afegeix usuari</a>
-    <a href="/" class="btn btn-secondary ms-2">Tornar</a>
+    <a th:href="@{/}" class="btn btn-secondary">Tornar</a>
 </main>
 </body>
 </html>

@@ -23,18 +23,16 @@ public class RequestDao {
     public void addRequest(Request request) {
         jdbcTemplate.update(
                 "INSERT INTO request (ovi_user_id, request_date, start_date, " +
-                        "duration, type_pa, type_service, age_pa, city, hobbies, " +
+                        "duration, type_pa, age_pa, city, hobbies, " +
                         "required_gender, experience, education, comments) " +
                         "VALUES (?, ?, ?, ?, " +
                         "CAST(? AS type_pa_enum), " +
-                        "CAST(? AS type_accompaniment_enum), " +
                         "?, ?, ?, ?, ?, ?, ?)",
                 request.getOviUserId(),
                 request.getRequestDate(),
                 request.getStartDate(),
                 request.getDuration(),
                 request.getTypePa(),
-                request.getTypeService(),
                 request.getAgePa(),
                 request.getCity(),
                 request.getHobbies(),
@@ -58,14 +56,12 @@ public class RequestDao {
                 "UPDATE request SET " +
                         "start_date = ?, duration = ?, " +
                         "type_pa = CAST(? AS type_pa_enum), " +
-                        "type_service = CAST(? AS type_accompaniment_enum), " +
                         "age_pa = ?, city = ?, hobbies = ?, required_gender = ?, " +
                         "experience = ?, education = ?, comments = ? " +
                         "WHERE id_request = ?",
                 request.getStartDate(),
                 request.getDuration(),
                 request.getTypePa(),
-                request.getTypeService(),
                 request.getAgePa(),
                 request.getCity(),
                 request.getHobbies(),
@@ -122,6 +118,21 @@ public class RequestDao {
                             "WHERE state = CAST(? AS state_enum) " +
                             "ORDER BY request_date DESC",
                     new RequestRowMapper(),
+                    state
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Obtiene las solicitudes de un usuario concreto filtradas por su estado
+    public List<Request> getRequestsByOviUserAndState(int oviUserId, String state) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM request WHERE ovi_user_id = ? AND state = CAST(? AS state_enum) " +
+                            "ORDER BY request_date DESC",
+                    new RequestRowMapper(),
+                    oviUserId,
                     state
             );
         } catch (EmptyResultDataAccessException e) {

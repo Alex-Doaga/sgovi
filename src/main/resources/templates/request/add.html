@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGOVI - Nova Sol·licitud AP</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container py-5" style="max-width: 900px;">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">
+            <i class="bi bi-file-earmark-plus me-2"></i>Nova Sol·licitud
+        </h2>
+        <a th:href="@{/request/list/user/{id}(id=${request.oviUserId})}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Tornar
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom p-4">
+            <h5 class="mb-0">Dades de la sol·licitud d'Assistència Personal</h5>
+            <p class="text-muted small mb-0 mt-1">Emplena els camps següents segons les teues preferències.</p>
+        </div>
+
+        <div class="card-body p-4">
+            <form th:action="@{/request/add}" th:object="${request}" method="post">
+
+                <input type="hidden" th:field="*{oviUserId}" />
+
+                <div class="row g-4">
+
+                    <div class="col-12">
+                        <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">1. Dades Temporals i d'Ubicació</h6>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Data d'Inici <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" th:field="*{startDate}" required />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Durada (mesos) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" th:field="*{duration}" required min="1" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Ciutat <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" th:field="*{city}" required />
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">2. Configuració del Servei</h6>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Tipus d'Assistent <span class="text-danger">*</span></label>
+                        <select class="form-select" th:field="*{typePa}" required>
+                            <option value="" disabled selected>Selecciona una opció...</option>
+                            <option value="PAP">PAP (Professional d’Assistència Personal )</option>
+                            <option value="PATI">PATI (Professional d’Assistència Terapèutica Infantil)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">3. Preferències i Observacions</h6>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Edat preferida PA</label>
+                        <input type="number" class="form-control" th:field="*{agePa}" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Gènere preferit</label>
+                        <select class="form-select" th:field="*{requiredGender}">
+                            <option value="Indiferent">Indiferent</option>
+                            <option value="Dona">Dona</option>
+                            <option value="Home">Home</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Formació</label>
+                        <input type="text" class="form-control" th:field="*{education}" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Experiència requerida</label>
+                        <input type="text" class="form-control" th:field="*{experience}" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Aficions (Hobbies)</label>
+                        <input type="text" class="form-control" th:field="*{hobbies}" />
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-medium">Comentaris addicionals</label>
+                        <textarea class="form-control" rows="3" th:field="*{comments}"></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
+                    <a th:href="@{/request/list/user/{id}(id=*{oviUserId})}" class="btn btn-light px-4">Cancel·lar</a>
+                    <button type="submit" class="btn btn-primary px-5">
+                        <i class="bi bi-send me-2"></i> Registrar Sol·licitud
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

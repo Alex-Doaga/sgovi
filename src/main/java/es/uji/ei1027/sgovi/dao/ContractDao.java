@@ -108,7 +108,7 @@ public class ContractDao {
         }
     }
 
-    // Contractes actius o finalitzats
+    // Listar contratos por estado (actius o finalitzats)
     public List<Contract> getContractsByState(String state) {
         try {
             return jdbcTemplate.query(
@@ -123,6 +123,7 @@ public class ContractDao {
         }
     }
 
+    // Actualizar estado de un contrato
     public void updateContractState(int idContract, String state) {
         jdbcTemplate.update(
                 "UPDATE contract SET " +
@@ -133,12 +134,14 @@ public class ContractDao {
         );
     }
 
-    public List<Contract> getContractsByOviUser(int idOviUser) {
+
+    // Contratos de un ovi user
+    public List<Contract> getContractsByUserId(int idOviUser) {
         try {
             return jdbcTemplate.query(
                     "SELECT c.* FROM contract c " +
                             "JOIN request r ON c.id_request = r.id_request " +
-                            "WHERE r.ovi_user_id = ? ORDER BY c.start_date DESC",
+                            "WHERE r.ovi_user_id = ?",
                     new ContractRowMapper(),
                     idOviUser
             );

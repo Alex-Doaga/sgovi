@@ -19,6 +19,12 @@ public class ContractController {
         this.contractDao = contractDao;
     }
 
+    // Operaciones: listar, crear, actualizar, borrar
+
+    // ==========================================
+    //   LISTAR Contratos
+    // ==========================================
+
     // Listado de todos los contratos
     @RequestMapping("/list")
     public String listContracts(Model model) {
@@ -26,14 +32,16 @@ public class ContractController {
         return "contract/list";
     }
 
-    // Listado de contratos de un usuario específico (el que llama tu botón)
-    @RequestMapping("/list/ovi-user/{id}")
-    public String listByOviUser(Model model, @PathVariable int id) {
-        // AHORA SÍ busca los contratos de ese usuario concreto
-        model.addAttribute("contracts", contractDao.getContractsByOviUser(id));
-        model.addAttribute("oviUserId", id);
+    // Listado de contratos de un usuario específico
+    @RequestMapping("/list/user/{id}")
+    public String listUserContracts(Model model, @PathVariable int id) {
+        model.addAttribute("contracts", contractDao.getContractsByUserId(id));
         return "contract/list";
     }
+
+    // ==========================================
+    //   CREAR/AÑADIR Request
+    // ==========================================
 
     // Formulario de añadir contrato
     @RequestMapping(value = "/add/{idRequest}", method = RequestMethod.GET)
@@ -64,6 +72,10 @@ public class ContractController {
         return "redirect:/contract/list/ovi-user/" + contract.getIdRequest();
     }
 
+    // ==========================================
+    //   MODIFICAR/ACTUALIZAR Contrato
+    // ==========================================
+
     // Mostrar formulario de edición
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String editContract(Model model, @PathVariable int id) {
@@ -89,6 +101,10 @@ public class ContractController {
         contractDao.updateContract(contract);
         return "redirect:/contract/list";
     }
+
+    // ==========================================
+    //   BORRADO DE CONTRATOS
+    // ==========================================
 
     // Eliminar contrato
     @RequestMapping(value = "/delete/{id}")

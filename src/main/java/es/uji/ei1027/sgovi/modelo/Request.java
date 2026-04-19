@@ -15,7 +15,6 @@ public class Request {
     private LocalDate startDate;
     private Integer duration;
     private String typePa;
-    private String typeService;
     private Integer agePa;
     private String city;
     private String hobbies;
@@ -77,14 +76,6 @@ public class Request {
 
     public void setTypePa(String typePa) {
         this.typePa = typePa;
-    }
-
-    public String getTypeService() {
-        return typeService;
-    }
-
-    public void setTypeService(String typeService) {
-        this.typeService = typeService;
     }
 
     public Integer getAgePa() {
@@ -160,7 +151,6 @@ public class Request {
                 ", startDate=" + startDate +
                 ", duration=" + duration +
                 ", typePa='" + typePa + '\'' +
-                ", typeService='" + typeService + '\'' +
                 ", agePA=" + agePa +
                 ", city='" + city + '\'' +
                 ", hobbies='" + hobbies + '\'' +

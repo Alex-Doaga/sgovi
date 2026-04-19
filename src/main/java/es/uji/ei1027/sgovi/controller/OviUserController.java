@@ -25,18 +25,20 @@ public class OviUserController {
     //   LISTAR Ovi Users
     // ==========================================
 
-    //Operación listar todos los oviUsers
+    // Operación listar todos los oviUsers
     @RequestMapping("/list")
     public String list(Model model) {
         model.addAttribute("oviUsers", oviUserDao.getOviUsers());
+        model.addAttribute("currentState", "all"); // <-- Añadimos esto
         return "ovi-user/list";
     }
 
-    // Operación listar los oviUsers por estado de registro (aceptados/pendientes/rechazados)
+    // Operación listar los oviUsers por estado
     @RequestMapping("/list/{state}")
     public String listByState(Model model, @PathVariable String state) {
-        model.addAttribute("oviUsers", oviUserDao.getOviUsersByState(state));
-        return "ovi-user/list-" + state;
+        model.addAttribute("oviUsers", oviUserDao.getOviUsersByState(state)); // O el nombre que tenga tu método en el DAO
+        model.addAttribute("currentState", state); // <-- Añadimos esto
+        return "ovi-user/list"; // <-- Ahora TODOS devuelven la misma vista
     }
 
     // ==========================================
@@ -147,5 +149,20 @@ public class OviUserController {
             @ModelAttribute("oviUser") OviUser oviUser) {
         oviUserDao.deleteOviUser(oviUser.getIdOviUser());
         return "redirect:list";
+    }
+
+    // ==========================================
+    //   DASHBOARD
+    // ==========================================
+
+    @RequestMapping("/dashboard")
+    public String dashboard(Model model) {
+        // Por ahora, como no tenemos login real,
+        // buscamos un usuario de prueba (por ejemplo el ID 1)
+        // para que la vista tenga datos que mostrar.
+        OviUser oviUser = oviUserDao.getOviUser(1);
+        model.addAttribute("oviUser", oviUser);
+
+        return "ovi-user/dashboard";
     }
 }
