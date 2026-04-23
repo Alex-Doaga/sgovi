@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/pa")
 public class PaController {
 
+    private PaDao paDao;
+
     @Autowired
-    private PaDao paDao; // Asegúrate de tener tu DAO inyectado
+    public void setOviUserDao(PaDao paDao) {
+        this.paDao = paDao;
+    }
 
     @RequestMapping("/dashboard")
     public String dashboard(Model model) {

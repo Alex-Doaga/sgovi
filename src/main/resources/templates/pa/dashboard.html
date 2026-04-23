@@ -27,7 +27,7 @@
         </a>
       </li>
 
-      <th:block th:if="${oviUser.oviUserState == 'accepted'}">
+      <th:block th:if="${pa.paState == 'accepted'}">
         <li>
           <a th:href="@{/contract/list/pa/{id}(id=${pa.idPa})}" class="nav-link">
             <i data-lucide="file-text"></i> Contractes
@@ -59,10 +59,10 @@
         <div class="d-flex align-items-center me-3 border-end pe-3">
           <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
                style="width: 32px; height: 32px; font-size: 0.8rem;"
-               th:text="${#strings.substring(oviUser.name,0,1) + #strings.substring(oviUser.surname,0,1)}">
+               th:text="${#strings.substring(pa.name,0,1) + #strings.substring(pa.surname,0,1)}">
             U
           </div>
-          <span class="fw-medium text-dark" th:text="${oviUser.name + ' ' + oviUser.surname}">Usuari</span>
+          <span class="fw-medium text-dark" th:text="${pa.name + ' ' + pa.surname}">Usuari</span>
         </div>
         <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm d-flex align-items-center">
           <i data-lucide="log-out" class="me-1" style="width: 16px;"></i> Tancar sessió
@@ -74,7 +74,7 @@
       <div th:if="${pa.paState == 'accepted'}">
 
         <div class="mb-4">
-          <h1 class="h3 fw-bold">Benvingut/da, <span th:text="${oviUser.name}">Nom</span>!</h1>
+          <h1 class="h3 fw-bold">Benvingut/da, <span th:text="${pa.name}">Nom</span>!</h1>
           <p class="text-secondary">Resum del teu compte i gestions actives.</p>
         </div>
 
@@ -125,7 +125,7 @@
         </div>
       </div>
 
-      <div th:if="${oviUser.oviUserState == 'pending'}">
+      <div th:if="${pa.paState == 'pending'}">
         <div class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-center">
           <div class="bg-white rounded-circle p-3 me-4 text-info shadow-sm">
             <i data-lucide="hourglass" style="width: 40px; height: 40px;"></i>
@@ -133,7 +133,7 @@
           <div>
             <h4 class="alert-heading fw-bold">El teu compte està en revisió</h4>
             <p class="mb-3 text-dark">El teu registre està sent revisat per un instructor.</p>
-            <a th:href="@{/ovi-user/update/{id}(id=${oviUser.idOviUser})}" class="btn btn-info text-white fw-bold">
+            <a th:href="@{/ovi-user/update/{id}(id=${pa.idPa})}" class="btn btn-info text-white fw-bold">
               <i data-lucide="user-cog" class="me-2" style="width: 18px;"></i> Anar al meu perfil
             </a>
           </div>
