@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Nou Assistent Personal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4 mb-5">
+  <h1>Registrar Nou Assistent Personal (PA)</h1>
+  <hr>
+
+  <form th:action="@{/pa/add}" th:object="${pa}" method="post" class="row g-3">
+
+    <input type="hidden" th:field="*{paState}" value="pending" />
+
+    <h2 class="h5 mt-4 text-primary">Dades Personals</h2>
+
+    <div class="col-md-4">
+      <label for="name" class="form-label">Nom</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('name')} ? 'form-control is-invalid' : 'form-control'"
+             id="name" th:field="*{name}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="surname" class="form-label">Cognoms</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('surname')} ? 'form-control is-invalid' : 'form-control'"
+             id="surname" th:field="*{surname}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="dniNie" class="form-label">DNI/NIE</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('dniNie')} ? 'form-control is-invalid' : 'form-control'"
+             id="dniNie" th:field="*{dniNie}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('dniNie')}" th:errors="*{dniNie}"></div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="birthDate" class="form-label">Data de Naixement</label>
+      <input type="date"
+             th:class="${#fields.hasErrors('birthDate')} ? 'form-control is-invalid' : 'form-control'"
+             id="birthDate" th:field="*{birthDate}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="gender" class="form-label">Gènere</label>
+      <select th:class="${#fields.hasErrors('gender')} ? 'form-select is-invalid' : 'form-select'"
+              id="gender" th:field="*{gender}">
+        <option value="" disabled selected>Selecciona una opció...</option>
+        <option value="Dona">Dona</option>
+        <option value="Home">Home</option>
+        <option value="Altres">Altres</option>
+      </select>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+    </div>
+
+    <h2 class="h5 mt-4 text-primary">Contacte i Localització</h2>
+
+    <div class="col-md-6">
+      <label for="email" class="form-label">Correu Electrònic</label>
+      <input type="email"
+             th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid' : 'form-control'"
+             id="email" th:field="*{email}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="phone" class="form-label">Telèfon</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('phone')} ? 'form-control is-invalid' : 'form-control'"
+             id="phone" th:field="*{phone}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+    </div>
+
+    <div class="col-md-12">
+      <label for="address" class="form-label">Adreça</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('address')} ? 'form-control is-invalid' : 'form-control'"
+             id="address" th:field="*{address}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="city" class="form-label">Ciutat</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('city')} ? 'form-control is-invalid' : 'form-control'"
+             id="city" th:field="*{city}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="postalCode" class="form-label">Codi Postal</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('postalCode')} ? 'form-control is-invalid' : 'form-control'"
+             id="postalCode" th:field="*{postalCode}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></div>
+    </div>
+
+    <h2 class="h5 mt-4 text-primary">Perfil Professional</h2>
+
+    <div class="col-md-6">
+      <label for="entity" class="form-label">Entitat vinculada</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('entity')} ? 'form-control is-invalid' : 'form-control'"
+             id="entity" th:field="*{entity}"/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('entity')}" th:errors="*{entity}"></div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="cv" class="form-label">URL del Currículum (CV)</label>
+      <input type="text"
+             th:class="${#fields.hasErrors('cv')} ? 'form-control is-invalid' : 'form-control'"
+             id="cv" th:field="*{cv}" placeholder="http://..."/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"></div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="typePa" class="form-label">Tipus de PA</label>
+      <select th:class="${#fields.hasErrors('typePa')} ? 'form-select is-invalid' : 'form-select'"
+              id="typePa" th:field="*{typePa}">
+        <option value="" disabled selected>Selecciona el tipus...</option>
+        <option value="PAP">PAP</option>
+        <option value="Altres">Altres</option>
+      </select>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('typePa')}" th:errors="*{typePa}"></div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="education" class="form-label">Formació</label>
+      <textarea class="form-control" id="education" th:field="*{education}" rows="3" placeholder="Estudis i titulacions..."></textarea>
+    </div>
+
+    <div class="col-md-6">
+      <label for="experience" class="form-label">Experiència prèvia</label>
+      <textarea class="form-control" id="experience" th:field="*{experience}" rows="3" placeholder="Anys i tipus d'experiència..."></textarea>
+    </div>
+
+    <h2 class="h5 mt-4 text-primary">Dades Addicionals</h2>
+
+    <div class="col-md-6">
+      <label for="hobbies" class="form-label">Aficions / Hobbies</label>
+      <textarea class="form-control" id="hobbies" th:field="*{hobbies}" rows="2"></textarea>
+    </div>
+
+    <div class="col-md-6">
+      <label for="comments" class="form-label">Comentaris (Opcional)</label>
+      <textarea class="form-control" id="comments" th:field="*{comments}" rows="2"></textarea>
+    </div>
+
+    <h2 class="h5 mt-4 text-primary">Seguretat</h2>
+
+    <div class="col-md-6">
+      <label for="password" class="form-label">Contrasenya inicial</label>
+      <input type="password"
+             th:class="${#fields.hasErrors('password')} ? 'form-control is-invalid' : 'form-control'"
+             id="password" th:field="*{password}" required/>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </div>
+
+    <div class="col-12 mt-4">
+      <button type="submit" class="btn btn-primary">Registrar Assistent Personal</button>
+      <a th:href="@{/pa/list}" class="btn btn-secondary">Cancel·lar</a>
+    </div>
+  </form>
+</main>
+</body>
+</html>

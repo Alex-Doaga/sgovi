@@ -84,43 +84,50 @@
 
                 <div class="row g-4">
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card h-100 border-0 shadow-sm p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Contractes</h6>
+                                <h6 class="text-muted fw-bold mb-0">Contractes</h6>
                                 <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="file-check-2"></i></span>
                             </div>
-                            <h2 class="fw-bold mb-3">--</h2>
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+                            <div class="mt-auto">
+                                <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Veure contractes <i data-lucide="arrow-right" class="ms-1" style="width: 14px;"></i></a>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card h-100 border-0 shadow-sm p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Sol·licituds AP</h6>
+                                <h6 class="text-muted fw-bold mb-0">Sol·licituds AP</h6>
                                 <span class="badge bg-warning-subtle text-warning p-2"><i data-lucide="clipboard-list"></i></span>
                             </div>
-                            <h2 class="fw-bold mb-3">--</h2>
-                            <a th:href="@{/request/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>
+                            <div class="mt-auto">
+                                <a th:href="@{/request/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Gestionar <i data-lucide="arrow-right" class="ms-1" style="width: 14px;"></i></a>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card h-100 border-0 shadow-sm p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Activitats</h6>
+                                <h6 class="text-muted fw-bold mb-0">Activitats</h6>
                                 <span class="badge bg-success-subtle text-success p-2"><i data-lucide="calendar"></i></span>
                             </div>
-                            <h2 class="fw-bold mb-3">--</h2>
-                            <a th:href="@{/activity/list}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
+                            <div class="mt-auto">
+                                <a th:href="@{/activity/list}" class="text-decoration-none text-primary small fw-bold">Explorar <i data-lucide="arrow-right" class="ms-1" style="width: 14px;"></i></a>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card h-100 border-0 shadow-sm p-4">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Negociacions</h6>
+                                <h6 class="text-muted fw-bold mb-0">Negociacions</h6>
                                 <span class="badge bg-info-subtle text-info p-2"><i data-lucide="handshake"></i></span>
                             </div>
-                            <h2 class="fw-bold mb-3">--</h2>
-                            <a th:href="@{/negotiation/list}" class="text-decoration-none text-primary small fw-bold">Revisar</a>
+                            <div class="mt-auto">
+                                <a th:href="@{/negotiation/list}" class="text-decoration-none text-primary small fw-bold">Revisar <i data-lucide="arrow-right" class="ms-1" style="width: 14px;"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,7 +140,7 @@
                     </div>
                     <div>
                         <h4 class="alert-heading fw-bold">El teu compte està en revisió</h4>
-                        <p class="mb-3 text-dark">El teu registre està sent revisat per un instructor.</p>
+                        <p class="mb-3 text-dark">El teu registre està sent revisat per un tècnic.</p>
                         <a th:href="@{/ovi-user/update/{id}(id=${oviUser.idOviUser})}" class="btn btn-info text-white fw-bold">
                             <i data-lucide="user-cog" class="me-2" style="width: 18px;"></i> Anar al meu perfil
                         </a>
