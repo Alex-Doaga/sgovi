@@ -24,7 +24,7 @@ public class PaDao {
     public void addPA(PA pa) {
         jdbcTemplate.update(
                 "INSERT INTO pa (name, surname, dni_nie, birth_date, address, city, " +
-                        "postal_code, email, phone, type_pa, type_service, education, entity, " +
+                        "postal_code, email, phone, type_pa, type_service, education, " +
                         "experience, hobbies, gender, comments, cv, password) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, " +
                         "CAST(? AS type_pa_enum), CAST(? AS type_accompaniment_enum), " +
@@ -32,7 +32,7 @@ public class PaDao {
                 pa.getName(), pa.getSurname(), pa.getDniNie(), pa.getBirthDate(),
                 pa.getAddress(), pa.getCity(), pa.getPostalCode(), pa.getEmail(),
                 pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
-                pa.getEntity(), pa.getExperience(), pa.getHobbies(), pa.getGender(),
+                pa.getExperience(), pa.getHobbies(), pa.getGender(),
                 pa.getComments(), pa.getCv(), pa.getPassword()
         );
     }
@@ -52,13 +52,13 @@ public class PaDao {
                         "address=?, city=?, postal_code=?, email=?, phone=?, " +
                         "type_pa=CAST(? AS type_pa_enum), " +
                         "type_service=CAST(? AS type_accompaniment_enum), " +
-                        "education=?, entity=?, experience=?, hobbies=?, " +
+                        "education=?, experience=?, hobbies=?, " +
                         "gender=?, comments=?, cv=? " +
                         "WHERE id_pa=?",
                 pa.getName(), pa.getSurname(), pa.getDniNie(), pa.getBirthDate(),
                 pa.getAddress(), pa.getCity(), pa.getPostalCode(), pa.getEmail(),
                 pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
-                pa.getEntity(), pa.getExperience(), pa.getHobbies(), pa.getGender(),
+                pa.getExperience(), pa.getHobbies(), pa.getGender(),
                 pa.getComments(), pa.getCv(), pa.getIdPa()
         );
     }
