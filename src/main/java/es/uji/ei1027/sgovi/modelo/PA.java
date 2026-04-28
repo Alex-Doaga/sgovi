@@ -1,5 +1,6 @@
 package es.uji.ei1027.sgovi.modelo;
 
+import es.uji.ei1027.sgovi.modelo.enums.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -11,21 +12,20 @@ public class PA {
     private String surname;
     private String email;
     private String phone;
-    private String typePa;
+    private TypePaEnum typePa;
     private String typeService;
     private String address;
-    private String education;
-    private String entity;
-    private String experience;
+    private EducationEnum education;
+    private Integer experience;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    private String city;
-    private String gender;
-    private String postalCode;
-    private String hobbies;
+    private CityEnum city;
+    private GenderEnum gender;
+    private Integer postalCode;
+    private HobbiesEnum hobbies;
     private String comments;
     private String cv;
-    private String paState;
+    private StateEnum paState;
     private String rejectionReason;
     private String password;
 
@@ -72,12 +72,28 @@ public class PA {
         this.email = email;
     }
 
-    public String getTypePa() {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public TypePaEnum getTypePa() {
         return typePa;
     }
 
-    public void setTypePa(String typePa) {
+    public void setTypePa(TypePaEnum typePa) {
         this.typePa = typePa;
+    }
+
+    public String getTypeService() {
+        return typeService;
+    }
+
+    public void setTypeService(String typeService) {
+        this.typeService = typeService;
     }
 
     public String getAddress() {
@@ -88,54 +104,61 @@ public class PA {
         this.address = address;
     }
 
-    public String getEducation() {
+    public EducationEnum getEducation() {
         return education;
     }
 
-    public void setEducation(String education) {
+    public void setEducation(EducationEnum education) {
         this.education = education;
     }
 
-    public String getEntity() {
-        return entity;
-    }
-
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
-
-    public String getExperience() {
+    public Integer getExperience() {
         return experience;
     }
 
-    public void setExperience(String experience) {
+    public void setExperience(Integer experience) {
         this.experience = experience;
     }
 
     public LocalDate getBirthDate() {
         return birthDate;
     }
+
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
-    public String getCity() {
+    public CityEnum getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(CityEnum city) {
         this.city = city;
     }
 
-    public String getPostalCode() { return postalCode; }
+    public GenderEnum getGender() {
+        return gender;
+    }
 
-    public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
+    public void setGender(GenderEnum gender) {
+        this.gender = gender;
+    }
 
-    public String getHobbies() {
+    public Integer getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(Integer postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public HobbiesEnum getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(String hobbies) { this.hobbies = hobbies; }
+    public void setHobbies(HobbiesEnum hobbies) {
+        this.hobbies = hobbies;
+    }
 
     public String getComments() {
         return comments;
@@ -153,35 +176,11 @@ public class PA {
         this.cv = cv;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getTypeService() {
-        return typeService;
-    }
-
-    public void setTypeService(String typeService) {
-        this.typeService = typeService;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getPaState() {
+    public StateEnum getPaState() {
         return paState;
     }
 
-    public void setPaState(String paState) {
+    public void setPaState(StateEnum paState) {
         this.paState = paState;
     }
 
@@ -204,7 +203,7 @@ public class PA {
     @Override
     public String toString() {
         return "PA{" +
-                "idPa='" + idPa + '\'' +
+                "idPa=" + idPa +
                 ", dniNie='" + dniNie + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
@@ -213,18 +212,18 @@ public class PA {
                 ", typePa=" + typePa +
                 ", typeService='" + typeService + '\'' +
                 ", address='" + address + '\'' +
-                ", education='" + education + '\'' +
-                ", entity='" + entity + '\'' +
-                ", experience='" + experience + '\'' +
+                ", education=" + education +
+                ", experience=" + experience +
                 ", birthDate=" + birthDate +
-                ", city='" + city + '\'' +
-                ", gender='" + gender + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", hobbies='" + hobbies + '\'' +
+                ", city=" + city +
+                ", gender=" + gender +
+                ", postalCode=" + postalCode +
+                ", hobbies=" + hobbies +
                 ", comments='" + comments + '\'' +
                 ", cv='" + cv + '\'' +
-                ", paState='" + paState + '\'' +
+                ", paState=" + paState +
                 ", rejectionReason='" + rejectionReason + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

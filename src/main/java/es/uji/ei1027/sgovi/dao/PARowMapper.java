@@ -1,6 +1,7 @@
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.modelo.PA;
+import es.uji.ei1027.sgovi.modelo.enums.*;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -16,20 +17,19 @@ public class PARowMapper implements RowMapper<PA> {
         pa.setSurname(rs.getString("surname"));
         pa.setEmail(rs.getString("email"));
         pa.setAddress(rs.getString("address"));
-        pa.setEducation(rs.getString("education"));
-        pa.setEntity(rs.getString("entity"));
-        pa.setExperience(rs.getString("experience"));
+        pa.setEducation(EducationEnum.valueOf(rs.getString("education")));
+        pa.setExperience(Integer.valueOf(rs.getString("experience")));
         pa.setBirthDate(rs.getObject("birth_date", LocalDate.class));
-        pa.setCity(rs.getString("city"));
-        pa.setHobbies(rs.getString("hobbies"));
+        pa.setCity(CityEnum.valueOf(rs.getString("city")));
+        pa.setHobbies(HobbiesEnum.valueOf(rs.getString("hobbies")));
         pa.setComments(rs.getString("comments"));
         pa.setCv(rs.getString("cv"));
         pa.setPhone(rs.getString("phone"));
-        pa.setTypePa(rs.getString("type_pa"));
+        pa.setTypePa(TypePaEnum.valueOf(rs.getString("type_pa")));
         pa.setTypeService(rs.getString("type_service"));
-        pa.setGender(rs.getString("gender"));
-        pa.setPostalCode(rs.getString("postal_code"));
-        pa.setPaState(rs.getString("pa_state"));
+        pa.setGender(GenderEnum.valueOf(rs.getString("gender")));
+        pa.setPostalCode(rs.getInt("postal_code"));
+        pa.setPaState(StateEnum.valueOf(rs.getString("pa_state")));
         pa.setRejectionReason(rs.getString("rejection_reason"));
 
         return pa;
