@@ -28,6 +28,10 @@ public class PA {
     private StateEnum paState;
     private String rejectionReason;
     private String password;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate availabilityStartDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate availabilityEndDate;
 
     public PA() {
     }
@@ -200,6 +204,22 @@ public class PA {
         this.password = password;
     }
 
+    public LocalDate getAvailabilityStartDate() {
+        return availabilityStartDate;
+    }
+
+    public void setAvailabilityStartDate(LocalDate availabilityStartDate) {
+        this.availabilityStartDate = availabilityStartDate;
+    }
+
+    public LocalDate getAvailabilityEndDate() {
+        return availabilityEndDate;
+    }
+
+    public void setAvailabilityEndDate(LocalDate availabilityEndDate) {
+        this.availabilityEndDate = availabilityEndDate;
+    }
+
     @Override
     public String toString() {
         return "PA{" +
@@ -224,6 +244,8 @@ public class PA {
                 ", paState=" + paState +
                 ", rejectionReason='" + rejectionReason + '\'' +
                 ", password='" + password + '\'' +
+                ", availabilityStartDate=" + availabilityStartDate +
+                ", availabilityEndDate=" + availabilityEndDate +
                 '}';
     }
 }

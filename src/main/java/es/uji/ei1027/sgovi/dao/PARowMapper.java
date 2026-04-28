@@ -31,6 +31,8 @@ public class PARowMapper implements RowMapper<PA> {
         pa.setPostalCode(rs.getInt("postal_code"));
         pa.setPaState(StateEnum.valueOf(rs.getString("pa_state")));
         pa.setRejectionReason(rs.getString("rejection_reason"));
+        pa.setAvailabilityStartDate(rs.getObject("availability_start_date", LocalDate.class));
+        pa.setAvailabilityEndDate(rs.getObject("availability_end_date", LocalDate.class));
 
         return pa;
     }

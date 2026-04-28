@@ -1,7 +1,6 @@
 package es.uji.ei1027.sgovi.modelo;
 
-
-
+import es.uji.ei1027.sgovi.modelo.enums.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -14,21 +13,20 @@ public class Request {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private Integer duration;
-    private String typePa;
+    private TypePaEnum typePa;
     private Integer agePa;
-    private String city;
-    private String hobbies;
-    private String requiredGender;
-    private String experience;
-    private String education;
-    private String state;
+    private CityEnum city;
+    private HobbiesEnum hobbies;
+    private GenderEnum requiredGender;
+    private Integer experience;
+    private EducationEnum education;
+    private StateEnum state;
     private String comments;
 
 
     //Constructor
     public Request() {
     }
-
 
     public Integer getIdRequest() {
         return idRequest;
@@ -70,11 +68,11 @@ public class Request {
         this.duration = duration;
     }
 
-    public String getTypePa() {
+    public TypePaEnum getTypePa() {
         return typePa;
     }
 
-    public void setTypePa(String typePa) {
+    public void setTypePa(TypePaEnum typePa) {
         this.typePa = typePa;
     }
 
@@ -82,55 +80,55 @@ public class Request {
         return agePa;
     }
 
-    public void setAgePa(Integer agePA) {
-        this.agePa = agePA;
+    public void setAgePa(Integer agePa) {
+        this.agePa = agePa;
     }
 
-    public String getCity() {
+    public CityEnum getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(CityEnum city) {
         this.city = city;
     }
 
-    public String getHobbies() {
+    public HobbiesEnum getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(String hobbies) {
+    public void setHobbies(HobbiesEnum hobbies) {
         this.hobbies = hobbies;
     }
 
-    public String getRequiredGender() {
+    public GenderEnum getRequiredGender() {
         return requiredGender;
     }
 
-    public void setRequiredGender(String requiredGender) {
+    public void setRequiredGender(GenderEnum requiredGender) {
         this.requiredGender = requiredGender;
     }
 
-    public String getExperience() {
+    public Integer getExperience() {
         return experience;
     }
 
-    public void setExperience(String experience) {
+    public void setExperience(Integer experience) {
         this.experience = experience;
     }
 
-    public String getEducation() {
+    public EducationEnum getEducation() {
         return education;
     }
 
-    public void setEducation(String education) {
+    public void setEducation(EducationEnum education) {
         this.education = education;
     }
 
-    public String getState() {
+    public StateEnum getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(StateEnum state) {
         this.state = state;
     }
 
@@ -150,14 +148,14 @@ public class Request {
                 ", requestDate=" + requestDate +
                 ", startDate=" + startDate +
                 ", duration=" + duration +
-                ", typePa='" + typePa + '\'' +
-                ", agePA=" + agePa +
-                ", city='" + city + '\'' +
-                ", hobbies='" + hobbies + '\'' +
-                ", requiredGender='" + requiredGender + '\'' +
-                ", experience='" + experience + '\'' +
-                ", education='" + education + '\'' +
-                ", state='" + state + '\'' +
+                ", typePa=" + typePa +
+                ", agePa=" + agePa +
+                ", city=" + city +
+                ", hobbies=" + hobbies +
+                ", requiredGender=" + requiredGender +
+                ", experience=" + experience +
+                ", education=" + education +
+                ", state=" + state +
                 ", comments='" + comments + '\'' +
                 '}';
     }
