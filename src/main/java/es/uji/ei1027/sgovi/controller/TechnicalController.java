@@ -1,5 +1,6 @@
 package es.uji.ei1027.sgovi.controller;
 
+import es.uji.ei1027.sgovi.dao.NegotiationDao;
 import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
 import es.uji.ei1027.sgovi.modelo.OviUser;
@@ -15,9 +16,14 @@ import java.util.List;
 @RequestMapping("/technical")
 public class TechnicalController {
 
+    private NegotiationDao negotiationDao;
     private OviUserDao oviUserDao;
     private RequestDao requestDao;
 
+    @Autowired
+    public void setNegotiationDao(NegotiationDao negotiationDao) {
+        this.negotiationDao = negotiationDao;
+    }
     @Autowired
     public void setOviUserDao(OviUserDao oviUserDao) {
         this.oviUserDao = oviUserDao;
@@ -82,6 +88,15 @@ public class TechnicalController {
             System.out.println(">>>>>>>>>>CANDIDATE  " + candidate);
         }
        return "technical/candidates";
+    }
+
+    //TODO Noemí: de momento es una prueba
+    // Visualizar los detalles de una negociación entra el usuario ovi y el candidato PA de una request
+    @RequestMapping("/candidates/negotiation-details/{paId}/{requestId}")
+    public String listCandidates(Model model, @PathVariable int paId, @PathVariable int requestId) {
+        model.addAttribute("currentState", "accepted");
+        model.addAttribute("negotiation", negotiationDao.getNegotiationByPaInRequest(paId, requestId));
+        return "technical/negotiation-details";
     }
 
     // ==========================================

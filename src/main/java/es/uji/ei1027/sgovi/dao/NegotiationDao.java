@@ -105,6 +105,21 @@ public class NegotiationDao {
         }
     }
 
+    // Negociación de un asistente personal en una solicitud concreta
+    public List<Negotiation> getNegotiationByPaInRequest(int idPa, int idRequest) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM negotiation WHERE id_pa = ?, id_request = ? " +
+                            "ORDER BY start_date DESC",
+                    new NegotiationRowMapper(),
+                    idPa,
+                    idRequest
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
     // Cambio de estado de la negociación (hablando/sinHablar)
     public void updateNegotiationState(int idNegotiation, String state) {
         jdbcTemplate.update(
