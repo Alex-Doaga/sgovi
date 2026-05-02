@@ -1,11 +1,13 @@
 package es.uji.ei1027.sgovi.dao;
 
+import es.uji.ei1027.sgovi.modelo.PA;
 import es.uji.ei1027.sgovi.modelo.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class RequestDao {
         }
     }
 
-    /* Obtiene todos las solicitudes. Devuelve una lista vacía si no hay solicitudes */
+    /* Obtiene todas las solicitudes. Devuelve una lista vacía si no hay solicitudes */
     public List<Request> getRequests() {
         try {
             return jdbcTemplate.query("SELECT * FROM request",
@@ -115,7 +117,7 @@ public class RequestDao {
         try {
             return jdbcTemplate.query(
                     "SELECT * FROM request " +
-                            "WHERE state = CAST(? AS state_enum) " +
+                            "WHERE state = ?::state_enum " +
                             "ORDER BY request_date DESC",
                     new RequestRowMapper(),
                     state
@@ -140,14 +142,69 @@ public class RequestDao {
         }
     }
 
-
     /* Actualiza el estado de una solicitud  */
-    public void updateRequestState(int idRequest, String state) {
+    public void updateRequestState(int idRequest, String state, String reason) {
         jdbcTemplate.update(
-                "UPDATE request SET state = CAST(? AS state_enum) " +
+                "UPDATE request SET state = ?::state_enum, comments = ? " +
                         "WHERE id_request = ?",
                 state,
+                reason,
                 idRequest
         );
+    }
+
+    //TODO Noemí: por el momento no se puede ver el estado de la negociacion en la tabla
+/*    public List<PA> findCandidatesForRequest(int idRequest) {
+        try {
+            Request req = getRequest(idRequest);
+            return jdbcTemplate.query(
+                    "SELECT pa.*, n.* FROM pa " +
+                            "LEFT JOIN negotiation n ON n.pa_id = pa.id AND n.id_request = ? "+
+                            "WHERE pa.city = ? AND pa.education = ? AND pa.experience = ? AND pa.hobbies = ? AND pa.gender = ? " +
+                            "ORDER BY surname",
+                    new PARowMapper(),
+                    idRequest,
+                    req.getCity(),
+                    req.getEducation(),
+                    req.getExperience(),
+                    req.getHobbies(),
+                    req.getRequiredGender()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }*/
+
+    // Filtra los posibles candidatos PA para una request pasada por parámetro
+    public List<PA> findCandidatesForRequest(int idRequest) {
+        try {
+            Request req = getRequest(idRequest);
+
+            System.out.println("REQUEST >>>>>" + req.toString());
+            LocalDate testDate = LocalDate.of(2026, 04, 15);
+
+            return jdbcTemplate.query(
+                    "SELECT * FROM pa " +
+                            //"WHERE city = ? AND education = ? AND experience = ? AND hobbies = ? AND gender = ? " +
+                            "WHERE city = ? AND education = ? AND hobbies = ? AND gender = ? " +
+                            "AND experience = ? AND availability_start_date <= ? " +
+                            "AND availability_end_date >= (? + (? * INTERVAL '1 month')) " +
+                            "ORDER BY surname",
+                    new PARowMapper(),
+                    req.getCity().toString(),
+                    req.getEducation().toString(),
+                    req.getHobbies().toString(),
+                    req.getRequiredGender().toString(),
+                    req.getExperience().toString(),
+                    req.getStartDate(),
+                    req.getStartDate(),
+                    //testDate,
+                    //testDate,
+                    req.getDuration()
+
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 }
