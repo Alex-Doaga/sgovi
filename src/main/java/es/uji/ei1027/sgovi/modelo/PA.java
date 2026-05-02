@@ -13,7 +13,7 @@ public class PA {
     private String email;
     private String phone;
     private TypePaEnum typePa;
-    private String typeService;
+    //private String typeService;
     private String address;
     private EducationEnum education;
     private Integer experience;
@@ -92,13 +92,13 @@ public class PA {
         this.typePa = typePa;
     }
 
-    public String getTypeService() {
+    /*public String getTypeService() {
         return typeService;
     }
 
     public void setTypeService(String typeService) {
         this.typeService = typeService;
-    }
+    }*/
 
     public String getAddress() {
         return address;
@@ -230,7 +230,7 @@ public class PA {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", typePa=" + typePa +
-                ", typeService='" + typeService + '\'' +
+                //", typeService='" + typeService + '\'' +
                 ", address='" + address + '\'' +
                 ", education=" + education +
                 ", experience=" + experience +

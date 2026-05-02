@@ -24,14 +24,17 @@ public class PaDao {
     public void addPA(PA pa) {
         jdbcTemplate.update(
                 "INSERT INTO pa (name, surname, dni_nie, birth_date, address, city, " +
-                        "postal_code, email, phone, type_pa, type_service, education, " +
+                        //"postal_code, email, phone, type_pa, type_service, education, " +
+                        "postal_code, email, phone, type_pa, education, " +
                         "experience, hobbies, gender, comments, cv, password) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, " +
-                        "CAST(? AS type_pa_enum), CAST(? AS type_accompaniment_enum), " +
+                        //"CAST(? AS type_pa_enum), CAST(? AS type_accompaniment_enum), " +
+                        "CAST(? AS type_pa_enum), " +
                         "?, ?, ?, ?, ?, ?, ?, ?)",
                 pa.getName(), pa.getSurname(), pa.getDniNie(), pa.getBirthDate(),
                 pa.getAddress(), pa.getCity(), pa.getPostalCode(), pa.getEmail(),
-                pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
+                //pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
+                pa.getPhone(), pa.getTypePa(), pa.getEducation(),
                 pa.getExperience(), pa.getHobbies(), pa.getGender(),
                 pa.getComments(), pa.getCv(), pa.getPassword()
         );
@@ -51,13 +54,14 @@ public class PaDao {
                 "UPDATE pa SET name=?, surname=?, dni_nie=?, birth_date=?, " +
                         "address=?, city=?, postal_code=?, email=?, phone=?, " +
                         "type_pa=CAST(? AS type_pa_enum), " +
-                        "type_service=CAST(? AS type_accompaniment_enum), " +
+                        //"type_service=CAST(? AS type_accompaniment_enum), " +
                         "education=?, experience=?, hobbies=?, " +
                         "gender=?, comments=?, cv=? " +
                         "WHERE id_pa=?",
                 pa.getName(), pa.getSurname(), pa.getDniNie(), pa.getBirthDate(),
                 pa.getAddress(), pa.getCity(), pa.getPostalCode(), pa.getEmail(),
-                pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
+                //pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
+                pa.getPhone(), pa.getTypePa(), pa.getEducation(),
                 pa.getExperience(), pa.getHobbies(), pa.getGender(),
                 pa.getComments(), pa.getCv(), pa.getIdPa()
         );
@@ -80,7 +84,7 @@ public class PaDao {
     public List<PA> getPAs() {
         try {
             return jdbcTemplate.query(
-                    "SELECT * FROM pa",
+                    "SELECT * FROM pa;",
                     new PARowMapper()
             );
         } catch (EmptyResultDataAccessException e) {

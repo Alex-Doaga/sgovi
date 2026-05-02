@@ -25,9 +25,9 @@ public class PARowMapper implements RowMapper<PA> {
         pa.setComments(rs.getString("comments"));
         pa.setCv(rs.getString("cv"));
         pa.setPhone(rs.getString("phone"));
-        pa.setTypePa(TypePaEnum.valueOf(rs.getString("type_pa")));
-        pa.setTypeService(rs.getString("type_service"));
-        pa.setGender(GenderEnum.valueOf(rs.getString("gender")));
+        pa.setTypePa(TypePaEnum.valueOf(rs.getString("type_pa").toUpperCase()));
+        //pa.setTypeService(rs.getString("type_service"));
+        pa.setGender(GenderEnum.valueOf(rs.getString("gender").toUpperCase()));
         pa.setPostalCode(rs.getInt("postal_code"));
         pa.setPaState(StateEnum.valueOf(rs.getString("pa_state")));
         pa.setRejectionReason(rs.getString("rejection_reason"));
