@@ -2,7 +2,7 @@ package es.uji.ei1027.sgovi.modelo.enums;
 
 public enum HobbiesEnum {
     READING("Llegir"),
-    TRAVELLING("Viatjar"),
+    TRAVELING("Viatjar"),
     COOKING("Cuinar"),
     PLAYING_SPORTS("Practicar esports");
 

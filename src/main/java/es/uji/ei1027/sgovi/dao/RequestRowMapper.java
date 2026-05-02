@@ -17,14 +17,14 @@ public final class RequestRowMapper implements RowMapper<Request> {
         request.setRequestDate(rs.getObject("request_date", LocalDate.class));
         request.setStartDate(rs.getObject("start_date", LocalDate.class));
         request.setDuration(rs.getInt("duration"));
-        request.setTypePa(TypePaEnum.valueOf(rs.getString("type_pa")));
+        request.setTypePa(TypePaEnum.valueOf(rs.getString("type_pa").toUpperCase()));
         request.setAgePa(rs.getInt("age_pa"));
-        request.setCity(CityEnum.valueOf(rs.getString("city")));
-        request.setHobbies(HobbiesEnum.valueOf(rs.getString("hobbies")));
-        request.setRequiredGender(GenderEnum.valueOf(rs.getString("required_gender")));
+        request.setCity(CityEnum.valueOf(rs.getString("city").toUpperCase()));
+        request.setHobbies(HobbiesEnum.valueOf(rs.getString("hobbies").toUpperCase()));
+        request.setRequiredGender(GenderEnum.valueOf(rs.getString("required_gender").toUpperCase()));
         request.setExperience(rs.getInt("experience"));
-        request.setEducation(EducationEnum.valueOf(rs.getString("education")));
-        request.setState(StateEnum.valueOf(rs.getString("state")));
+        request.setEducation(EducationEnum.valueOf(rs.getString("education").toUpperCase()));
+        request.setState(StateEnum.valueOf(rs.getString("state").toUpperCase()));
         request.setComments(rs.getString("comments"));
 
         return request;

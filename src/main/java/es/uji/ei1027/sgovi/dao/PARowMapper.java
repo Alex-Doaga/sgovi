@@ -17,11 +17,11 @@ public class PARowMapper implements RowMapper<PA> {
         pa.setSurname(rs.getString("surname"));
         pa.setEmail(rs.getString("email"));
         pa.setAddress(rs.getString("address"));
-        pa.setEducation(EducationEnum.valueOf(rs.getString("education")));
+        pa.setEducation(EducationEnum.valueOf(rs.getString("education").toUpperCase()));
         pa.setExperience(Integer.valueOf(rs.getString("experience")));
         pa.setBirthDate(rs.getObject("birth_date", LocalDate.class));
-        pa.setCity(CityEnum.valueOf(rs.getString("city")));
-        pa.setHobbies(HobbiesEnum.valueOf(rs.getString("hobbies")));
+        pa.setCity(CityEnum.valueOf(rs.getString("city").toUpperCase()));
+        pa.setHobbies(HobbiesEnum.valueOf(rs.getString("hobbies").toUpperCase()));
         pa.setComments(rs.getString("comments"));
         pa.setCv(rs.getString("cv"));
         pa.setPhone(rs.getString("phone"));
@@ -29,7 +29,7 @@ public class PARowMapper implements RowMapper<PA> {
         //pa.setTypeService(rs.getString("type_service"));
         pa.setGender(GenderEnum.valueOf(rs.getString("gender").toUpperCase()));
         pa.setPostalCode(rs.getInt("postal_code"));
-        pa.setPaState(StateEnum.valueOf(rs.getString("pa_state")));
+        pa.setPaState(StateEnum.valueOf(rs.getString("pa_state").toUpperCase()));
         pa.setRejectionReason(rs.getString("rejection_reason"));
         pa.setAvailabilityStartDate(rs.getObject("availability_start_date", LocalDate.class));
         pa.setAvailabilityEndDate(rs.getObject("availability_end_date", LocalDate.class));
