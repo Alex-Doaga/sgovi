@@ -34,13 +34,13 @@ public class RequestDao {
                 request.getRequestDate(),
                 request.getStartDate(),
                 request.getDuration(),
-                request.getTypePa(),
+                request.getTypePa().name(),
                 request.getAgePa(),
-                request.getCity(),
-                request.getHobbies(),
-                request.getRequiredGender(),
+                request.getCity().name(),
+                request.getHobbies().name(),
+                request.getRequiredGender().name(),
                 request.getExperience(),
-                request.getEducation(),
+                request.getEducation().name(),
                 request.getComments()
         );
     }

@@ -29,7 +29,7 @@ public class OviUserController {
     @RequestMapping("/list")
     public String list(Model model) {
         model.addAttribute("oviUsers", oviUserDao.getOviUsers());
-        model.addAttribute("currentState", "all"); // <-- Añadimos esto
+        model.addAttribute("currentState", "all");
         return "ovi-user/list";
     }
 
@@ -52,23 +52,36 @@ public class OviUserController {
         return "ovi-user/add";
     }
 
-    // Procesar el formulario de añadir con VALIDACIÓN
+    // Procesar el formulario de añadir
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("oviUser") OviUser oviUser,
-                                   BindingResult bindingResult) {
+    public String processAddSubmit(@ModelAttribute("oviUser") OviUser oviUser, BindingResult bindingResult) {
 
-        // Instanciar y ejecutar el validador
+        // 1. Ejecutamos las validaciones normales (OviUserValidator)
         OviUserValidator oviUserValidator = new OviUserValidator();
         oviUserValidator.validate(oviUser, bindingResult);
 
-        // Si hay errores, volvemos a la vista del formulario
-        if (bindingResult.hasErrors()) {
-            return "ovi-user/add";
+        // 2. VALIDACIÓN DE DNI DUPLICADO:
+        // Solo buscamos en la BD si el usuario ha escrito algo en el DNI y no ha dado error de formato antes
+        if (oviUser.getDniNie() != null && !oviUser.getDniNie().trim().isEmpty() && !bindingResult.hasFieldErrors("dniNie")) {
+            OviUser existingUser = oviUserDao.getOviUserByDni(oviUser.getDniNie());
+
+            // Si el objeto no es nulo, significa que ya hay alguien con ese DNI en la base de datos
+            if (existingUser != null) {
+                // Añadimos el error específicamente al campo 'dniNie'
+                bindingResult.rejectValue("dniNie", "duplicat", "Aquest DNI/NIE ja està registrat al sistema.");
+            }
         }
 
-        // Si no hay errores, guardamos
+        // 3. Comprobamos si hay errores (de validación normal o de DNI duplicado)
+        if (bindingResult.hasErrors()) {
+            return "ovi-user/add"; // Devolvemos el formulario con los errores en rojo
+        }
+
+        // Si todo está perfecto y el DNI es nuevo, lo guardamos en la BD
         oviUserDao.addOviUser(oviUser);
-        return "redirect:/ovi-user/list/pending";
+
+        // Cambia la redirección a donde te interese al acabar el registro (ej. login o lista)
+        return "redirect:/";
     }
 
     // ==========================================

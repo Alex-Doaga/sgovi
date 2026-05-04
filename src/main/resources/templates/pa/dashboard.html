@@ -27,7 +27,7 @@
         </a>
       </li>
 
-      <th:block th:if="${pa.paState == 'accepted'}">
+      <th:block th:if="${pa.paState.name() == 'ACCEPTED'}">
         <li>
           <a th:href="@{/contract/list/pa/{id}(id=${pa.idPa})}" class="nav-link">
             <i data-lucide="file-text"></i> Contractes
@@ -70,7 +70,7 @@
     </header>
 
     <main class="p-4">
-      <div th:if="${pa.paState == 'accepted'}">
+      <div th:if="${pa.paState.name() == 'ACCEPTED'}">
 
         <div class="mb-4">
           <h1 class="h3 fw-bold">Benvingut/da, <span th:text="${pa.name}">Nom</span>!</h1>
@@ -84,7 +84,9 @@
                 <h6 class="text-muted mb-0">El meu Perfil</h6>
                 <span class="badge bg-secondary-subtle text-secondary p-2"><i data-lucide="user-cog"></i></span>
               </div>
-              <a th:href="@{/pa/update/{id}(id=${pa.idPa})}" class="text-decoration-none text-primary small fw-bold">Modificar dades</a>
+              <div class="mt-auto">
+                <a th:href="@{/pa/update/{id}(id=${pa.idPa})}" class="text-decoration-none text-primary small fw-bold">Modificar dades</a>
+              </div>
             </div>
           </div>
 
@@ -94,17 +96,20 @@
                 <h6 class="text-muted mb-0">Contractes</h6>
                 <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="file-check-2"></i></span>
               </div>
-              <a th:href="@{/contract/list/pa/{id}(id=${pa.idPa})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+              <div class="mt-auto">
+                <a th:href="@{/contract/list/pa/{id}(id=${pa.idPa})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+              </div>
             </div>
           </div>
-
           <div class="col-12 col-md-6 col-xl-3">
             <div class="card h-100 border-0 shadow-sm p-4">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="text-muted mb-0">Activitats</h6>
                 <span class="badge bg-success-subtle text-success p-2"><i data-lucide="calendar"></i></span>
               </div>
-              <a th:href="@{/activity/list}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
+              <div class="mt-auto">
+                <a th:href="@{/activity/list}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
+              </div>
             </div>
           </div>
 
@@ -114,13 +119,15 @@
                 <h6 class="text-muted mb-0">Negociacions</h6>
                 <span class="badge bg-info-subtle text-info p-2"><i data-lucide="handshake"></i></span>
               </div>
-              <a th:href="@{/negotiation/list}" class="text-decoration-none text-primary small fw-bold">Revisar</a>
+              <div class="mt-auto">
+                <a th:href="@{/negotiation/list}" class="text-decoration-none text-primary small fw-bold">Revisar</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div th:if="${pa.paState == 'pending'}">
+      <div th:if="${pa.paState.name() == 'PENDING'}">
         <div class="alert alert-info border-0 shadow-sm p-4 d-flex align-items-center">
           <div class="bg-white rounded-circle p-3 me-4 text-info shadow-sm">
             <i data-lucide="hourglass" style="width: 40px; height: 40px;"></i>
@@ -135,7 +142,7 @@
         </div>
       </div>
 
-      <div th:if="${pa.paState == 'refused'}">
+      <div th:if="${pa.paState.name() == 'REFUSED'}">
         <div class="card border-0 shadow-sm overflow-hidden">
           <div class="bg-danger text-white p-3 d-flex align-items-center">
             <i data-lucide="alert-triangle" class="me-2"></i>

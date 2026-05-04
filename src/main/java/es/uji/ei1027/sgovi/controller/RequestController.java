@@ -1,12 +1,12 @@
 package es.uji.ei1027.sgovi.controller;
 
-import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
 import es.uji.ei1027.sgovi.modelo.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 
@@ -25,8 +25,8 @@ public class RequestController {
     // Operaciones: listar, crear, actualizar, borrar
 
     // ==========================================
-    //   LISTAR Requests
-    // ==========================================
+    //   LISTAR REQUESTS
+    // ============================================
 
     // Listar TODAS las solicitudes del usuario (sin filtrar)
     @RequestMapping("/list/user/{id}")
@@ -45,6 +45,10 @@ public class RequestController {
         model.addAttribute("currentState", state); // Indicamos la pestaña activa
         return "request/list";
     }
+
+    // ==========================================
+    //   VER DETALLE DE REQUEST
+    // ==========================================
 
     //Mostrat una request
     @RequestMapping("/view/{id}")
@@ -69,9 +73,19 @@ public class RequestController {
 
     // Procesar el formulario de añadir
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("request") Request request) {
+    public String processAddSubmit(@ModelAttribute("request") Request request, BindingResult bindingResult) {
 
-        // Asignar fecha actual para la petición que se hace
+        // 1. Instanciar y ejecutar el validador
+        RequestValidator requestValidator = new RequestValidator();
+        requestValidator.validate(request, bindingResult);
+
+        // 2. Comprobar si hay errores
+        if (bindingResult.hasErrors()) {
+            // Si hay errores, devolvemos la misma vista del formulario para que muestre los mensajes
+            return "request/add";
+        }
+
+        // 3. Si todo está correcto, asignamos la fecha actual y guardamos en BD
         request.setRequestDate(LocalDate.now());
 
         requestDao.addRequest(request);

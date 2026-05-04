@@ -2,24 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
     <meta charset="UTF-8"/>
-    <title>Gestió d'Usuaris OVI</title>
+    <title>Gestió d'Assistents Personals</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 <main class="container mt-4">
-    <h1><i class="bi bi-person-vcard-fill me-2 text-primary"></i>Llista d'Usuaris OVI</h1>
+    <h1><i class="bi bi-people-fill me-2 text-primary"></i>Llista d'Assistents Personals (PA)</h1>
     <hr>
 
     <div class="mb-3 mt-4">
-        <a th:href="@{/ovi-user/list/pending}" class="btn btn-sm"
+        <a th:href="@{/pa/list/pending}" class="btn btn-sm"
            th:classappend="${currentState == 'pending' ? 'btn-warning' : 'btn-outline-warning'}">Pendents</a>
 
-        <a th:href="@{/ovi-user/list/accepted}" class="btn btn-sm"
+        <a th:href="@{/pa/list/accepted}" class="btn btn-sm"
            th:classappend="${currentState == 'accepted' ? 'btn-success' : 'btn-outline-success'}">Acceptats</a>
 
-        <a th:href="@{/ovi-user/list/refused}" class="btn btn-sm"
+        <a th:href="@{/pa/list/refused}" class="btn btn-sm"
            th:classappend="${currentState == 'refused' ? 'btn-danger' : 'btn-outline-danger'}">Rebutjats</a>
     </div>
 
@@ -31,47 +31,51 @@
                 <th>Cognoms</th>
                 <th>DNI/NIE</th>
                 <th>Contacte</th>
+                <th>Tipus PA</th>
                 <th>Accions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="oviUser : ${oviUsers}">
-                <td th:text="${oviUser.name}"></td>
-                <td th:text="${oviUser.surname}"></td>
-                <td th:text="${oviUser.dniNie}"></td>
+            <tr th:each="pa : ${pas}">
+                <td th:text="${pa.name}"></td>
+                <td th:text="${pa.surname}"></td>
+                <td th:text="${pa.dniNie}"></td>
                 <td>
-                    <div th:text="${oviUser.email}"></div>
-                    <small class="text-muted" th:text="${oviUser.phone}"></small>
+                    <div th:text="${pa.email}"></div>
+                    <small class="text-muted" th:text="${pa.phone}"></small>
+                </td>
+                <td>
+                    <span class="badge bg-secondary" th:text="${pa.typePa}"></span>
                 </td>
 
                 <td>
                     <div class="d-flex gap-2">
+
                         <th:block th:if="${currentState == 'pending'}">
-                            <form th:action="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" method="post">
+                            <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post">
                                 <button type="submit" class="btn btn-success btn-sm">
                                     <i class="bi bi-check-lg"></i> Acceptar
                                 </button>
                             </form>
-                            <a th:href="@{/ovi-user/reject/{id}(id=${oviUser.idOviUser})}" class="btn btn-danger btn-sm">
+                            <a th:href="@{/pa/reject/{id}(id=${pa.idPa})}" class="btn btn-danger btn-sm">
                                 <i class="bi bi-x-lg"></i> Rebutjar
                             </a>
                         </th:block>
 
                         <th:block th:if="${currentState == 'accepted'}">
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}"
-                               class="btn btn-info btn-sm text-white">
-                                <i class="bi bi-file-earmark-text"></i> Ver Contractes
+                            <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-info btn-sm text-white">
+                                <i class="bi bi-eye"></i> Veure Perfil
                             </a>
                         </th:block>
 
                         <th:block th:if="${currentState == 'refused'}">
                             <button type="button" class="btn btn-secondary btn-sm"
                                     data-bs-toggle="modal"
-                                    th:data-bs-target="'#modalMotivo' + ${oviUser.idOviUser}">
-                                <i class="bi bi-chat-left-text"></i> Ver Motiu
+                                    th:data-bs-target="'#modalMotivo' + ${pa.idPa}">
+                                <i class="bi bi-chat-left-text"></i> Veure Motiu
                             </button>
 
-                            <div class="modal fade" th:id="'modalMotivo' + ${oviUser.idOviUser}" tabindex="-1" aria-hidden="true">
+                            <div class="modal fade" th:id="'modalMotivo' + ${pa.idPa}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header bg-danger text-white">
@@ -79,9 +83,9 @@
                                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p><strong>Usuari:</strong> <span th:text="${oviUser.name + ' ' + oviUser.surname}"></span></p>
+                                            <p><strong>Candidat PA:</strong> <span th:text="${pa.name + ' ' + pa.surname}"></span></p>
                                             <hr>
-                                            <p th:text="${oviUser.rejectionReason} ?: 'No s\'ha especificat cap motiu.'"></p>
+                                            <p th:text="${pa.rejectionReason} ?: 'No s\'ha especificat cap motiu.'"></p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
@@ -93,9 +97,9 @@
                     </div>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(oviUsers)}">
-                <td colspan="5" class="text-center text-muted py-4">
-                    No hi ha cap usuari OVI en aquest estat.
+            <tr th:if="${#lists.isEmpty(pas)}">
+                <td colspan="6" class="text-center text-muted py-4">
+                    No hi ha cap assistent personal en aquest estat.
                 </td>
             </tr>
             </tbody>
@@ -103,7 +107,7 @@
     </div>
 
     <div class="mt-4">
-        <a th:href="@{/}" class="btn btn-secondary">
+        <a th:href="@{/technical/dashboard}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Tornar
         </a>
     </div>

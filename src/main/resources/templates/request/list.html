@@ -39,7 +39,7 @@
           <th>Duració</th>
           <th>Ciutat</th>
           <th>Tipus PA</th>
-          <th>Estat</th>
+          <th>Gènere</th>
           <th>Accions</th>
         </tr>
         </thead>
@@ -51,9 +51,10 @@
           <td th:text="${req.city}">--</td>
           <td th:text="${req.typePa}">--</td>
           <td>
-             <span class="badge"
-                   th:classappend="${req.state == 'accepted' ? 'bg-success' : (req.state == 'refused' ? 'bg-danger' : 'bg-warning')}"
-                   th:text="${req.state}">Pendent</span>
+            <span th:if="${req.requiredGender != null and req.requiredGender.name() == 'MALE'}" >Home</span>
+            <span th:if="${req.requiredGender != null and req.requiredGender.name() == 'FEMALE'}" >Dona</span>
+            <span th:if="${req.requiredGender != null and req.requiredGender.name() == 'OTHER'}" >Altre</span>
+            <span th:if="${req.requiredGender == null}" class="badge bg-light text-dark">Indiferent</span>
           </td>
           <td>
             <div class="d-flex gap-2">

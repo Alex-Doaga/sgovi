@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+  <meta charset="UTF-8"/>
+  <title>SGOVI - Rebutjar Assistent</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body class="bg-light">
+<main class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h1 class="h3 text-danger mb-3">Rebutjar Candidatura PA</h1>
+      <p class="text-muted">
+        Indica el motiu pel qual es rebutja a l'assistent:
+        <strong th:text="${pa.name + ' ' + pa.surname}"></strong>
+      </p>
+      <hr>
+
+      <form th:action="@{/pa/reject}" th:object="${pa}" method="post">
+        <input type="hidden" th:field="*{idPa}"/>
+
+        <div class="mb-3">
+          <label for="rejectionReason" class="form-label fw-bold">Motiu del rebuig</label>
+          <textarea class="form-control" id="rejectionReason" rows="4"
+                    th:field="*{rejectionReason}"
+                    placeholder="Escriu aquí el motiu..." required></textarea>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a th:href="@{/pa/list/pending}" class="btn btn-light">Cancel·lar</a>
+          <button type="submit" class="btn btn-danger">Confirmar Rebuig</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

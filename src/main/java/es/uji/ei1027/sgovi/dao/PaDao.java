@@ -30,13 +30,24 @@ public class PaDao {
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, " +
                         //"CAST(? AS type_pa_enum), CAST(? AS type_accompaniment_enum), " +
                         "CAST(? AS type_pa_enum), " +
-                        "?, ?, ?, ?, ?, ?, ?, ?)",
-                pa.getName(), pa.getSurname(), pa.getDniNie(), pa.getBirthDate(),
-                pa.getAddress(), pa.getCity(), pa.getPostalCode(), pa.getEmail(),
-                //pa.getPhone(), pa.getTypePa(), pa.getTypeService(), pa.getEducation(),
-                pa.getPhone(), pa.getTypePa(), pa.getEducation(),
-                pa.getExperience(), pa.getHobbies(), pa.getGender(),
-                pa.getComments(), pa.getCv(), pa.getPassword()
+                        "?, ?, ?, ?, ?, ?, ?)",
+                pa.getName(),
+                pa.getSurname(),
+                pa.getDniNie(),
+                pa.getBirthDate(),
+                pa.getAddress(),
+                pa.getCity().name(),
+                pa.getPostalCode(),
+                pa.getEmail(),
+                pa.getPhone(),
+                pa.getTypePa().name(),
+                pa.getEducation().name(),
+                pa.getExperience(),
+                pa.getHobbies().name(),
+                pa.getGender().name(),
+                pa.getComments(),
+                pa.getCv(),
+                pa.getPassword()
         );
     }
 
