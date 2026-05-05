@@ -26,6 +26,9 @@ public class UserValidator implements Validator {
         if (userDetails.getPassword() == null || userDetails.getPassword().trim().isEmpty()) {
             errors.rejectValue("password", "obligatori", "La contrasenya no pot estar buida");
         }
-    }
+
+        if (userDetails.getRol()==null || userDetails.getRol().trim().isEmpty() || (!userDetails.getRol().equals("OviUser")|| userDetails.getRol().equals("PA"))){
+            errors.rejectValue("rol","obligatori","l'usuari té que ser OviUser o PA");
+        }
     }
 }

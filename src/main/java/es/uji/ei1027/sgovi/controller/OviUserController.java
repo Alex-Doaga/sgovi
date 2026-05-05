@@ -160,7 +160,7 @@ public class OviUserController {
         // Por ahora, como no tenemos login real,
         // buscamos un usuario de prueba (por ejemplo el ID 1)
         // para que la vista tenga datos que mostrar.
-        OviUser oviUser = oviUserDao.getOviUser(1);
+        OviUser oviUser = oviUserDao.getOviUser(11);
         model.addAttribute("oviUser", oviUser);
 
         return "ovi-user/dashboard";
