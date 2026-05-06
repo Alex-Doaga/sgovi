@@ -66,6 +66,17 @@ public class OviUserDao {
         }
     }
 
+    public OviUser getOviUserByDni(String dniNie) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM ovi_user WHERE dni_nie = ?",
+                    new OviUserRowMapper(), dniNie
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Si no lo encuentra, devuelve null
+        }
+    }
+
     /* Obtiene todos los oviUsers. Devuelve una lista vacía si no hay oviUsers */
     public List<OviUser> getOviUsers() {
         try {

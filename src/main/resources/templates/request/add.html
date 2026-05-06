@@ -1,120 +1,132 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
     <title>SGOVI - Nova Sol·licitud AP</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
 </head>
-<body class="bg-light">
+<body>
+<main class="container mt-4 mb-5">
+    <h1>Registrar Nova Sol·licitud d'Assistent Personal</h1>
+    <hr>
 
-<div class="container py-5" style="max-width: 900px;">
+    <form th:action="@{/request/add}" th:object="${request}" method="post" class="row g-3">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">
-            <i class="bi bi-file-earmark-plus me-2"></i>Nova Sol·licitud
-        </h2>
-        <a th:href="@{/request/list/user/{id}(id=${request.oviUserId})}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-1"></i> Tornar
-        </a>
-    </div>
+        <input type="hidden" th:field="*{oviUserId}" />
+        <input type="hidden" th:field="*{requestDate}" />
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white border-bottom p-4">
-            <h5 class="mb-0">Dades de la sol·licitud d'Assistència Personal</h5>
-            <p class="text-muted small mb-0 mt-1">Emplena els camps següents segons les teues preferències.</p>
+        <h2 class="h5 mt-4 text-primary">Dades Temporals i Ubicació</h2>
+
+        <div class="col-md-4">
+            <label for="startDate" class="form-label">Data d'Inici</label>
+            <input type="date"
+                   th:class="${#fields.hasErrors('startDate')} ? 'form-control is-invalid' : 'form-control'"
+                   id="startDate" th:field="*{startDate}" required />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
         </div>
 
-        <div class="card-body p-4">
-            <form th:action="@{/request/add}" th:object="${request}" method="post">
-
-                <input type="hidden" th:field="*{oviUserId}" />
-
-                <div class="row g-4">
-
-                    <div class="col-12">
-                        <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">1. Dades Temporals i d'Ubicació</h6>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-medium">Data d'Inici <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" th:field="*{startDate}" required />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-medium">Durada (mesos) <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" th:field="*{duration}" required min="1" />
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-medium">Ciutat <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" th:field="*{city}" required />
-                    </div>
-
-                    <div class="col-12 mt-4">
-                        <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">2. Configuració del Servei</h6>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-medium">Tipus d'Assistent <span class="text-danger">*</span></label>
-                        <select class="form-select" th:field="*{typePa}" required>
-                            <option value="" disabled selected>Selecciona una opció...</option>
-                            <option value="PAP">PAP (Professional d’Assistència Personal )</option>
-                            <option value="PATI">PATI (Professional d’Assistència Terapèutica Infantil)</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12 mt-4">
-                        <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">3. Preferències i Observacions</h6>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-medium">Edat preferida PA</label>
-                        <input type="number" class="form-control" th:field="*{agePa}" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-medium">Gènere preferit</label>
-                        <select class="form-select" th:field="*{requiredGender}">
-                            <option value="Indiferent">Indiferent</option>
-                            <option value="Dona">Dona</option>
-                            <option value="Home">Home</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-medium">Formació</label>
-                        <input type="text" class="form-control" th:field="*{education}" />
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-medium">Experiència requerida</label>
-                        <input type="text" class="form-control" th:field="*{experience}" />
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-medium">Aficions (Hobbies)</label>
-                        <input type="text" class="form-control" th:field="*{hobbies}" />
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label fw-medium">Comentaris addicionals</label>
-                        <textarea class="form-control" rows="3" th:field="*{comments}"></textarea>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
-                    <a th:href="@{/request/list/user/{id}(id=*{oviUserId})}" class="btn btn-light px-4">Cancel·lar</a>
-                    <button type="submit" class="btn btn-primary px-5">
-                        <i class="bi bi-send me-2"></i> Registrar Sol·licitud
-                    </button>
-                </div>
-            </form>
+        <div class="col-md-4">
+            <label for="duration" class="form-label">Durada (mesos)</label>
+            <input type="number"
+                   th:class="${#fields.hasErrors('duration')} ? 'form-control is-invalid' : 'form-control'"
+                   id="duration" th:field="*{duration}" min="1" required />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></div>
         </div>
-    </div>
-</div>
 
+        <div class="col-md-4">
+            <label for="city" class="form-label">Ciutat</label>
+            <select th:class="${#fields.hasErrors('city')} ? 'form-select is-invalid' : 'form-select'"
+                    id="city" th:field="*{city}" required>
+                <option value="" disabled selected>Selecciona una ciutat...</option>
+                <option th:each="c : ${T(es.uji.ei1027.sgovi.modelo.enums.CityEnum).values()}"
+                        th:value="${c.name()}"
+                        th:text="${c.label}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+        </div>
+
+        <h2 class="h5 mt-4 text-primary">Perfil de l'Assistent Requerit</h2>
+
+        <div class="col-md-4">
+            <label for="typePa" class="form-label">Tipus de PA</label>
+            <select th:class="${#fields.hasErrors('typePa')} ? 'form-select is-invalid' : 'form-select'"
+                    id="typePa" th:field="*{typePa}" required>
+                <option value="" disabled selected>Selecciona el tipus...</option>
+                <option th:each="type : ${T(es.uji.ei1027.sgovi.modelo.enums.TypePaEnum).values()}"
+                        th:value="${type.name()}"
+                        th:text="${type.name()}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('typePa')}" th:errors="*{typePa}"></div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="agePa" class="form-label">Edat aproximada</label>
+            <input type="number"
+                   th:class="${#fields.hasErrors('agePa')} ? 'form-control is-invalid' : 'form-control'"
+                   id="agePa" th:field="*{agePa}" min="18" />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('agePa')}" th:errors="*{agePa}"></div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="requiredGender" class="form-label">Gènere preferit</label>
+            <select th:class="${#fields.hasErrors('requiredGender')} ? 'form-select is-invalid' : 'form-select'"
+                    id="requiredGender" th:field="*{requiredGender}" required>
+                <option value="" disabled selected>Selecciona gènere...</option>
+                <option th:each="g : ${T(es.uji.ei1027.sgovi.modelo.enums.GenderEnum).values()}"
+                        th:value="${g.name()}"
+                        th:text="${g.label}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('requiredGender')}" th:errors="*{requiredGender}"></div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="education" class="form-label">Formació mínima</label>
+            <select th:class="${#fields.hasErrors('education')} ? 'form-select is-invalid' : 'form-select'"
+                    id="education" th:field="*{education}" required>
+                <option value="" disabled selected>Selecciona formació...</option>
+                <option th:each="e : ${T(es.uji.ei1027.sgovi.modelo.enums.EducationEnum).values()}"
+                        th:value="${e.name()}"
+                        th:text="${e.label}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('education')}" th:errors="*{education}"></div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="experience" class="form-label">Anys d'experiència</label>
+            <input type="number"
+                   th:class="${#fields.hasErrors('experience')} ? 'form-control is-invalid' : 'form-control'"
+                   id="experience" th:field="*{experience}" min="0" />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}"></div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="hobbies" class="form-label">Afició principal</label>
+            <select th:class="${#fields.hasErrors('hobbies')} ? 'form-select is-invalid' : 'form-select'"
+                    id="hobbies" th:field="*{hobbies}" required>
+                <option value="" disabled selected>Selecciona afició...</option>
+                <option th:each="h : ${T(es.uji.ei1027.sgovi.modelo.enums.HobbiesEnum).values()}"
+                        th:value="${h.name()}"
+                        th:text="${h.label}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('hobbies')}" th:errors="*{hobbies}"></div>
+        </div>
+
+        <h2 class="h5 mt-4 text-primary">Altres Detalls</h2>
+
+        <div class="col-12">
+            <label for="comments" class="form-label">Comentaris addicionals</label>
+            <textarea th:class="${#fields.hasErrors('comments')} ? 'form-control is-invalid' : 'form-control'"
+                      id="comments" th:field="*{comments}" rows="3"
+                      placeholder="Detalla qualsevol altra informació rellevant..."></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('comments')}" th:errors="*{comments}"></div>
+        </div>
+
+        <div class="col-12 mt-4 d-flex justify-content-end gap-2">
+            <a th:href="@{/request/list/user/{id}(id=*{oviUserId})}" class="btn btn-secondary">Cancel·lar</a>
+            <button type="submit" class="btn btn-primary">Registrar Sol·licitud</button>
+        </div>
+
+    </form>
+</main>
 </body>
 </html>
