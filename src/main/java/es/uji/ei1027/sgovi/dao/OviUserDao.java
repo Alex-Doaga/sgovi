@@ -110,6 +110,17 @@ public class OviUserDao {
                 state, rejectionReason, idOviUser
         );
     }
+    /* Obté el oviUser amb l'email donat. Torna null si no existeix. */
+    public OviUser getOviUserByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM ovi_user WHERE email = ?",
+                    new OviUserRowMapper(), email
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Si no el troba, torna null
+        }
+    }
 
 
 }

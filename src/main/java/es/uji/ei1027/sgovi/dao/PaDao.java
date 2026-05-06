@@ -1,6 +1,8 @@
 package es.uji.ei1027.sgovi.dao;
 
+import es.uji.ei1027.sgovi.modelo.OviUser;
 import es.uji.ei1027.sgovi.modelo.PA;
+import es.uji.ei1027.sgovi.dao.PARowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -135,6 +137,16 @@ public class PaDao {
             );
         } catch (EmptyResultDataAccessException e) {
             return null;
+        }
+    }
+    public PA getPaByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM pa WHERE email = ?",
+                    new PARowMapper(), email
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Si no el troba, torna null
         }
     }
 

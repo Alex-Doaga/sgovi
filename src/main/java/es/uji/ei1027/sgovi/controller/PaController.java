@@ -1,7 +1,11 @@
 package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.PaDao;
+import es.uji.ei1027.sgovi.modelo.OviUser;
 import es.uji.ei1027.sgovi.modelo.PA;
+import es.uji.ei1027.sgovi.modelo.UserDetails;
+import jakarta.servlet.http.HttpSession;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +59,9 @@ public class PaController {
         if (bindingResult.hasErrors()) {
             return "pa/add"; // Devolvemos el formulario con los errores en rojo
         }
-
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(pa.getPassword());
+        pa.setPassword(encryptedPassword);
         // Si todo está perfecto y el DNI es nuevo, lo guardamos en la BD
         paDao.addPA(pa);
 
@@ -115,11 +121,19 @@ public class PaController {
     }
 
     @RequestMapping("/dashboard")
-    public String dashboard(Model model) {
-        // Obtenemos un Asistente Personal de prueba (ej. ID 1) temporalmente
-        PA pa = paDao.getPA(1);
+    public String dashboard(HttpSession session, Model model) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // 3. ¡SOLUCIÓN! En lugar de cast, buscamos el perfil completo por email
+        // Usamos el email que viene en el objeto UserDetails de la sesión
+        PA pa = paDao.getPaByEmail(user.getEmail());
         model.addAttribute("pa", pa);
 
         return "pa/dashboard";
+
     }
 }

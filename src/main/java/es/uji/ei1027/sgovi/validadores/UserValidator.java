@@ -18,8 +18,8 @@ public class UserValidator implements Validator {
     public void validate(Object obj, Errors errors) {
         UserDetails userDetails = (UserDetails) obj;
 
-        if (userDetails.getUsername() == null || userDetails.getUsername().trim().isEmpty()) {
-            errors.rejectValue("username", "obligatori", "L'usuari no pot estar buit");
+        if (userDetails.getEmail() == null || userDetails.getEmail().trim().isEmpty()) {
+            errors.rejectValue("email", "obligatori", "L'usuari no pot estar buit");
         }
 
         // Validar que la contraseña no esté vacía
@@ -27,7 +27,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "obligatori", "La contrasenya no pot estar buida");
         }
 
-        if (userDetails.getRol()==null || userDetails.getRol().trim().isEmpty() || (!userDetails.getRol().equals("OviUser")|| userDetails.getRol().equals("PA"))){
+        if (userDetails.getRol()==null || userDetails.getRol().trim().isEmpty() || (!userDetails.getRol().equals("OviUser") && !userDetails.getRol().equals("PA"))){
             errors.rejectValue("rol","obligatori","l'usuari té que ser OviUser o PA");
         }
     }
