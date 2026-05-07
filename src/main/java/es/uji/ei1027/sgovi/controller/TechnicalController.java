@@ -3,8 +3,8 @@ package es.uji.ei1027.sgovi.controller;
 import es.uji.ei1027.sgovi.dao.NegotiationDao;
 import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
+import es.uji.ei1027.sgovi.dto.PACandidateDTO;
 import es.uji.ei1027.sgovi.modelo.OviUser;
-import es.uji.ei1027.sgovi.modelo.PA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,16 +78,39 @@ public class TechnicalController {
     // Listar los candidatos de una solicitud aceptada
     @RequestMapping("/candidates/list/{requestId}")
     public String listCandidates(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidates " + requestId);
         model.addAttribute("currentState", "all");
         model.addAttribute("requestId", requestId);
-        List<PA> candidates = requestDao.findCandidatesForRequest(requestId);
+        List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(requestId);
         model.addAttribute("candidates", candidates);
 
-        //TODO Noemí: De alguna forma se debe saber el estado de la negociacion de ese candidato concreto en la tabla
-        for(PA candidate : candidates) {
-            System.out.println(">>>>>>>>>>CANDIDATE  " + candidate);
-        }
        return "technical/candidates";
+    }
+
+    // Listar los candidatos que no tienen un contrato
+    @RequestMapping("/candidates/withoutContract/{requestId}")
+    public String listCandidatesWithoutContract(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidatesWithoutContract " + requestId);
+
+        model.addAttribute("currentState", "withoutContract");
+        model.addAttribute("requestId", requestId);
+        List<PACandidateDTO> candidates = requestDao.findCandidatesWithoutContract(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "technical/candidates";
+    }
+
+    // Listar los candidatos que tienen contrato
+    @RequestMapping("/candidates/withContract/{requestId}")
+    public String listCandidatesWithContract(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidatesWithContract " + requestId);
+
+        model.addAttribute("currentState", "withContract");
+        model.addAttribute("requestId", requestId);
+        List<PACandidateDTO> candidates = requestDao.findCandidatesWithContract(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "technical/candidates";
     }
 
     //TODO Noemí: de momento es una prueba
