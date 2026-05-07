@@ -2,11 +2,14 @@ package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.modelo.OviUser;
+import jakarta.servlet.http.HttpSession;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import es.uji.ei1027.sgovi.modelo.UserDetails;
 
 @Controller
 @RequestMapping("/ovi-user")
@@ -76,6 +79,9 @@ public class OviUserController {
         if (bindingResult.hasErrors()) {
             return "ovi-user/add"; // Devolvemos el formulario con los errores en rojo
         }
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(oviUser.getPassword());
+        oviUser.setPassword(encryptedPassword);
 
         // Si todo está perfecto y el DNI es nuevo, lo guardamos en la BD
         oviUserDao.addOviUser(oviUser);
@@ -169,11 +175,16 @@ public class OviUserController {
     // ==========================================
 
     @RequestMapping("/dashboard")
-    public String dashboard(Model model) {
-        // Por ahora, como no tenemos login real,
-        // buscamos un usuario de prueba (por ejemplo el ID 1)
-        // para que la vista tenga datos que mostrar.
-        OviUser oviUser = oviUserDao.getOviUser(1);
+    public String dashboard(HttpSession session, Model model) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // 3. ¡SOLUCIÓN! En lugar de cast, buscamos el perfil completo por email
+        // Usamos el email que viene en el objeto UserDetails de la sesión
+        OviUser oviUser = oviUserDao.getOviUserByEmail(user.getEmail());
         model.addAttribute("oviUser", oviUser);
 
         return "ovi-user/dashboard";

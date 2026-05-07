@@ -1,13 +1,15 @@
 package es.uji.ei1027.sgovi.modelo;
 
 public class UserDetails {
-    String username;
-    String password;
-    public String getUsername() {
-        return username;
+    private String email;
+    private String password;
+    private String rol;
+
+    public String getEmail() {
+        return email;
     }
-    public String setUsername(String username){
-        this.username=username;
+    public void setEmail(String email){
+        this.email=email;
     }
 
     public String getPassword() {
@@ -16,5 +18,13 @@ public class UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

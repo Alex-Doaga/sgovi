@@ -37,8 +37,7 @@ public class LoginController {
         }
         // Comprova que el login siga correcte
         // intentant carregar les dades de l'usuari
-        user = userDao.loadUserByUsername(user.getUsername(),
-                user.getPassword());
+        user = userDao.loadUserByEmail(user.getEmail(), user.getPassword(), user.getRol());
         if (user == null) {
             bindingResult.rejectValue("password", "badpw",
                     "Contrasenya incorrecta");
@@ -50,7 +49,9 @@ public class LoginController {
         // Aci podrem restaurar on tornar si ho existeix en la sessió, ④
         // i en altre cas...
         // Torna a la pàgina principal
-        return "redirect:/";
+        if (user.getRol().equals("OviUser"))
+            return "redirect:/ovi-user/dashboard";
+        return "redirect:/pa/dashboard";
     }
 
 
