@@ -1,5 +1,6 @@
 package es.uji.ei1027.sgovi.dao;
 
+import es.uji.ei1027.sgovi.dto.PACandidateDTO;
 import es.uji.ei1027.sgovi.modelo.PA;
 import es.uji.ei1027.sgovi.modelo.Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +8,18 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository // En Spring els DAOs van anotats amb @Repository
 public class RequestDao {
     private JdbcTemplate jdbcTemplate;
+
+    // Constante para no repetir la cláusula WHERE en 3 métodos
+    private static String WHERE_CLAUSE_CANDIDATES = "WHERE city = ? AND education = ? AND hobbies = ? AND gender = ? " +
+            "AND experience >= ? AND availability_start_date <= ? " +
+            "AND availability_end_date >= (? + (? * INTERVAL '1 month')) " +
+            "AND pa_state = ?::state_enum ";
 
     // Obté el jdbcTemplate a partir del Data Source
     @Autowired
@@ -153,44 +159,29 @@ public class RequestDao {
         );
     }
 
-    //TODO Noemí: por el momento no se puede ver el estado de la negociacion en la tabla
-/*    public List<PA> findCandidatesForRequest(int idRequest) {
+    //TODO: descomentar las restricciones
+    public List<PACandidateDTO> findCandidatesWithContract(int idRequest) {
         try {
             Request req = getRequest(idRequest);
             return jdbcTemplate.query(
-                    "SELECT pa.*, n.* FROM pa " +
-                            "LEFT JOIN negotiation n ON n.pa_id = pa.id AND n.id_request = ? "+
-                            "WHERE pa.city = ? AND pa.education = ? AND pa.experience = ? AND pa.hobbies = ? AND pa.gender = ? " +
-                            "ORDER BY surname",
-                    new PARowMapper(),
-                    idRequest,
-                    req.getCity(),
-                    req.getEducation(),
-                    req.getExperience(),
-                    req.getHobbies(),
-                    req.getRequiredGender()
+                    "SELECT pa.*, null AS negotiation_state, c.contract_state " +
+                            "FROM pa " +
+                            "JOIN contract AS c " +
+                            "ON c.id_pa = pa.id_pa " +
+                            "ORDER BY pa.surname",
+                    new PACandidateDTORowMapper()
             );
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<>();
-        }
-    }*/
-
-    // Filtra los posibles candidatos PA para una request pasada por parámetro
-    public List<PA> findCandidatesForRequest(int idRequest) {
-        try {
-            Request req = getRequest(idRequest);
-
-            System.out.println("REQUEST >>>>>" + req.toString());
-            LocalDate testDate = LocalDate.of(2026, 04, 15);
-
-            return jdbcTemplate.query(
-                    "SELECT * FROM pa " +
-                            //"WHERE city = ? AND education = ? AND experience = ? AND hobbies = ? AND gender = ? " +
-                            "WHERE city = ? AND education = ? AND hobbies = ? AND gender = ? " +
-                            "AND experience = ? AND availability_start_date <= ? " +
-                            "AND availability_end_date >= (? + (? * INTERVAL '1 month')) " +
-                            "ORDER BY surname",
-                    new PARowMapper(),
+            //Restricciones correctas
+/*            return jdbcTemplate.query(
+                    "SELECT pa.*, null AS negotiation_state, 'FIRMADO' AS contract_state " +
+                    //"SELECT pa.*, null AS negotiation_state, c.contract_state " +
+                            "FROM pa " +
+                            "JOIN contract AS c " +
+                            "ON c.id_pa = pa.id_pa AND c.id_request = ? " +
+                            WHERE_CLAUSE_CANDIDATES +
+                            "ORDER BY pa.surname",
+                    new PACandidateDTORowMapper(),
+                    idRequest,
                     req.getCity().toString(),
                     req.getEducation().toString(),
                     req.getHobbies().toString(),
@@ -198,11 +189,88 @@ public class RequestDao {
                     req.getExperience().toString(),
                     req.getStartDate(),
                     req.getStartDate(),
-                    //testDate,
-                    //testDate,
-                    req.getDuration()
+                    req.getDuration(),
+                    StateEnum.ACCEPTED.name().toLowerCase()
+            );*/
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
 
+    public List<PACandidateDTO> findCandidatesWithoutContract(int idRequest) {
+        try {
+            Request req = getRequest(idRequest);
+            return jdbcTemplate.query(
+                    "SELECT pa.*, n.negotiation_state, null AS contract_state " +
+                            "FROM pa " +
+                            "JOIN negotiation AS n " +
+                            "ON n.id_pa = pa.id_pa " +
+                            "ORDER BY pa.surname",
+                    new PACandidateDTORowMapper()
             );
+            //Restricciones correctas
+            /*return jdbcTemplate.query(
+                    "SELECT pa.*, 'HABLANDO' AS negotiation_state, null AS contract_state " +
+                    //"SELECT pa.*, n.negotiation_state, null AS contract_state " +
+                            "FROM pa " +
+                            "JOIN negotiation AS n " +
+                            "ON n.id_pa = pa.id_pa AND n.id_request = ? " +
+                            WHERE_CLAUSE_CANDIDATES +
+                            "ORDER BY pa.surname",
+                    new PACandidateDTORowMapper(),
+                    idRequest,
+                    req.getCity().toString(),
+                    req.getEducation().toString(),
+                    req.getHobbies().toString(),
+                    req.getRequiredGender().toString(),
+                    req.getExperience().toString(),
+                    req.getStartDate(),
+                    req.getStartDate(),
+                    req.getDuration(),
+                    StateEnum.ACCEPTED.name().toLowerCase()
+            );*/
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Filtra los posibles candidatos PA para una request pasada por parámetro
+    public List<PACandidateDTO> findCandidatesForRequest(int idRequest) {
+        try {
+            Request req = getRequest(idRequest);
+
+            System.out.println("REQUEST >>>>>" + req.toString());
+
+            return jdbcTemplate.query(
+                    "SELECT pa.*, n.negotiation_state, c.contract_state " +
+                            "FROM pa " +
+                            "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa " +
+                            "LEFT JOIN contract AS c ON c.id_pa = pa.id_pa " +
+                            "ORDER BY surname",
+                    new PACandidateDTORowMapper()
+            );
+
+            //Restricciones correctas
+            /*return jdbcTemplate.query(
+                    "SELECT pa.*, 'HABLANDO' AS negotiation_state, 'FIRMADO' AS contract_state " +
+                            "FROM pa " +
+                            "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa AND n.id_request = ? " +
+                            "LEFT JOIN contract AS c ON c.id_pa = pa.id_pa AND c.id_request = ? " +
+                            WHERE_CLAUSE_CANDIDATES +
+                            "ORDER BY surname",
+                    new PACandidateDTORowMapper(),
+                    idRequest,
+                    idRequest,
+                    req.getCity().toString(),
+                    req.getEducation().toString(),
+                    req.getHobbies().toString(),
+                    req.getRequiredGender().toString(),
+                    req.getExperience().toString(),
+                    req.getStartDate(),
+                    req.getStartDate(),
+                    req.getDuration(),
+                    StateEnum.ACCEPTED.name().toLowerCase()
+            );*/
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
