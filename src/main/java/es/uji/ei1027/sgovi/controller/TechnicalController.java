@@ -4,6 +4,8 @@ import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
 import es.uji.ei1027.sgovi.modelo.OviUser;
 import es.uji.ei1027.sgovi.modelo.PA;
+import es.uji.ei1027.sgovi.modelo.UserDetails;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ public class TechnicalController {
 
     private OviUserDao oviUserDao;
     private RequestDao requestDao;
+    private int pageLength = 10;
 
     @Autowired
     public void setOviUserDao(OviUserDao oviUserDao) {
@@ -88,14 +91,29 @@ public class TechnicalController {
     //   DASHBOARD
     // ==========================================
 
+//    @RequestMapping("/dashboard")
+//    public String dashboard(Model model) {
+//        // Por ahora, como no tenemos login real,
+//        // buscamos un usuario de prueba (por ejemplo el ID 1)
+//        // para que la vista tenga datos que mostrar.
+//        OviUser oviUser = oviUserDao.getOviUser(1);
+//        model.addAttribute("oviUser", oviUser);
+//
+//        return "technical/dashboard";
+//    }
     @RequestMapping("/dashboard")
-    public String dashboard(Model model) {
-        // Por ahora, como no tenemos login real,
-        // buscamos un usuario de prueba (por ejemplo el ID 1)
-        // para que la vista tenga datos que mostrar.
-        OviUser oviUser = oviUserDao.getOviUser(1);
-        model.addAttribute("oviUser", oviUser);
+    public String dashboard(HttpSession session, Model model) {
+            UserDetails user = (UserDetails) session.getAttribute("user");
 
-        return "technical/dashboard";
+            if (user == null) {
+                return "redirect:/login";
+            }
+
+            // 3. ¡SOLUCIÓN! En lugar de cast, buscamos el perfil completo por email
+            // Usamos el email que viene en el objeto UserDetails de la sesión
+            OviUser oviUser = oviUserDao.getOviUserByEmail(user.getEmail());
+            model.addAttribute("oviUser", oviUser);
+
+            return "ovi-user/dashboard";
     }
 }

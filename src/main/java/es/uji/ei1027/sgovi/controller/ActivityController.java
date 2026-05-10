@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/activity")
 public class ActivityController {
     private ActivityDao activityDao;
+    private int pageLength = 10;
+
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
         this.activityDao = activityDao;

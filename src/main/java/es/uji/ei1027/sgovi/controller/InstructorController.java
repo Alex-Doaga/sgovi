@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class InstructorController {
 
     private InstructorDao instructorDao;
+    private int pageLength = 10;
 
     @Autowired
     public void setInstructorDao(InstructorDao instructorDao) {

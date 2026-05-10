@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaController {
 
     private PaDao paDao;
+    private int pageLength = 10;
 
     @Autowired
     public void setPaDao(PaDao paDao) {

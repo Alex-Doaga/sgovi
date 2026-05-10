@@ -16,6 +16,7 @@ import es.uji.ei1027.sgovi.modelo.UserDetails;
 public class OviUserController {
 
     private OviUserDao oviUserDao;
+    private int pageLength = 10;
 
     @Autowired
     public void setOviUserDao(OviUserDao oviUserDao) {

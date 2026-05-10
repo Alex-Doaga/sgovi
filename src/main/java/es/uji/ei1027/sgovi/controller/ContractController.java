@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 public class ContractController {
 
     private ContractDao contractDao;
+    private int pageLength = 10;
 
     @Autowired
     public void setContractDao(ContractDao contractDao) {
