@@ -23,83 +23,68 @@
            th:classappend="${currentState == 'refused' ? 'btn-danger' : 'btn-outline-danger'}">Rebutjats</a>
     </div>
 
-    <div class="table-responsive shadow-sm">
-        <table class="table table-striped align-middle mb-0">
-            <thead class="table-dark">
-            <tr>
-                <th>Nom</th>
-                <th>Cognoms</th>
-                <th>DNI/NIE</th>
-                <th>Contacte</th>
-                <th>Accions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="oviUser : ${oviUsers}">
-                <td th:text="${oviUser.name}"></td>
-                <td th:text="${oviUser.surname}"></td>
-                <td th:text="${oviUser.dniNie}"></td>
-                <td>
-                    <div th:text="${oviUser.email}"></div>
-                    <small class="text-muted" th:text="${oviUser.phone}"></small>
-                </td>
+    <div th:with="oviUsers=${#lists.isEmpty(oviUsersPaged) ? {} : oviUsersPaged[__${selectedPage}__]}">
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Cognoms</th>
+                    <th>DNI/NIE</th>
+                    <th>Contacte</th>
+                    <th>Accions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="oviUser : ${oviUsers}">
+                    <td th:text="${oviUser.name}"></td>
+                    <td th:text="${oviUser.surname}"></td>
+                    <td th:text="${oviUser.dniNie}"></td>
+                    <td>
+                        <div th:text="${oviUser.email}"></div>
+                        <small class="text-muted" th:text="${oviUser.phone}"></small>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <th:block th:if="${currentState == 'pending'}">
+                                <form th:action="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" method="post">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-check-lg"></i> Acceptar
+                                    </button>
+                                </form>
+                                <a th:href="@{/ovi-user/reject/{id}(id=${oviUser.idOviUser})}" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-x-lg"></i> Rebutjar
+                                </a>
+                            </th:block>
 
-                <td>
-                    <div class="d-flex gap-2">
-                        <th:block th:if="${currentState == 'pending'}">
-                            <form th:action="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" method="post">
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    <i class="bi bi-check-lg"></i> Acceptar
-                                </button>
-                            </form>
-                            <a th:href="@{/ovi-user/reject/{id}(id=${oviUser.idOviUser})}" class="btn btn-danger btn-sm">
-                                <i class="bi bi-x-lg"></i> Rebutjar
-                            </a>
-                        </th:block>
+                            <th:block th:if="${currentState == 'accepted'}">
+                                <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}"
+                                   class="btn btn-info btn-sm text-white">
+                                    <i class="bi bi-file-earmark-text"></i> Ver Contractes
+                                </a>
+                            </th:block>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(oviUsers)}">
+                    <td colspan="5" class="text-center text-muted py-4">
+                        No hi ha cap usuari OVI en aquest estat.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-                        <th:block th:if="${currentState == 'accepted'}">
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}"
-                               class="btn btn-info btn-sm text-white">
-                                <i class="bi bi-file-earmark-text"></i> Ver Contractes
-                            </a>
-                        </th:block>
-
-                        <th:block th:if="${currentState == 'refused'}">
-                            <button type="button" class="btn btn-secondary btn-sm"
-                                    data-bs-toggle="modal"
-                                    th:data-bs-target="'#modalMotivo' + ${oviUser.idOviUser}">
-                                <i class="bi bi-chat-left-text"></i> Ver Motiu
-                            </button>
-
-                            <div class="modal fade" th:id="'modalMotivo' + ${oviUser.idOviUser}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title">Motiu del Rebuig</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p><strong>Usuari:</strong> <span th:text="${oviUser.name + ' ' + oviUser.surname}"></span></p>
-                                            <hr>
-                                            <p th:text="${oviUser.rejectionReason} ?: 'No s\'ha especificat cap motiu.'"></p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th:block>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(oviUsers)}">
-                <td colspan="5" class="text-center text-muted py-4">
-                    No hi ha cap usuari OVI en aquest estat.
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == selectedPage + 1} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{${currentState == 'all' ? '/ovi-user/list' : '/ovi-user/list/' + currentState}(page=${pageNumber - 1})}"
+                       th:text="${pageNumber}"></a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <div class="mt-4">

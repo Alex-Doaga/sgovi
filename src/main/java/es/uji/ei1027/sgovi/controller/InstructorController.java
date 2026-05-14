@@ -6,15 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/instructor")
 public class InstructorController {
 
+    private void preparePagination(Model model, List<Instructor> instructors, Optional<Integer> page) {
+        ArrayList<ArrayList<Instructor>> instructorsPaged = new ArrayList<>();
+        if (!instructors.isEmpty()) {
+            int ini = 0;
+            while (ini < instructors.size()) {
+                int fin = Math.min(ini + pageLength, instructors.size());
+                instructorsPaged.add(new ArrayList<>(instructors.subList(ini, fin)));
+                ini += pageLength;
+            }
+        }
+        model.addAttribute("instructorsPaged", instructorsPaged);
+
+        int totalPages = instructorsPaged.size();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        model.addAttribute("selectedPage", page.orElse(0));
+    }
     private InstructorDao instructorDao;
     private int pageLength = 10;
 
@@ -24,8 +48,9 @@ public class InstructorController {
     }
 
     @RequestMapping("/list")
-    public String list(Model model) {
-        model.addAttribute("instructors", instructorDao.getInstructors());
+    public String list(Model model, @RequestParam("page") Optional<Integer> page) {
+        List<Instructor> instructors = instructorDao.getInstructors();
+        preparePagination(model, instructors, page);
         return "instructor/list";
     }
 

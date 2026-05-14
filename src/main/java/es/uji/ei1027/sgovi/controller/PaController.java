@@ -12,6 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 @Controller
 @RequestMapping("/pa")
@@ -23,6 +29,28 @@ public class PaController {
     @Autowired
     public void setPaDao(PaDao paDao) {
         this.paDao = paDao;
+    }
+
+    private void preparePagination(Model model, List<PA> pas, Optional<Integer> page) {
+        ArrayList<ArrayList<PA>> pasPaged = new ArrayList<>();
+        if (!pas.isEmpty()) {
+            int ini = 0;
+            while (ini < pas.size()) {
+                int fin = Math.min(ini + pageLength, pas.size());
+                pasPaged.add(new ArrayList<>(pas.subList(ini, fin)));
+                ini += pageLength;
+            }
+        }
+        model.addAttribute("pasPaged", pasPaged);
+
+        int totalPages = pasPaged.size();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        model.addAttribute("selectedPage", page.orElse(0));
     }
 
     // ==========================================
@@ -81,14 +109,10 @@ public class PaController {
 
     // 2. Ruta con filtro: Carga la lista según la pestaña seleccionada (pending, accepted, refused)
     @RequestMapping(value="/list/{state}", method = RequestMethod.GET)
-    public String listPasByState(@PathVariable String state, Model model) {
-        // Usamos el método de tu DAO que filtra por estado
-        model.addAttribute("pas", paDao.getPasByState(state));
-
-        // Le pasamos el estado actual a la vista para que pinte la pestaña del color correcto
+    public String listPasByState(@PathVariable String state, Model model, @RequestParam("page") Optional<Integer> page) {
+        List<PA> pas = paDao.getPasByState(state);
+        preparePagination(model, pas, page);
         model.addAttribute("currentState", state);
-
-        // Devolvemos la vista list.html
         return "pa/list";
     }
 

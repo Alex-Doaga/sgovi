@@ -23,87 +23,79 @@
            th:classappend="${currentState == 'refused' ? 'btn-danger' : 'btn-outline-danger'}">Rebutjats</a>
     </div>
 
-    <div class="table-responsive shadow-sm">
-        <table class="table table-striped align-middle mb-0">
-            <thead class="table-dark">
-            <tr>
-                <th>Nom</th>
-                <th>Cognoms</th>
-                <th>DNI/NIE</th>
-                <th>Contacte</th>
-                <th>Tipus PA</th>
-                <th>Accions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="pa : ${pas}">
-                <td th:text="${pa.name}"></td>
-                <td th:text="${pa.surname}"></td>
-                <td th:text="${pa.dniNie}"></td>
-                <td>
-                    <div th:text="${pa.email}"></div>
-                    <small class="text-muted" th:text="${pa.phone}"></small>
-                </td>
-                <td>
-                    <span class="badge bg-secondary" th:text="${pa.typePa}"></span>
-                </td>
+    <div th:with="pas=${#lists.isEmpty(pasPaged) ? {} : pasPaged[__${selectedPage}__]}">
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Cognoms</th>
+                    <th>DNI/NIE</th>
+                    <th>Contacte</th>
+                    <th>Tipus PA</th>
+                    <th>Accions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="pa : ${pas}">
+                    <td th:text="${pa.name}"></td>
+                    <td th:text="${pa.surname}"></td>
+                    <td th:text="${pa.dniNie}"></td>
+                    <td>
+                        <div th:text="${pa.email}"></div>
+                        <small class="text-muted" th:text="${pa.phone}"></small>
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary" th:text="${pa.typePa}"></span>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <th:block th:if="${currentState == 'pending'}">
+                                <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-check-lg"></i> Acceptar
+                                    </button>
+                                </form>
+                                <a th:href="@{/pa/reject/{id}(id=${pa.idPa})}" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-x-lg"></i> Rebutjar
+                                </a>
+                            </th:block>
 
-                <td>
-                    <div class="d-flex gap-2">
+                            <th:block th:if="${currentState == 'accepted'}">
+                                <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-info btn-sm text-white">
+                                    <i class="bi bi-eye"></i> Veure Perfil
+                                </a>
+                            </th:block>
 
-                        <th:block th:if="${currentState == 'pending'}">
-                            <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post">
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    <i class="bi bi-check-lg"></i> Acceptar
+                            <th:block th:if="${currentState == 'refused'}">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="'#modalMotivo' + ${pa.idPa}">
+                                    <i class="bi bi-chat-left-text"></i> Veure Motiu
                                 </button>
-                            </form>
-                            <a th:href="@{/pa/reject/{id}(id=${pa.idPa})}" class="btn btn-danger btn-sm">
-                                <i class="bi bi-x-lg"></i> Rebutjar
-                            </a>
-                        </th:block>
+                            </th:block>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(pas)}">
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No hi ha cap assistent personal en aquest estat.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-                        <th:block th:if="${currentState == 'accepted'}">
-                            <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-info btn-sm text-white">
-                                <i class="bi bi-eye"></i> Veure Perfil
-                            </a>
-                        </th:block>
-
-                        <th:block th:if="${currentState == 'refused'}">
-                            <button type="button" class="btn btn-secondary btn-sm"
-                                    data-bs-toggle="modal"
-                                    th:data-bs-target="'#modalMotivo' + ${pa.idPa}">
-                                <i class="bi bi-chat-left-text"></i> Veure Motiu
-                            </button>
-
-                            <div class="modal fade" th:id="'modalMotivo' + ${pa.idPa}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title">Motiu del Rebuig</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p><strong>Candidat PA:</strong> <span th:text="${pa.name + ' ' + pa.surname}"></span></p>
-                                            <hr>
-                                            <p th:text="${pa.rejectionReason} ?: 'No s\'ha especificat cap motiu.'"></p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th:block>
-                    </div>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(pas)}">
-                <td colspan="6" class="text-center text-muted py-4">
-                    No hi ha cap assistent personal en aquest estat.
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == selectedPage + 1} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{'/pa/list/' + ${currentState}(page=${pageNumber - 1})}"
+                       th:text="${pageNumber}"></a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <div class="mt-4">
