@@ -49,8 +49,8 @@
                 <small class="text-muted" th:text="${candidate.getPa().getPhone()}"></small>
             </td>
 
-            <td th:if="${currentState != 'withContract'}" th:text="${candidate.getNegotiationState() == null ? 'Sin hablar' : candidate.getNegotiationState()}"></td>
-            <td th:if="${currentState != 'withoutContract'}" th:text="${candidate.getContractState() == null ? 'Sin contrato' : candidate.getContractState() }"></td>
+            <td th:if="${currentState != 'withContract'}" th:text="${candidate.getNegotiationState() == '' ? 'Sin hablar' : candidate.getNegotiationState() }"></td>
+            <td th:if="${currentState != 'withoutContract'}" th:text="${candidate.getContractState()}"></td>
 
             <td>
                 <button type="button" class="btn btn-sm btn-outline-primary"
@@ -89,7 +89,11 @@
         </tr>
         </tbody>
     </table>
-    <a th:href="@{/technical/list-requests/state/accepted}" class="btn btn-secondary">Tornar</a>
+    <div class="mt-3">
+        <a th:href="@{/ovi-user/dashboard}" class="btn btn-link text-decoration-none">
+            <i class="bi bi-arrow-left"></i> Tornar al Dashboard
+        </a>
+    </div>
 </main>
 </body>
 </html>

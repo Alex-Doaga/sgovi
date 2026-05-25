@@ -3,7 +3,7 @@ package es.uji.ei1027.sgovi.controller;
 import es.uji.ei1027.sgovi.dao.NegotiationDao;
 import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
-import es.uji.ei1027.sgovi.dto.PACandidateDTO;
+import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.OviUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,7 +81,7 @@ public class TechnicalController {
         System.out.println("REQUEST ID listCandidates " + requestId);
         model.addAttribute("currentState", "all");
         model.addAttribute("requestId", requestId);
-        List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesForRequest(requestId);
         model.addAttribute("candidates", candidates);
 
        return "technical/candidates";
@@ -94,7 +94,7 @@ public class TechnicalController {
 
         model.addAttribute("currentState", "withoutContract");
         model.addAttribute("requestId", requestId);
-        List<PACandidateDTO> candidates = requestDao.findCandidatesWithoutContract(requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesWithoutContract(requestId);
         model.addAttribute("candidates", candidates);
 
         return "technical/candidates";
@@ -107,7 +107,7 @@ public class TechnicalController {
 
         model.addAttribute("currentState", "withContract");
         model.addAttribute("requestId", requestId);
-        List<PACandidateDTO> candidates = requestDao.findCandidatesWithContract(requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesWithContract(requestId);
         model.addAttribute("candidates", candidates);
 
         return "technical/candidates";
