@@ -1,22 +1,44 @@
 package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.ContractDao;
+import es.uji.ei1027.sgovi.dao.PaDao;
+import es.uji.ei1027.sgovi.dao.RequestDao;
+import es.uji.ei1027.sgovi.dto.PACandidateDTO;
 import es.uji.ei1027.sgovi.modelo.Contract;
+import es.uji.ei1027.sgovi.modelo.PA;
+import es.uji.ei1027.sgovi.modelo.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Controller
 @RequestMapping("/contract")
 public class ContractController {
 
     private ContractDao contractDao;
+    private RequestDao requestDao;
+    private PaDao paDao;
 
     @Autowired
     public void setContractDao(ContractDao contractDao) {
         this.contractDao = contractDao;
+    }
+
+    @Autowired
+    public void setRequestDao(RequestDao requestDao) {
+        this.requestDao = requestDao;
+    }
+
+    @Autowired
+    public void setPaDao(PaDao paDao) {
+        this.paDao = paDao;
     }
 
     // Operaciones: listar, crear, actualizar, borrar
@@ -29,6 +51,7 @@ public class ContractController {
     @RequestMapping("/list")
     public String listContracts(Model model) {
         model.addAttribute("contracts", contractDao.getContractsByState("activo"));
+        model.addAttribute("isUserView", false);
         return "contract/list";
     }
 
@@ -36,6 +59,9 @@ public class ContractController {
     @RequestMapping("/list/user/{id}")
     public String listUserContracts(Model model, @PathVariable int id) {
         model.addAttribute("contracts", contractDao.getContractsByUserId(id));
+        model.addAttribute("isUserView", true);
+        model.addAttribute("userId", id);
+        model.addAttribute("paDao", paDao);
         return "contract/list";
     }
 
@@ -43,88 +69,89 @@ public class ContractController {
     //   CREAR/AÑADIR Request
     // ==========================================
 
-    // Formulario de añadir contrato
-    @RequestMapping(value = "/add/{idRequest}", method = RequestMethod.GET)
-    public String addContract(Model model, @PathVariable int idRequest) {
+    // Formulario de añadir contrato por usuario
+    @RequestMapping(value = "/add/user/{idUser}", method = RequestMethod.GET)
+    public String addContractByUser(Model model, @PathVariable int idUser) {
+        List<Request> requests = requestDao.getRequestsWithoutContractByOviUser(idUser);
+        Set<PA> candidatePAs = new HashSet<>();
+        for (Request req : requests) {
+            List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(req.getIdRequest());
+            for (PACandidateDTO cand : candidates) {
+                candidatePAs.add(cand.getPa());
+            }
+        }
+        List<PA> pas = new ArrayList<>(candidatePAs);
+        model.addAttribute("requests", requests);
+        model.addAttribute("pas", pas);
+        model.addAttribute("idUser", idUser);
         Contract contract = new Contract();
-        contract.setIdRequest(idRequest);
-        contract.setContractState("activo"); // Estado por defecto
+        contract.setContractState("activo");
         model.addAttribute("contract", contract);
         return "contract/add";
     }
 
-    // Procesar el formulario de añadir con VALIDACIÓN
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("contract") Contract contract,
-                                   BindingResult bindingResult) {
-
-        // 1. Instanciar y ejecutar el validador
-        ContractValidator contractValidator = new ContractValidator();
-        contractValidator.validate(contract, bindingResult);
-
-        // 2. Si hay errores, volvemos a la vista del formulario
+    // Procesar el formulario de añadir por usuario
+    @RequestMapping(value = "/add/user", method = RequestMethod.POST)
+    public String processAddUserSubmit(@ModelAttribute("contract") Contract contract,
+                                       @RequestParam("idUser") int idUser,
+                                       BindingResult bindingResult, Model model) {
+        ContractValidator validator = new ContractValidator();
+        validator.validate(contract, bindingResult);
         if (bindingResult.hasErrors()) {
+            List<Request> requests = requestDao.getRequestsWithoutContractByOviUser(idUser);
+            Set<PA> candidatePAs = new HashSet<>();
+            for (Request req : requests) {
+                List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(req.getIdRequest());
+                for (PACandidateDTO cand : candidates) {
+                    candidatePAs.add(cand.getPa());
+                }
+            }
+            List<PA> pas = new ArrayList<>(candidatePAs);
+            model.addAttribute("requests", requests);
+            model.addAttribute("pas", pas);
+            model.addAttribute("idUser", idUser);
             return "contract/add";
         }
-
-        // 3. Si no hay errores, guardamos
         contractDao.addContract(contract);
-        return "redirect:/contract/list/ovi-user/" + contract.getIdRequest();
+        return "redirect:/contract/list/user/" + idUser;
     }
 
     // ==========================================
     //   MODIFICAR/ACTUALIZAR Contrato
     // ==========================================
 
-    // Mostrar formulario de edición
+    // MOSTRAR FORMULARIO DE EDITAR (GET)
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String editContract(Model model, @PathVariable int id) {
-        model.addAttribute("contract", contractDao.getContract(id));
+    public String updateContract(Model model, @PathVariable int id) {
+        Contract contract = contractDao.getContract(id);
+        model.addAttribute("contract", contract);
+
+        Request request = requestDao.getRequest(contract.getIdRequest());
+        int idUser = request.getOviUserId();
+
+        model.addAttribute("idUser", idUser);
+
         return "contract/update";
     }
 
-    // Procesar el formulario de edición con VALIDACIÓN
+    // PROCESAR EL FORMULARIO DE EDITAR (POST)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("contract") Contract contract,
-                                      BindingResult bindingResult) {
+                                      BindingResult bindingResult, Model model) {
 
-        // 1. Instanciar y ejecutar el validador (reutilizamos el mismo)
         ContractValidator contractValidator = new ContractValidator();
-        contractValidator.validate(contract, bindingResult);
+        contractValidator.validateUpdate(contract, bindingResult);
 
-        // 2. Si hay errores en la edición, volvemos a la vista de update
         if (bindingResult.hasErrors()) {
+            Request request = requestDao.getRequest(contract.getIdRequest());
+            model.addAttribute("idUser", request.getOviUserId());
             return "contract/update";
         }
 
-        // 3. Si todo es correcto, actualizamos
         contractDao.updateContract(contract);
-        return "redirect:/contract/list";
-    }
 
-    // ==========================================
-    //   BORRADO DE CONTRATOS
-    // ==========================================
-
-    // Eliminar contrato
-    @RequestMapping(value = "/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        contractDao.deleteContract(id);
-        return "redirect:/contract/list";
-    }
-
-    // Mostrar página de confirmación de borrado
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteContract(Model model, @PathVariable int id) {
-        model.addAttribute("contract", contractDao.getContract(id));
-        return "contract/delete";
-    }
-
-    // Procesar el borrado
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String processDeleteSubmit(@ModelAttribute("contract") Contract contract) {
-        contractDao.deleteContract(contract.getIdContract());
-        return "redirect:/contract/list";
+        Request request = requestDao.getRequest(contract.getIdRequest());
+        return "redirect:/contract/list/user/" + request.getOviUserId();
     }
 
 }

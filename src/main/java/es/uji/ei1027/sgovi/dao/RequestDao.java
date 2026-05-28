@@ -3,6 +3,7 @@ package es.uji.ei1027.sgovi.dao;
 import es.uji.ei1027.sgovi.dto.PACandidateDTO;
 import es.uji.ei1027.sgovi.modelo.PA;
 import es.uji.ei1027.sgovi.modelo.Request;
+import es.uji.ei1027.sgovi.modelo.enums.StateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -163,16 +164,16 @@ public class RequestDao {
     public List<PACandidateDTO> findCandidatesWithContract(int idRequest) {
         try {
             Request req = getRequest(idRequest);
-            return jdbcTemplate.query(
+            /*return jdbcTemplate.query(
                     "SELECT pa.*, null AS negotiation_state, c.contract_state " +
                             "FROM pa " +
                             "JOIN contract AS c " +
                             "ON c.id_pa = pa.id_pa " +
                             "ORDER BY pa.surname",
                     new PACandidateDTORowMapper()
-            );
+            );*/
             //Restricciones correctas
-/*            return jdbcTemplate.query(
+            return jdbcTemplate.query(
                     "SELECT pa.*, null AS negotiation_state, 'FIRMADO' AS contract_state " +
                     //"SELECT pa.*, null AS negotiation_state, c.contract_state " +
                             "FROM pa " +
@@ -191,7 +192,7 @@ public class RequestDao {
                     req.getStartDate(),
                     req.getDuration(),
                     StateEnum.ACCEPTED.name().toLowerCase()
-            );*/
+            );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
@@ -200,16 +201,16 @@ public class RequestDao {
     public List<PACandidateDTO> findCandidatesWithoutContract(int idRequest) {
         try {
             Request req = getRequest(idRequest);
-            return jdbcTemplate.query(
+            /*return jdbcTemplate.query(
                     "SELECT pa.*, n.negotiation_state, null AS contract_state " +
                             "FROM pa " +
                             "JOIN negotiation AS n " +
                             "ON n.id_pa = pa.id_pa " +
                             "ORDER BY pa.surname",
                     new PACandidateDTORowMapper()
-            );
-            //Restricciones correctas
-            /*return jdbcTemplate.query(
+            );*/
+
+            return jdbcTemplate.query(
                     "SELECT pa.*, 'HABLANDO' AS negotiation_state, null AS contract_state " +
                     //"SELECT pa.*, n.negotiation_state, null AS contract_state " +
                             "FROM pa " +
@@ -228,7 +229,7 @@ public class RequestDao {
                     req.getStartDate(),
                     req.getDuration(),
                     StateEnum.ACCEPTED.name().toLowerCase()
-            );*/
+            );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
@@ -241,17 +242,17 @@ public class RequestDao {
 
             System.out.println("REQUEST >>>>>" + req.toString());
 
-            return jdbcTemplate.query(
+            /*return jdbcTemplate.query(
                     "SELECT pa.*, n.negotiation_state, c.contract_state " +
                             "FROM pa " +
                             "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa " +
                             "LEFT JOIN contract AS c ON c.id_pa = pa.id_pa " +
                             "ORDER BY surname",
                     new PACandidateDTORowMapper()
-            );
+            );*/
 
             //Restricciones correctas
-            /*return jdbcTemplate.query(
+            return jdbcTemplate.query(
                     "SELECT pa.*, 'HABLANDO' AS negotiation_state, 'FIRMADO' AS contract_state " +
                             "FROM pa " +
                             "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa AND n.id_request = ? " +
@@ -270,7 +271,23 @@ public class RequestDao {
                     req.getStartDate(),
                     req.getDuration(),
                     StateEnum.ACCEPTED.name().toLowerCase()
-            );*/
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Obtiene solicitudes de un usuario que no tienen contrato y están aceptadas
+    public List<Request> getRequestsWithoutContractByOviUser(int oviUserId) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT r.* FROM request r " +
+                            "LEFT JOIN contract c ON r.id_request = c.id_request " +
+                            "WHERE r.ovi_user_id = ? AND r.state = 'accepted'::state_enum " +
+                            "ORDER BY r.request_date DESC",
+                    new RequestRowMapper(),
+                    oviUserId
+            );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }

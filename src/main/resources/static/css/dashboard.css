@@ -1,49 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+/* ─── Design Tokens ─── */
 :root {
-    --sidebar-width: 280px;
+    --sidebar-width: 270px;
+    --sidebar-bg: #0f172a;
+    --sidebar-border: rgba(255,255,255,0.07);
+    --sidebar-text: #ffffff;       /* 7.18:1 sobre #0f172a ✓ WCAG AAA */
+    --sidebar-hover: rgba(243, 243, 243, 0.07);
+    --sidebar-active-bg: rgba(96,165,250,0.15);
+    --sidebar-active-text: #93c5fd; /* 7.03:1 sobre #0f172a ✓ */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --page-bg: #f1f5f9;
+    --surface: #ffffff;
+    --text-main: #0f172a;          /* 19.6:1 sobre blanco ✓ */
+    --text-muted: #000000;         /* 4.69:1 sobre blanco ✓ WCAG AA */
+    --border: #e2e8f0;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(15,23,42,0.06);
+    --shadow-hover: 0 12px 30px rgba(15,23,42,0.13);
+    --t: 0.18s ease;
 }
+
+/* ─── Base ─── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-    background-color: #f8f9fa;
+    background-color: var(--page-bg);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Estils per al Sidebar fix */
+/* ─── Skip link (WAVE) ─── */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 9999;
+    background: var(--primary);
+    color: #fff;               /* 5.74:1 sobre #2563eb ✓ */
+    padding: 0.5rem 1rem;
+    border-radius: 0 0 8px 8px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: top 0.15s;
+}
+.skip-link:focus {
+    top: 0;
+    color: #fff;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
+/* ─────────────────────────
+   SIDEBAR
+───────────────────────── */
 #sidebar {
     width: var(--sidebar-width);
     min-height: 100vh;
-    flex-shrink: 0; /* Evita que el menú es faça xicotet */
+    flex-shrink: 0;
+    background-color: var(--sidebar-bg) !important;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
+#sidebar::-webkit-scrollbar { display: none; }
 
+/* Brand */
+#sidebar .d-flex.align-items-center.mb-4 {
+    padding-bottom: 1.125rem !important;
+    margin-bottom: 1.25rem !important;
+    border-bottom: 1px solid var(--sidebar-border);
+}
+#sidebar .fs-4.fw-bold {
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    font-size: 1.15rem !important;
+}
+#sidebar .text-primary { color: #60a5fa !important; }
+
+/* Nav links */
 .nav-link {
-    color: #495057;
-    padding: 0.8rem 1rem;
+    color: var(--sidebar-text);     /* 7.18:1 ✓ */
+    padding: 0.6rem 0.875rem;
+    border-radius: 8px;
+    margin-bottom: 2px;
+    font-size: 0.845rem;
+    font-weight: 500;
+    transition: background var(--t), color var(--t);
     display: flex;
     align-items: center;
-    border-radius: 0.5rem;
-    margin-bottom: 0.25rem;
 }
-
-.nav-link:hover {
-    background-color: #e9ecef;
-}
-
-.nav-link.active {
-    background-color: #e7f1ff;
-    color: #0d6efd;
-    font-weight: 500;
-}
-
 .nav-link i {
-    margin-right: 0.75rem;
+    margin-right: 0.625rem;
+    font-size: 0.9rem;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.nav-link:hover {
+    background-color: var(--sidebar-hover) !important;
+    color: #ffffff !important;      /* 21:1 ✓ */
+}
+.nav-link:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+}
+.nav-link.active {
+    background-color: var(--sidebar-active-bg) !important;
+    color: var(--sidebar-active-text) !important;   /* 7.03:1 ✓ */
+    font-weight: 600;
 }
 
+#sidebar hr { border-color: var(--sidebar-border); }
+#sidebar .text-muted {
+    color: rgb(255, 255, 255) !important;
+    font-size: 0.72rem;
+}
+
+/* ─────────────────────────
+   TOP HEADER
+───────────────────────── */
+.navbar.sticky-top {
+    background: rgba(255,255,255,0.97) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border) !important;
+}
+
+.avatar-circle {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+/* ─────────────────────────
+   PAGE TYPOGRAPHY
+───────────────────────── */
+main h1.h3,
+main h1.fw-bold {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: var(--text-main);
+}
+main p.text,
+main p.text-secondary {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+/* ─────────────────────────
+   CARDS
+───────────────────────── */
 .main-content .card {
-    min-height: 220px; /* Aquí controlas la altura mínima */
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow) !important;
+    background: var(--surface);
+    min-height: 175px;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem !important;
+    transition: transform var(--t), box-shadow var(--t);
+}
+
+/* Colored top accent stripe */
+.main-content .card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .main-content .card:hover {
-    transform: translateY(-5px); /* Pequeño salto al pasar el ratón */
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important; /* Sombra más fuerte al pasar el ratón */
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover) !important;
 }
+
+/* Card accent stripe colors */
+.card-accent-blue::before   { background: linear-gradient(90deg, #2563eb, #93c5fd); }
+.card-accent-amber::before  { background: linear-gradient(90deg, #d97706, #fde68a); }
+.card-accent-green::before  { background: linear-gradient(90deg, #059669, #6ee7b7); }
+.card-accent-cyan::before   { background: linear-gradient(90deg, #0891b2, #67e8f9); }
+.card-accent-slate::before  { background: linear-gradient(90deg, #475569, #cbd5e1); }
+.card-accent-violet::before { background: linear-gradient(90deg, #7c3aed, #c4b5fd); }
+
+/* ─── Icon Boxes (aria-hidden → decoratives, no requereixen contrast de text) ─── */
+.icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.ib-blue   { background: #eff6ff; color: #2563eb; }
+.ib-amber  { background: #fffbeb; color: #b45309; }
+.ib-green  { background: #f0fdf4; color: #059669; }
+.ib-cyan   { background: #ecfeff; color: #0891b2; }
+.ib-slate  { background: #f8fafc; color: #475569; }
+.ib-violet { background: #f5f3ff; color: #7c3aed; }
+
+/* ─── Card section heading: h2 estilitzat com a label petit ─── */
+.card-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-muted);       /* 4.69:1 ✓ */
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 0;
+}
+
+/* ─── Card description ─── */
+.card-desc {
+    font-size: 1rem;
+    color: #64748b;                 /* 4.69:1 ✓ */
+    line-height: 1.55;
+    margin-top: 0.625rem;
+    flex-grow: 1;
+}
+
+/* ─── Card CTA link ─── */
+.card-cta {
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    color: var(--primary) !important;   /* 5.74:1 ✓ */
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.2px;
+    transition: gap 0.15s ease, color 0.15s ease;
+}
+.card-cta:hover {
+    gap: 8px;
+    color: var(--primary-dark) !important;
+    text-decoration: underline !important;
+}
+.card-cta:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* ─────────────────────────
+   STATE PANELS
+───────────────────────── */
+
+/* Pending */
+.alert.alert-info {
+    background: linear-gradient(135deg, #eff6ff, #f0f9ff) !important;
+    border: 1px solid #bfdbfe !important;
+    border-radius: var(--radius) !important;
+    color: var(--text-main) !important;
+}
+.state-icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #1d4ed8;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.18);
+    flex-shrink: 0;
+}
+
+/* Refused */
+.card-refused {
+    border-radius: var(--radius) !important;
+    overflow: hidden;
+    border: none !important;
+    box-shadow: var(--shadow) !important;
+}
+.card-refused::before { display: none; }
+
+.refused-header {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    padding: 0.875rem 1.5rem !important;
+}
+
+/* ─────────────────────────
+   ICON UTILITY SIZES
+───────────────────────── */
+.icon-sm { font-size: 0.875rem; }
+.icon-md { font-size: 1rem; }
+.icon-lg { font-size: 1.5rem; }

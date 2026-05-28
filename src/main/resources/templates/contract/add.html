@@ -10,17 +10,31 @@
     <h1>Registrar Nou Contracte</h1>
     <hr>
 
-    <form th:action="@{/contract/add}" th:object="${contract}" method="post" class="row g-3">
-        <input type="hidden" th:field="*{idRequest}" />
+    <form th:action="@{/contract/add/user}" th:object="${contract}" method="post" class="row g-3">
+        <input type="hidden" th:value="${idUser}" name="idUser" />
         <input type="hidden" th:field="*{contractState}" />
 
         <div class="col-md-6 mb-3">
-            <label for="idPa" class="form-label">ID Assistent Personal (PA)</label>
-            <input type="number"
-                   th:class="${#fields.hasErrors('idPa')} ? 'form-control is-invalid' : 'form-control'"
-                   id="idPa" th:field="*{idPa}"/>
+            <label for="idRequest" class="form-label">Selecciona la Sol·licitud</label>
+            <select th:class="${#fields.hasErrors('idRequest')} ? 'form-select is-invalid' : 'form-select'"
+                    id="idRequest" th:field="*{idRequest}" required>
+                <option value="">Selecciona una sol·licitud</option>
+                <option th:each="request : ${requests}" th:value="${request.idRequest}" th:text="${'Sol·licitud ' + request.idRequest + ' - ' + request.startDate}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('idRequest')}" th:errors="*{idRequest}">
+                Error en la sol·licitud
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="idPa" class="form-label">Assistent Personal (PA)</label>
+            <select th:class="${#fields.hasErrors('idPa')} ? 'form-select is-invalid' : 'form-select'"
+                    id="idPa" th:field="*{idPa}" required>
+                <option value="">Selecciona un assistent</option>
+                <option th:each="pa : ${pas}" th:value="${pa.idPa}" th:text="${pa.name + ' ' + pa.surname}"></option>
+            </select>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('idPa')}" th:errors="*{idPa}">
-                Error en el ID del PA
+                Error en l'assistent
             </div>
         </div>
 
@@ -38,7 +52,7 @@
             <label for="startDate" class="form-label">Data d'Inici</label>
             <input type="date"
                    th:class="${#fields.hasErrors('startDate')} ? 'form-control is-invalid' : 'form-control'"
-                   id="startDate" th:field="*{startDate}"/>
+                   id="startDate" th:field="*{startDate}" required/>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">
                 Error en la data d'inici
             </div>
@@ -56,7 +70,7 @@
 
         <div class="col-12 mt-4">
             <button type="submit" class="btn btn-primary">Crear Contracte</button>
-            <a th:href="@{/contract/list}" class="btn btn-outline-secondary">Cancel·lar</a>
+            <a th:href="@{/contract/list/user/{id}(id=${idUser})}" class="btn btn-outline-secondary">Cancel·lar</a>
         </div>
     </form>
 </main>

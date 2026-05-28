@@ -125,9 +125,9 @@ public class OviUserController {
     // ==========================================
 
     // Aceptar solicitud directamente
-    @RequestMapping(value = "/accept/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/accept/{id}", method = RequestMethod.GET)
     public String acceptOviUser(@PathVariable int id) {
-        oviUserDao.updateOviUserState(id, "accepted", "");
+        oviUserDao.updateOviUserState(id, "accepted", null);
         return "redirect:/ovi-user/list/pending";
     }
 
@@ -149,6 +149,13 @@ public class OviUserController {
                 oviUser.getRejectionReason()
         );
         return "redirect:/ovi-user/list/pending";
+    }
+
+    // Vista de confirmación antes de aceptar
+    @RequestMapping(value = "/accept/confirm/{id}", method = RequestMethod.GET)
+    public String confirmAcceptOviUser(Model model, @PathVariable int id) {
+        model.addAttribute("oviUser", oviUserDao.getOviUser(id));
+        return "ovi-user/confirm-accept";
     }
 
     // ==========================================
@@ -188,5 +195,17 @@ public class OviUserController {
         model.addAttribute("oviUser", oviUser);
 
         return "ovi-user/dashboard";
+    }
+
+    // Ver perfil de un usuario OVI
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public String viewOviUser(Model model, @PathVariable int id, @RequestParam(value="review", defaultValue="false") boolean review) {
+        OviUser oviUser = oviUserDao.getOviUser(id); // O como se llame tu método en el DAO
+        model.addAttribute("oviUser", oviUser);
+
+        // Si necesitas pasar una bandera para activar los botones de acción:
+        model.addAttribute("isReviewMode", review);
+
+        return "ovi-user/view";
     }
 }

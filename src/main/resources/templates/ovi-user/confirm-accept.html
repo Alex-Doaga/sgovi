@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Acceptació</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<main class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="bi bi-check-circle me-2"></i>Confirmar Acceptació</h5>
+        </div>
+        <div class="card-body p-4">
+            <p class="fs-5">Estàs a punt d'acceptar a l'usuari OVI:</p>
+            <p class="fs-4 fw-bold text-center my-3" th:text="${oviUser.name + ' ' + oviUser.surname}"></p>
+            <p class="text-muted">Això canviarà el seu estat a <strong>acceptat</strong> i podrà accedir al sistema.</p>
+        </div>
+        <div class="card-footer bg-light d-flex justify-content-end gap-2 p-3">
+            <a th:href="@{/ovi-user/view/{id}(id=${oviUser.idOviUser}, review=true)}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Cancel·lar
+            </a>
+            <a th:href="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" class="btn btn-success">
+                <i class="bi bi-check-circle me-1"></i> Sí, Acceptar
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

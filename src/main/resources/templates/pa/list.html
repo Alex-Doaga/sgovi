@@ -53,13 +53,8 @@
                     <div class="d-flex gap-2">
 
                         <th:block th:if="${currentState == 'pending'}">
-                            <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post">
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    <i class="bi bi-check-lg"></i> Acceptar
-                                </button>
-                            </form>
-                            <a th:href="@{/pa/reject/{id}(id=${pa.idPa})}" class="btn btn-danger btn-sm">
-                                <i class="bi bi-x-lg"></i> Rebutjar
+                            <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i> Revisar
                             </a>
                         </th:block>
 

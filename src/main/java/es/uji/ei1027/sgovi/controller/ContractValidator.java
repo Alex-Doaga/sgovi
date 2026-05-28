@@ -13,6 +13,11 @@ public class ContractValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        validateFull(target, errors);
+    }
+
+    // Validación completa para crear un contrato
+    public void validateFull(Object target, Errors errors) {
         Contract contract = (Contract) target;
 
         // Validar que el ID del PA no sea nulo ni negativo
@@ -31,5 +36,13 @@ public class ContractValidator implements Validator {
                 errors.rejectValue("endDate", "incoherent", "La data de finalització no pot ser anterior a la d'inici");
             }
         }
+    }
+
+    // Validación simplificada para actualizar un contrato (solo la URL)
+    public void validateUpdate(Object target, Errors errors) {
+        Contract contract = (Contract) target;
+
+        // En la actualización solo validamos el documento si es necesario
+        // (por ahora no hay validación específica, pero el campo es opcional)
     }
 }
