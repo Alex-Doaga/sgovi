@@ -46,7 +46,7 @@ public class RequestController {
     public String listUserRequests(Model model, @PathVariable int id,
                                    @RequestParam("page") Optional<Integer> page) {
         List<Request> requests = requestDao.getRequestsByOviUser(id);
-        preparePagination(model, requests, page);
+        Paginador.paginate(model, requests, page, pageLength, "requestsPaged");
 
         model.addAttribute("userId", id);
         model.addAttribute("currentState", "all");
@@ -65,7 +65,7 @@ public class RequestController {
                                           @PathVariable String state,
                                           @RequestParam("page") Optional<Integer> page) {
         List<Request> requests = requestDao.getRequestsByOviUserAndState(id, state);
-        preparePagination(model, requests, page);
+        Paginador.paginate(model, requests, page, pageLength, "requestsPaged");
 
         model.addAttribute("userId", id);
         model.addAttribute("currentState", state);
@@ -116,31 +116,5 @@ public class RequestController {
 
         requestDao.addRequest(request);
         return "redirect:/request/list/user/" + request.getOviUserId();
-    }
-    private void preparePagination(Model model, List<Request> requests, Optional<Integer> page) {
-        // Pas 1: Crear la llista paginada (ArrayList de ArrayLists)
-        ArrayList<ArrayList<Request>> requestsPaged = new ArrayList<>();
-        if (!requests.isEmpty()) {
-            int ini = 0;
-            while (ini < requests.size()) {
-                int fin = Math.min(ini + pageLength, requests.size());
-                requestsPaged.add(new ArrayList<>(requests.subList(ini, fin)));
-                ini += pageLength;
-            }
-        }
-        model.addAttribute("requestsPaged", requestsPaged);
-
-        // Pas 2: Crear la llista de números de pàgina per a la vista
-        int totalPages = requestsPaged.size();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-
-        // Pas 3: Pàgina seleccionada (per defecte 0)
-        int currentPage = page.orElse(0);
-        model.addAttribute("selectedPage", currentPage);
     }
 }

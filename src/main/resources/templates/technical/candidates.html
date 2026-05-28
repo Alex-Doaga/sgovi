@@ -21,57 +21,76 @@
            th:classappend="${currentState == 'refused' ? 'btn-secondary' : 'btn-outline-secondary'}">Sense contracte</a>
     </div>
 
+    <!-- CAMBIO 1: Envoltura th:with para fragmentar los candidatos en páginas -->
+    <div th:with="candidates=${#lists.isEmpty(candidatesPaged) ? {} : candidatesPaged[__${selectedPage}__]}">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Cognoms</th>
+                <th>Ciutat</th>
+                <th>Contacte</th>
+                <th>Estat negociació</th>
+                <th>Accions</th> </tr>
+            </thead>
+            <tbody>
+            <tr th:each="candidate : ${candidates}">
+                <td th:text="${candidate.name}"></td>
+                <td th:text="${candidate.surname}"></td>
+                <td th:text="${candidate.city}"></td>
+                <td>
+                    <div th:text="${candidate.email}"></div>
+                    <small class="text-muted" th:text="${candidate.phone}"></small>
+                </td>
 
-    <table class="table table-striped align-middle">
-        <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Cognoms</th>
-            <th>Ciutat</th>
-            <th>Contacte</th>
-            <th>Estat negociació</th>
-            <th>Accions</th> </tr>
-        </thead>
-        <tbody>
-        <tr th:each="candidate : ${candidates}">
-            <td th:text="${candidate.name}"></td>
-            <td th:text="${candidate.surname}"></td>
-            <td th:text="${candidate.city}"></td>
-            <td>
-                <div th:text="${candidate.email}"></div>
-                <small class="text-muted" th:text="${candidate.phone}"></small>
-            </td>
+                <td th:text="${candidate}"></td>
 
-            <td th:text="${candidate}"></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            th:data-bs-target="'#modalPersonalData' + ${candidate.idPa}">
+                        <i class="bi bi-plus me-1"></i> Més dades
+                    </button>
 
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary"
-                        data-bs-toggle="modal"
-                        th:data-bs-target="'#modalPersonalData' + ${candidate.IdPa}">
-                    <i class="bi bi-plus me-1"></i> Més dades
-                </button>
-
-                <div class="modal fade" th:id="'modalPersonalData' + ${candidate.idPa}" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary text-white">
-                                <h5 class="modal-title">Dades Personals</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Edat: </strong><span th:text="${candidate.birthDate}"></span>.</p>
-                                <p><strong>Ciutat: </strong><span th:text="${candidate.city.getLabel()}"></span>.</p>
-                                <p><strong>Títol acadèmic: </strong><span th:text="${candidate.education.getLabel()}"></span>.</p>
-                                <hr>
+                    <div class="modal fade" th:id="'modalPersonalData' + ${candidate.idPa}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title">Dades Personals</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Edat: </strong><span th:text="${candidate.birthDate}"></span>.</p>
+                                    <p><strong>Ciutat: </strong><span th:text="${candidate.city.getLabel()}"></span>.</p>
+                                    <p><strong>Títol acadèmic: </strong><span th:text="${candidate.education.getLabel()}"></span>.</p>
+                                    <hr>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/technical/list-requests/state/accepted}" class="btn btn-secondary">Tornar</a>
+                </td>
+            </tr>
+            <!-- Mensaje si la lista de candidatos está vacía en esta página -->
+            <tr th:if="${#lists.isEmpty(candidates)}">
+                <td colspan="6" class="text-center py-4 text-muted">No hi ha candidats en aquesta pàgina.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- CAMBIO 2: Barra de navegación para cambiar de página manteniendo el requestId -->
+        <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == selectedPage + 1} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/technical/candidates/list/{id}(id=${requestId}, page=${pageNumber - 1})}"
+                       th:text="${pageNumber}"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <a th:href="@{/technical/list-requests/state/accepted}" class="btn btn-secondary mt-3">Tornar</a>
 </main>
 </body>
 </html>

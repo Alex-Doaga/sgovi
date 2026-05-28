@@ -31,27 +31,6 @@ public class PaController {
         this.paDao = paDao;
     }
 
-    private void preparePagination(Model model, List<PA> pas, Optional<Integer> page) {
-        ArrayList<ArrayList<PA>> pasPaged = new ArrayList<>();
-        if (!pas.isEmpty()) {
-            int ini = 0;
-            while (ini < pas.size()) {
-                int fin = Math.min(ini + pageLength, pas.size());
-                pasPaged.add(new ArrayList<>(pas.subList(ini, fin)));
-                ini += pageLength;
-            }
-        }
-        model.addAttribute("pasPaged", pasPaged);
-
-        int totalPages = pasPaged.size();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-        model.addAttribute("selectedPage", page.orElse(0));
-    }
 
     // ==========================================
     //   CREAR / AÑADIR PA
@@ -111,7 +90,9 @@ public class PaController {
     @RequestMapping(value="/list/{state}", method = RequestMethod.GET)
     public String listPasByState(@PathVariable String state, Model model, @RequestParam("page") Optional<Integer> page) {
         List<PA> pas = paDao.getPasByState(state);
-        preparePagination(model, pas, page);
+
+        Paginador.paginate(model, pas, page, pageLength, "pasPaged");
+
         model.addAttribute("currentState", state);
         return "pa/list";
     }

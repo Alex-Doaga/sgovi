@@ -50,7 +50,8 @@ public class InstructorController {
     @RequestMapping("/list")
     public String list(Model model, @RequestParam("page") Optional<Integer> page) {
         List<Instructor> instructors = instructorDao.getInstructors();
-        preparePagination(model, instructors, page);
+        Paginador.paginate(model, instructors, page, pageLength, "instructorsPaged");
+
         return "instructor/list";
     }
 

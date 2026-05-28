@@ -22,29 +22,6 @@ public class ActivityController {
     private ActivityDao activityDao;
     private int pageLength = 10;
 
-    private void preparePagination(Model model, List<Activity> activities, Optional<Integer> page) {
-        ArrayList<ArrayList<Activity>> activitiesPaged = new ArrayList<>();
-        if (!activities.isEmpty()) {
-            int ini = 0;
-            while (ini < activities.size()) {
-                int fin = Math.min(ini + pageLength, activities.size());
-                activitiesPaged.add(new ArrayList<>(activities.subList(ini, fin)));
-                ini += pageLength;
-            }
-        }
-        model.addAttribute("activitiesPaged", activitiesPaged);
-
-        int totalPages = activitiesPaged.size();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-
-        model.addAttribute("selectedPage", page.orElse(0));
-    }
-
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
         this.activityDao = activityDao;
@@ -53,7 +30,7 @@ public class ActivityController {
     @RequestMapping("/list")
     public String listActivities(Model model, @RequestParam("page") Optional<Integer> page){
         List<Activity> activities = activityDao.getActivities();
-        preparePagination(model, activities, page);
+        Paginador.paginate(model,activities,page,pageLength,"activitiesPaged");
         return "activity/list";
     }
     @RequestMapping(value = "/add", method = RequestMethod.GET)

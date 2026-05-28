@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/contract")
 public class ContractController {
@@ -28,15 +31,25 @@ public class ContractController {
 
     // Listado de todos los contratos
     @RequestMapping("/list")
-    public String listContracts(Model model) {
-        model.addAttribute("contracts", contractDao.getContractsByState("activo"));
+    public String listContracts(Model model, @RequestParam("page") Optional<Integer> page) {
+        List<Contract> contracts = contractDao.getContractsByState("activo");
+
+        Paginador.paginate(model, contracts, page, pageLength, "contractsPaged");
+
+        model.addAttribute("currentState", "activo");
         return "contract/list";
     }
 
     // Listado de contratos de un usuario específico
     @RequestMapping("/list/user/{id}")
-    public String listUserContracts(Model model, @PathVariable int id) {
-        model.addAttribute("contracts", contractDao.getContractsByUserId(id));
+    public String listUserContracts(Model model, @PathVariable int id,
+                                    @RequestParam("page") Optional<Integer> page) {
+        List<Contract> contracts = contractDao.getContractsByUserId(id);
+
+        Paginador.paginate(model, contracts, page, pageLength, "contractsPaged");
+
+        model.addAttribute("userId", id);
+        model.addAttribute("currentState", "user");
         return "contract/list";
     }
 

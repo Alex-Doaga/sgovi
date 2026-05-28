@@ -32,114 +32,133 @@
 
     <div class="card border-0 shadow-sm">
         <div class="card-body">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                <tr>
-                    <th>Data Petició</th>
-                    <th>Inici Servei</th>
-                    <th>Duració</th>
-                    <th>Ciutat</th>
-                    <th>Tipus PA</th>
-                    <th>Estat</th>
-                    <th>Accions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="req : ${requests}">
-                    <td th:text="${req.requestDate}">--</td>
-                    <td th:text="${req.startDate}">--</td>
-                    <td th:text="${req.duration} + ' mesos'">--</td>
-                    <td th:text="${req.city}">--</td>
-                    <td th:text="${req.typePa}">--</td>
-                    <td>
-                        <span class="badge"
-                              th:classappend="${(req.state) == 'ACCEPTED' ? 'bg-success' : (req.state == 'REFUSED' ? 'bg-danger' : 'bg-warning')}"
-                              th:text="${req.state}">
-                        </span>
-                    </td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <th:block th:if="${currentState == 'pending'}">
-                                <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white">Acceptar</a>
-                                <button type="button" class="btn btn-sm btn-danger"
-                                        data-bs-toggle="modal"
-                                        th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
+            <!-- CAMBIO 1: Envoltura th:with para fragmentar las páginas según tus apuntes -->
+            <div th:with="requests=${#lists.isEmpty(requestsPaged) ? {} : requestsPaged[__${selectedPage}__]}">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Data Petició</th>
+                        <th>Inici Servei</th>
+                        <th>Duració</th>
+                        <th>Ciutat</th>
+                        <th>Tipus PA</th>
+                        <th>Estat</th>
+                        <th>Accions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="req : ${requests}">
+                        <td th:text="${req.requestDate}">--</td>
+                        <td th:text="${req.startDate}">--</td>
+                        <td th:text="${req.duration} + ' mesos'">--</td>
+                        <td th:text="${req.city}">--</td>
+                        <td th:text="${req.typePa}">--</td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${(req.state) == 'ACCEPTED' ? 'bg-success' : (req.state == 'REFUSED' ? 'bg-danger' : 'bg-warning')}"
+                                  th:text="${req.state}">
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <th:block th:if="${currentState == 'pending'}">
+                                    <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white">Acceptar</a>
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                            data-bs-toggle="modal"
+                                            th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
                                         Rebutjar
-                                </button>
+                                    </button>
 
-                                <div class="modal fade" th:id="'modalExplicarMotivo' + ${req.idRequest}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-danger text-white">
-                                                <h5 class="modal-title">Especificar el motiu del rebuig</h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal fade" th:id="'modalExplicarMotivo' + ${req.idRequest}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title">Especificar el motiu del rebuig</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <form th:action="@{/technical/list-requests/pending/refuse/{req_id}(req_id=${req.idRequest})}" method="post">
+                                                    <div class="modal-body">
+                                                            <textarea class="form-control"
+                                                                      name="reason"
+                                                                      rows="4"
+                                                                      placeholder="Escriu el motiu..."
+                                                                      required>
+                                                            </textarea>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                            Cancel·lar
+                                                        </button>
+
+                                                        <button type="submit" class="btn btn-danger">
+                                                            Rebutjar
+                                                        </button>
+                                                    </div>
+                                                </form>
+
                                             </div>
-
-                                            <form th:action="@{/technical/list-requests/pending/refuse/{req_id}(req_id=${req.idRequest})}" method="post">
-                                                <div class="modal-body">
-                                                        <textarea class="form-control"
-                                                                  name="reason"
-                                                                  rows="4"
-                                                                  placeholder="Escriu el motiu..."
-                                                                  required>
-                                                        </textarea>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                                        Cancel·lar
-                                                    </button>
-
-                                                    <button type="submit" class="btn btn-danger">
-                                                        Rebutjar
-                                                    </button>
-                                                </div>
-                                            </form>
-
                                         </div>
                                     </div>
-                                </div>
-                            </th:block>
+                                </th:block>
 
-                            <a th:href="@{/request/view/{id}(id=${req.idRequest})}" class="btn btn-sm btn-outline-primary" >
-                                <i class="bi bi-eye"></i> Detalls
-                            </a>
-
-                            <th:block th:if="${currentState == 'accepted'}">
-                                <a th:href="@{/technical/candidates/list/{id}(id=${req.idRequest})}" class="btn btn-sm btn-info text-white">
-                                    <i class="bi bi-people me-1"></i> Candidats
+                                <a th:href="@{/request/view/{id}(id=${req.idRequest})}" class="btn btn-sm btn-outline-primary" >
+                                    <i class="bi bi-eye"></i> Detalls
                                 </a>
-                            </th:block>
 
-                            <th:block th:if="${currentState == 'refused'}">
-                                <button type="button" class="btn btn-sm btn-secondary"
-                                        data-bs-toggle="modal"
-                                        th:data-bs-target="'#modalMotivo' + ${req.idRequest}">
-                                    <i class="bi bi-info-circle me-1"></i> Veure Motiu
-                                </button>
+                                <th:block th:if="${currentState == 'accepted'}">
+                                    <a th:href="@{/technical/candidates/list/{id}(id=${req.idRequest})}" class="btn btn-sm btn-info text-white">
+                                        <i class="bi bi-people me-1"></i> Candidats
+                                    </a>
+                                </th:block>
 
-                                <div class="modal fade" th:id="'modalMotivo' + ${req.idRequest}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-danger text-white">
-                                                <h5 class="modal-title">Motiu del Rebuig</h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p class="text-dark" th:text="${req.comments} ?: 'No s\'ha especificat cap motiu.'"></p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
+                                <th:block th:if="${currentState == 'refused'}">
+                                    <button type="button" class="btn btn-sm btn-secondary"
+                                            data-bs-toggle="modal"
+                                            th:data-bs-target="'#modalMotivo' + ${req.idRequest}">
+                                        <i class="bi bi-info-circle me-1"></i> Veure Motiu
+                                    </button>
+
+                                    <div class="modal fade" th:id="'modalMotivo' + ${req.idRequest}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title">Motiu del Rebuig</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="text-dark" th:text="${req.comments} ?: 'No s\'ha especificat cap motiu.'"></p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </th:block>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                </th:block>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Mensaje si la lista de la página está vacía -->
+                    <tr th:if="${#lists.isEmpty(requests)}">
+                        <td colspan="7" class="text-center py-4 text-muted">No hi ha sol·licituds en aquesta pàgina.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CAMBIO 2: Barra de navegación de páginas añadida según tus apuntes -->
+            <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                        th:classappend="${pageNumber == selectedPage + 1} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{${currentState == 'all' ? '/technical/list-requests' : '/technical/list-requests/state/' + currentState}(page=${pageNumber - 1})}"
+                           th:text="${pageNumber}"></a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <div class="mt-3">
