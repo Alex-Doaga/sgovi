@@ -24,26 +24,39 @@
            th:classappend="${currentState == 'refused' ? 'btn-danger' : 'btn-outline-danger'}">Rebutjats</a>
     </div>
 
-    <div class="table-responsive shadow-sm">
-        <table class="table table-striped align-middle mb-0">
-            <thead class="table-dark">
-            <tr>
-                <th>Nom</th>
-                <th>Cognoms</th>
-                <th>DNI/NIE</th>
-                <th>Contacte</th>
-                <th>Accions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="oviUser : ${oviUsers}">
-                <td th:text="${oviUser.name}"></td>
-                <td th:text="${oviUser.surname}"></td>
-                <td th:text="${oviUser.dniNie}"></td>
-                <td>
-                    <div th:text="${oviUser.email}"></div>
-                    <small class="text-muted" th:text="${oviUser.phone}"></small>
-                </td>
+    <div th:with="oviUsers=${#lists.isEmpty(oviUsersPaged) ? {} : oviUsersPaged[__${selectedPage}__]}">
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Cognoms</th>
+                    <th>DNI/NIE</th>
+                    <th>Contacte</th>
+                    <th>Accions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="oviUser : ${oviUsers}">
+                    <td th:text="${oviUser.name}"></td>
+                    <td th:text="${oviUser.surname}"></td>
+                    <td th:text="${oviUser.dniNie}"></td>
+                    <td>
+                        <div th:text="${oviUser.email}"></div>
+                        <small class="text-muted" th:text="${oviUser.phone}"></small>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <th:block th:if="${currentState == 'pending'}">
+                                <form th:action="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" method="post">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-check-lg"></i> Acceptar
+                                    </button>
+                                </form>
+                                <a th:href="@{/ovi-user/reject/{id}(id=${oviUser.idOviUser})}" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-x-lg"></i> Rebutjar
+                                </a>
+                            </th:block>
 
                 <td>
                     <div class="d-flex gap-2">

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Set;
 public class ContractController {
 
     private ContractDao contractDao;
+    private int pageLength = 10;
     private RequestDao requestDao;
     private PaDao paDao;
 
@@ -49,19 +51,27 @@ public class ContractController {
 
     // Listado de todos los contratos
     @RequestMapping("/list")
-    public String listContracts(Model model) {
-        model.addAttribute("contracts", contractDao.getContractsByState("activo"));
-        model.addAttribute("isUserView", false);
+    public String listContracts(Model model, @RequestParam("page") Optional<Integer> page) {
+        List<Contract> contracts = contractDao.getContractsByState("activo");
+
+        Paginador.paginate(model, contracts, page, pageLength, "contractsPaged");
+
+        model.addAttribute("currentState", "activo");
         return "contract/list";
     }
 
     // Listado de contratos de un usuario específico
     @RequestMapping("/list/user/{id}")
-    public String listUserContracts(Model model, @PathVariable int id) {
-        model.addAttribute("contracts", contractDao.getContractsByUserId(id));
-        model.addAttribute("isUserView", true);
+    public String listUserContracts(Model model, @PathVariable int id,
+                                    @RequestParam("page") Optional<Integer> page) {
+        List<Contract> contracts = contractDao.getContractsByUserId(id);
+
+        Paginador.paginate(model, contracts, page, pageLength, "contractsPaged");
+
         model.addAttribute("userId", id);
+        model.addAttribute("isUserView", true);
         model.addAttribute("paDao", paDao);
+        model.addAttribute("currentState", "user");
         return "contract/list";
     }
 

@@ -11,11 +11,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import es.uji.ei1027.sgovi.modelo.UserDetails;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 @Controller
 @RequestMapping("/ovi-user")
 public class OviUserController {
 
     private OviUserDao oviUserDao;
+    private int pageLength = 10;
+
 
     @Autowired
     public void setOviUserDao(OviUserDao oviUserDao) {
@@ -30,18 +38,21 @@ public class OviUserController {
 
     // Operación listar todos los oviUsers
     @RequestMapping("/list")
-    public String list(Model model) {
-        model.addAttribute("oviUsers", oviUserDao.getOviUsers());
+    public String list(Model model, @RequestParam("page") Optional<Integer> page) {
+        List<OviUser> oviUsers = oviUserDao.getOviUsers();
+        Paginador.paginate(model, oviUsers, page, pageLength, "oviUsersPaged");
+
         model.addAttribute("currentState", "all");
         return "ovi-user/list";
     }
 
     // Operación listar los oviUsers por estado
     @RequestMapping("/list/{state}")
-    public String listByState(Model model, @PathVariable String state) {
-        model.addAttribute("oviUsers", oviUserDao.getOviUsersByState(state)); // O el nombre que tenga tu método en el DAO
-        model.addAttribute("currentState", state); // <-- Añadimos esto
-        return "ovi-user/list"; // <-- Ahora TODOS devuelven la misma vista
+    public String listByState(Model model, @PathVariable String state, @RequestParam("page") Optional<Integer> page) {
+        List<OviUser> oviUsers = oviUserDao.getOviUsersByState(state);
+        Paginador.paginate(model, oviUsers, page, pageLength, "oviUsersPaged");
+        model.addAttribute("currentState", state);
+        return "ovi-user/list";
     }
 
     // ==========================================

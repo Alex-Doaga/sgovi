@@ -8,23 +8,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/activity")
 public class ActivityController {
     private ActivityDao activityDao;
+    private int pageLength = 10;
+
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
         this.activityDao = activityDao;
     }
 
     @RequestMapping("/list")
-    public String listActivities(Model model){
-        model.addAttribute("activities",activityDao.getActivities());
+    public String listActivities(Model model, @RequestParam("page") Optional<Integer> page){
+        List<Activity> activities = activityDao.getActivities();
+        Paginador.paginate(model,activities,page,pageLength,"activitiesPaged");
         return "activity/list";
     }
     @RequestMapping(value = "/add", method = RequestMethod.GET)

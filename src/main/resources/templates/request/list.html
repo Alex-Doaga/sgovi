@@ -7,7 +7,6 @@
   <link rel="stylesheet" th:href="@{/css/list.css}">
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <title>Les meues Sol·licituds</title>
 </head>
 <body class="bg-light">
@@ -20,6 +19,9 @@
   </div>
 
   <div class="mb-3">
+    <a th:href="@{/request/list/user/{id}(id=${userId})}" class="btn btn-sm"
+       th:classappend="${currentState == 'all' ? 'btn-secondary' : 'btn-outline-secondary'}">Totes</a>
+
     <a th:href="@{/request/list/user/{id}/pending(id=${userId})}" class="btn btn-sm"
        th:classappend="${currentState == 'pending' ? 'btn-warning' : 'btn-outline-warning'}">Pendents</a>
 
@@ -68,39 +70,31 @@
                 <a th:href="@{/request/candidates/{id}(id=${req.idRequest})}" class="btn btn-sm btn-candidats">
                   <i class="bi bi-people me-1"></i> Veure candidats
                 </a>
-              </th:block>
+                <th:block th:if="${currentState == 'accepted'}">
+                  <a th:href="@{/request/candidates/{id}(id=${req.idRequest})}" class="btn btn-sm btn-info text-white">
+                    <i class="bi bi-people me-1"></i> Veure candidats
+                  </a>
+                </th:block>
+              </div>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(requests)}">
+            <td colspan="7" class="text-center py-4 text-muted">No hi ha sol·licituds en aquesta pàgina.</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-              <th:block th:if="${currentState == 'refused'}">
-                <button type="button" class="btn btn-sm btn-secondary"
-                        data-bs-toggle="modal"
-                        th:data-bs-target="'#modalMotivo' + ${req.idRequest}">
-                  <i class="bi bi-info-circle me-1"></i> Veure Motiu
-                </button>
-
-                <div class="modal fade" th:id="'modalMotivo' + ${req.idRequest}" tabindex="-1" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title">Motiu del Rebuig</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <p><strong>Detalls de la sol·licitud:</strong> Per al servei en <span th:text="${req.city}"></span>.</p>
-                        <hr>
-                        <p class="text-dark" th:text="${req.comments} ?: 'No s\'ha especificat cap motiu.'"></p>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </th:block>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+              th:classappend="${pageNumber == selectedPage + 1} ? 'active'">
+            <a class="page-link"
+               th:href="@{${currentState == 'all' ? '/request/list/user/' + userId : '/request/list/user/' + userId + '/' + currentState}(page=${pageNumber - 1})}"
+               th:text="${pageNumber}"></a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
   <div class="mt-3">

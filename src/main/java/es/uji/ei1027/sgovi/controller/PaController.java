@@ -12,17 +12,25 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 @Controller
 @RequestMapping("/pa")
 public class PaController {
 
     private PaDao paDao;
+    private int pageLength = 10;
 
     @Autowired
     public void setPaDao(PaDao paDao) {
         this.paDao = paDao;
     }
+
 
     // ==========================================
     //   CREAR / AÑADIR PA
@@ -80,14 +88,12 @@ public class PaController {
 
     // 2. Ruta con filtro: Carga la lista según la pestaña seleccionada (pending, accepted, refused)
     @RequestMapping(value="/list/{state}", method = RequestMethod.GET)
-    public String listPasByState(@PathVariable String state, Model model) {
-        // Usamos el método de tu DAO que filtra por estado
-        model.addAttribute("pas", paDao.getPasByState(state));
+    public String listPasByState(@PathVariable String state, Model model, @RequestParam("page") Optional<Integer> page) {
+        List<PA> pas = paDao.getPasByState(state);
 
-        // Le pasamos el estado actual a la vista para que pinte la pestaña del color correcto
+        Paginador.paginate(model, pas, page, pageLength, "pasPaged");
+
         model.addAttribute("currentState", state);
-
-        // Devolvemos la vista list.html
         return "pa/list";
     }
 

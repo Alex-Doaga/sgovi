@@ -51,9 +51,10 @@ public class OviUserValidator implements Validator {
         // Validar Telèfon
         if (oviUser.getPhone() == null || oviUser.getPhone().trim().isEmpty()) {
             errors.rejectValue("phone", "obligatori", "El telèfon és obligatori");
-        } else if (oviUser.getPhone().trim().length() < 9) {
-            errors.rejectValue("phone", "format", "El telèfon ha de tindre almenys 9 dígits");
+        } else if (oviUser.getPhone().trim().length() < 9 || oviUser.getPhone().trim().length()>12) {
+            errors.rejectValue("phone", "format", "El telèfon ha de tindre entre 9 i 12 dígits");
         }
+
 
         // Validar Adreça
         if (oviUser.getAddress() == null || oviUser.getAddress().trim().isEmpty()) {

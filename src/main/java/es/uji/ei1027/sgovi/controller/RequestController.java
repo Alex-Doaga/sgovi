@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/request")
@@ -16,6 +21,7 @@ public class RequestController {
 
     @Autowired
     private RequestDao requestDao;
+    private int pageLength = 1;
 
     @Autowired
     public void setRequestDao(RequestDao requestDao) {
@@ -29,20 +35,40 @@ public class RequestController {
     // ============================================
 
     // Listar TODAS las solicitudes del usuario (sin filtrar)
+//    @RequestMapping("/list/user/{id}")
+//    public String listUserRequests(Model model, @PathVariable int id) {
+//        model.addAttribute("requests", requestDao.getRequestsByOviUser(id));
+//        model.addAttribute("userId", id); // Lo pasamos para los botones
+//        model.addAttribute("currentState", "all"); // Indicamos que estamos en "Todas"
+//        return "request/list";
+//    }
     @RequestMapping("/list/user/{id}")
-    public String listUserRequests(Model model, @PathVariable int id) {
-        model.addAttribute("requests", requestDao.getRequestsByOviUser(id));
-        model.addAttribute("userId", id); // Lo pasamos para los botones
-        model.addAttribute("currentState", "all"); // Indicamos que estamos en "Todas"
+    public String listUserRequests(Model model, @PathVariable int id,
+                                   @RequestParam("page") Optional<Integer> page) {
+        List<Request> requests = requestDao.getRequestsByOviUser(id);
+        Paginador.paginate(model, requests, page, pageLength, "requestsPaged");
+
+        model.addAttribute("userId", id);
+        model.addAttribute("currentState", "all");
         return "request/list";
     }
-
     // Listar solicitudes del usuario filtradas por estado (pending, accepted, refused)
+//    @RequestMapping("/list/user/{id}/{state}")
+//    public String listUserRequestsByState(Model model, @PathVariable int id, @PathVariable String state) {
+//        model.addAttribute("requests", requestDao.getRequestsByOviUserAndState(id, state));
+//        model.addAttribute("userId", id); // Lo pasamos para los botones
+//        model.addAttribute("currentState", state); // Indicamos la pestaña activa
+//        return "request/list";
+//    }
     @RequestMapping("/list/user/{id}/{state}")
-    public String listUserRequestsByState(Model model, @PathVariable int id, @PathVariable String state) {
-        model.addAttribute("requests", requestDao.getRequestsByOviUserAndState(id, state));
-        model.addAttribute("userId", id); // Lo pasamos para los botones
-        model.addAttribute("currentState", state); // Indicamos la pestaña activa
+    public String listUserRequestsByState(Model model, @PathVariable int id,
+                                          @PathVariable String state,
+                                          @RequestParam("page") Optional<Integer> page) {
+        List<Request> requests = requestDao.getRequestsByOviUserAndState(id, state);
+        Paginador.paginate(model, requests, page, pageLength, "requestsPaged");
+
+        model.addAttribute("userId", id);
+        model.addAttribute("currentState", state);
         return "request/list";
     }
 
