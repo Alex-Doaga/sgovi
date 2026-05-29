@@ -42,18 +42,13 @@ public class ContractDao {
         );
     }
 
-    // UPDATE: Modifica un contrato
+    // UPDATE: Modifica solo la URL del documento de un contrato
     public void updateContract(Contract contract) {
         jdbcTemplate.update(
                 "UPDATE contract SET " +
-                        "start_date = ?, end_date = ?, " +
-                        "contract_document = ?, " +
-                        "contract_state = CAST(? AS contract_state_enum) " +
+                        "contract_document = ? " +
                         "WHERE id_contract = ?",
-                contract.getStartDate(),
-                contract.getEndDate(),
                 contract.getContractDocument(),
-                contract.getContractState(),
                 contract.getIdContract()
         );
     }
@@ -150,5 +145,17 @@ public class ContractDao {
         }
     }
 
-}
+    // Obtener el ID del usuario OVI de una solicitud
+    public Integer getOviUserIdByRequest(int idRequest) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT ovi_user_id FROM request WHERE id_request = ?",
+                    Integer.class,
+                    idRequest
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 
+}

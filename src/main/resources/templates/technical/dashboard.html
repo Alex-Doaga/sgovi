@@ -3,55 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tecnico - Dashboard del Tècnic</title>
-
+    <title>SGOVI - Dashboard del Tècnic</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-<!-- TODO Noemí: crear diseño para los técnicos -->
+<a href="#main-content" class="skip-link">Saltar al contingut principal</a>
+
 <div class="d-flex">
-    <nav id="sidebar" class="bg-white border-end shadow-sm flex-column p-3 d-flex">
+
+    <nav id="sidebar" class="bg-white border-end shadow-sm flex-column p-3 d-flex"
+         aria-label="Navegació lateral">
+
         <div class="d-flex align-items-center mb-4 px-2 pt-2 text-primary">
-            <i data-lucide="shield-check" class="me-2"></i>
+            <i class="bi bi-shield-check me-2" aria-hidden="true"></i>
             <span class="fs-4 fw-bold">SGOVI</span>
         </div>
 
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a th:href="@{/ovi-user/update/{id}(id=${oviUser.idOviUser})}" class="nav-link active">
-                    <i data-lucide="user"></i> Gestió formadors
+        <ul class="nav nav-pills flex-column mb-auto" role="list">
+            <li class="nav-item" role="listitem">
+                <a th:href="@{/instructor/list}"
+                   class="nav-link active" aria-current="page">
+                    <i class="bi bi-people-fill" aria-hidden="true"></i> Gestió formadors
                 </a>
             </li>
-
-            <li>
-                <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="nav-link">
-                    <i data-lucide="file-text"></i> Gestió activitats
-                </a>
-            </li>
-            <li>
-<!--                <a th:href="@{/request/list/user/{id}(id=${oviUser.idOviUser})}" class="nav-link">-->
-                    <a th:href="@{/technical/list-requests}" class="nav-link">
-                    <i data-lucide="clipboard-list"></i> Sol·licituds AP
-                </a>
-            </li>
-            <li>
+            <li role="listitem">
                 <a th:href="@{/activity/list}" class="nav-link">
-                    <i data-lucide="handshake"></i> Nous registres d'usuaris OVI
+                    <i class="bi bi-calendar-event" aria-hidden="true"></i> Gestió activitats
                 </a>
             </li>
-            <li>
-                <a th:href="@{/activity/list}" class="nav-link">
-                    <i data-lucide="search"></i> Nous registres d'assistens personals
+            <li role="listitem">
+                <a th:href="@{/technical/list-requests}" class="nav-link">
+                    <i class="bi bi-clipboard-check" aria-hidden="true"></i> Sol·licituds AP
+                </a>
+            </li>
+            <li role="listitem">
+                <a th:href="@{/ovi-user/list/pending}" class="nav-link">
+                    <i class="bi bi-person-plus-fill" aria-hidden="true"></i> Nous registres d'usuaris OVI
+                </a>
+            </li>
+            <li role="listitem">
+                <a th:href="@{/pa/list/pending}" class="nav-link">
+                    <i class="bi bi-person-check-fill" aria-hidden="true"></i> Nous registres d'assistents personals
                 </a>
             </li>
         </ul>
+
         <hr>
-        <div class="text-center text-muted small pb-2">
+        <div class="text-center text-muted small pb-2" aria-hidden="true">
             &copy; 2026 SGOVI v1.0
         </div>
     </nav>
@@ -61,86 +62,141 @@
         <header class="navbar navbar-expand bg-white border-bottom px-4 py-2 shadow-sm sticky-top">
             <div class="ms-auto d-flex align-items-center">
                 <div class="d-flex align-items-center me-3 border-end pe-3">
-                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
-                         style="width: 32px; height: 32px; font-size: 0.8rem;"
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2 avatar-circle"
+                         aria-hidden="true"
                          th:text="${#strings.substring(oviUser.name,0,1) + #strings.substring(oviUser.surname,0,1)}">
                         U
                     </div>
-                    <span class="fw-medium text-dark" th:text="${oviUser.name + ' ' + oviUser.surname}">Usuari</span>
+                    <span class="fw-medium text-dark"
+                          th:text="${oviUser.name + ' ' + oviUser.surname}">Usuari</span>
                 </div>
-                <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm d-flex align-items-center">
-                    <i data-lucide="log-out" class="me-1" style="width: 16px;"></i> Tancar sessió
+                <a th:href="@{/logout}"
+                   class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1"
+                   aria-label="Tancar sessió">
+                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    <span>Tancar sessió</span>
                 </a>
             </div>
         </header>
 
-        <main class="p-4">
+        <main class="p-4" id="main-content">
 
             <div>
                 <div class="mb-4">
-                    <h1>Dahsboard Tècnics</h1>
-                    <h3 class="h3 fw-bold">Benvingut/da, <span th:text="${oviUser.name}">Nom</span>!</h3>
+                    <h1 class="h3 fw-bold">Benvingut/da,
+                        <span th:text="${oviUser.name}">Nom</span>!
+                    </h1>
+                    <p class="text">Panell de gestió tècnica del sistema SGOVI.</p>
                 </div>
 
                 <div class="row g-4">
+
+                    <!-- Gestió formadors -->
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Gestió formadors</h6>
-                                <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="file-check-2"></i></span>
+                        <div class="card h-100 border-0 shadow-sm card-accent-blue">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-section-title">Gestió formadors</h2>
+                                <span class="icon-box ib-blue" aria-hidden="true">
+                                    <i class="bi bi-people-fill"></i>
+                                </span>
                             </div>
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+                            <div class="mt-auto pt-2">
+                                <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}"
+                                   class="card-cta"
+                                   aria-label="Veure contractes de formadors">
+                                    Veure contractes
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Gestió activitats -->
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Gestió d'activitats</h6>
-                                <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="file-check-2"></i></span>
+                        <div class="card h-100 border-0 shadow-sm card-accent-violet">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-section-title">Gestió d'activitats</h2>
+                                <span class="icon-box ib-violet" aria-hidden="true">
+                                    <i class="bi bi-calendar-event"></i>
+                                </span>
                             </div>
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+                            <div class="mt-auto pt-2">
+                                <a th:href="@{/activity/list}"
+                                   class="card-cta"
+                                   aria-label="Veure contractes d'activitats">
+                                    Veure contractes
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Sol·licituds AP -->
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Sol·licituds AP</h6>
-                                <span class="badge bg-warning-subtle text-warning p-2"><i data-lucide="clipboard-list"></i></span>
+                        <div class="card h-100 border-0 shadow-sm card-accent-amber">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-section-title">Sol·licituds AP</h2>
+                                <span class="icon-box ib-amber" aria-hidden="true">
+                                    <i class="bi bi-clipboard-check"></i>
+                                </span>
                             </div>
-<!--                            <a th:href="@{/list-requests/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>-->
-                            <a th:href="@{/technical/list-requests}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>
+                            <div class="mt-auto pt-2">
+                                <a th:href="@{/technical/list-requests}"
+                                   class="card-cta"
+                                   aria-label="Gestionar sol·licituds d'assistent personal">
+                                    Gestionar
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Nous registres d'usuaris OVI -->
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Nous registres d'usuaris OVI</h6>
-                                <span class="badge bg-success-subtle text-success p-2"><i data-lucide="calendar"></i></span>
+                        <div class="card h-100 border-0 shadow-sm card-accent-green">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-section-title">Nous registres OVI</h2>
+                                <span class="icon-box ib-green" aria-hidden="true">
+                                    <i class="bi bi-person-plus-fill"></i>
+                                </span>
                             </div>
-                            <a th:href="@{/ovi-user/list/pending}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
+                            <div class="mt-auto pt-2">
+                                <a th:href="@{/ovi-user/list/pending}"
+                                   class="card-cta"
+                                   aria-label="Explorar nous registres d'usuaris OVI">
+                                    Explorar
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Nous registres d'assistents personals -->
                     <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Nous registres d'assistents personals</h6>
-                                <span class="badge bg-success-subtle text-success p-2"><i data-lucide="calendar"></i></span>
+                        <div class="card h-100 border-0 shadow-sm card-accent-cyan">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-section-title">Nous registres AP</h2>
+                                <span class="icon-box ib-cyan" aria-hidden="true">
+                                    <i class="bi bi-person-check-fill"></i>
+                                </span>
                             </div>
-                            <a th:href="@{/pa/list/pending}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
+                            <div class="mt-auto pt-2">
+                                <a th:href="@{/pa/list/pending}"
+                                   class="card-cta"
+                                   aria-label="Explorar nous registres d'assistents personals">
+                                    Explorar
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </main>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Dibuixem les icones
-        lucide.createIcons();
-    });
-</script>
 
 </body>
 </html>

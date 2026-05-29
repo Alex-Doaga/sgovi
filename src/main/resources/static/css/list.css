@@ -1,0 +1,71 @@
+/* =========================================
+   1. Botones Pendientes (Warning)
+   ========================================= */
+.btn-outline-warning {
+    color: #664d03; /* Marrón oscuro para contraste 4.5:1 */
+    border-color: #ffc107;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #000 !important; /* Texto negro sobre fondo amarillo */
+}
+
+/* =========================================
+   2. Botones Aceptados (Success)
+   ========================================= */
+.btn-outline-success {
+    color: #146c43; /* Verde oscuro para contraste */
+    border-color: #198754;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    color: #fff;
+}
+
+/* =========================================
+   3. Botones Rechazados (Danger)
+   ========================================= */
+.btn-outline-danger {
+    color: #b02a37; /* Rojo oscuro para contraste */
+    border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* =========================================
+   4. Enlace "Tornar" (btn-link)
+   Soluciona: "Very low contrast (4.26:1)"
+   ========================================= */
+.btn-link.text-decoration-none {
+    color: #0a58ca !important; /* Azul cobalto con contraste > 4.5:1 */
+}
+
+.btn-link.text-decoration-none:hover {
+    color: #084298 !important; /* Más oscuro al pasar el ratón */
+    text-decoration: underline !important;
+}
+
+/* =========================================
+   5. Botón especial para "Veure candidats"
+   ========================================= */
+.btn-candidats {
+    background-color: #0b7a8a; /* Cyan oscuro accesible */
+    color: #ffffff !important;
+    border: 1px solid #0b7a8a;
+}
+
+.btn-candidats:hover {
+    background-color: #075864;
+    border-color: #075864;
+    color: #ffffff !important;
+}

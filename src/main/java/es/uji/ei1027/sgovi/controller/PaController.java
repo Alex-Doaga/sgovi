@@ -142,4 +142,25 @@ public class PaController {
         return "pa/dashboard";
 
     }
+
+    // Ver perfil de un PA
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public String viewPa(Model model, @PathVariable int id) {
+        PA pa = paDao.getPA(id);
+        model.addAttribute("pa", pa);
+
+        // Si el estado es "pending", activamos el modo revisión para mostrar los botones
+        boolean isReviewMode = "pending".equalsIgnoreCase(String.valueOf(pa.getPaState()));
+        model.addAttribute("isReviewMode", isReviewMode);
+
+        return "pa/view";
+    }
+
+    // Vista de confirmación antes de aceptar
+    @RequestMapping(value = "/accept/confirm/{id}", method = RequestMethod.GET)
+    public String confirmAcceptPa(Model model, @PathVariable int id) {
+        model.addAttribute("pa", paDao.getPA(id));
+        return "pa/confirm-accept";
+    }
+
 }

@@ -1,7 +1,9 @@
 package es.uji.ei1027.sgovi.controller;
 
+import es.uji.ei1027.sgovi.dao.NegotiationDao;
 import es.uji.ei1027.sgovi.dao.OviUserDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
+import es.uji.ei1027.sgovi.dto.PACandidateDTO;
 import es.uji.ei1027.sgovi.modelo.OviUser;
 import es.uji.ei1027.sgovi.modelo.PA;
 import es.uji.ei1027.sgovi.modelo.Request;
@@ -19,10 +21,15 @@ import java.util.Optional;
 @RequestMapping("/technical")
 public class TechnicalController {
 
+    private NegotiationDao negotiationDao;
     private OviUserDao oviUserDao;
     private RequestDao requestDao;
     private int pageLength = 10;
 
+    @Autowired
+    public void setNegotiationDao(NegotiationDao negotiationDao) {
+        this.negotiationDao = negotiationDao;
+    }
     @Autowired
     public void setOviUserDao(OviUserDao oviUserDao) {
         this.oviUserDao = oviUserDao;
@@ -108,20 +115,51 @@ public class TechnicalController {
 //       return "technical/candidates";
 //    }
     @RequestMapping("/candidates/list/{requestId}")
-    public String listCandidates(Model model, @PathVariable int requestId, @RequestParam("page") Optional<Integer> page) {
+    public String listCandidates(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidates " + requestId);
         model.addAttribute("currentState", "all");
         model.addAttribute("requestId", requestId);
+        List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(requestId);
+        model.addAttribute("candidates", candidates);
 
-        List<PA> candidates = requestDao.findCandidatesForRequest(requestId);
+       return "technical/candidates";
+    }
 
+    // Listar los candidatos que no tienen un contrato
+    @RequestMapping("/candidates/withoutContract/{requestId}")
+    public String listCandidatesWithoutContract(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidatesWithoutContract " + requestId);
 
-        Paginador.paginate(model, candidates, page, pageLength, "candidatesPaged");
+        model.addAttribute("currentState", "withoutContract");
+        model.addAttribute("requestId", requestId);
+        List<PACandidateDTO> candidates = requestDao.findCandidatesWithoutContract(requestId);
+        model.addAttribute("candidates", candidates);
 
-        for(PA candidate : candidates) {
-            System.out.println(">>>>>>>>>>CANDIDATE  " + candidate);
-        }
         return "technical/candidates";
     }
+
+    // Listar los candidatos que tienen contrato
+    @RequestMapping("/candidates/withContract/{requestId}")
+    public String listCandidatesWithContract(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidatesWithContract " + requestId);
+
+        model.addAttribute("currentState", "withContract");
+        model.addAttribute("requestId", requestId);
+        List<PACandidateDTO> candidates = requestDao.findCandidatesWithContract(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "technical/candidates";
+    }
+
+    //TODO Noemí: de momento es una prueba
+    // Visualizar los detalles de una negociación entra el usuario ovi y el candidato PA de una request
+    @RequestMapping("/candidates/negotiation-details/{paId}/{requestId}")
+    public String listCandidates(Model model, @PathVariable int paId, @PathVariable int requestId) {
+        model.addAttribute("currentState", "accepted");
+        model.addAttribute("negotiation", negotiationDao.getNegotiationByPaInRequest(paId, requestId));
+        return "technical/negotiation-details";
+    }
+
     // ==========================================
     //   DASHBOARD
     // ==========================================
