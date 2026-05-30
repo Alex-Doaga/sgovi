@@ -1,57 +1,187 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
-    <title>SGOVI - Inici de sesió</title>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGOVI - Inici de sessió</title>
+
+    <!-- Bootstrap + estilos del dashboard -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <!-- Lucide (usa lo mismo que en los dashboards) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Ajustes puntuales para el login, basados en la estética del dashboard */
+        html, body {
+            height: 100%;
+        }
+
+        .page-wrap {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Oculta el sidebar en pantallas pequeñas para centrado */
+        @media (max-width: 767.98px) {
+            #sidebar {
+                display: none;
+            }
+        }
+
+        /* Contenedor central del login: usa las mismas sombras/borders que las cards del dashboard */
+        .login-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            width: 100%;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.08);
+        }
+
+        .login-hero {
+            background: linear-gradient(135deg, rgba(13,110,253,0.06), rgba(13,110,253,0.02));
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .logo-square {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0d6efd, #5aa0ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 6px 14px rgba(13,110,253,0.12);
+        }
+
+        .login-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f1720;
+        }
+
+        .login-subtitle {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .card-body form .form-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(90deg,#0d6efd,#3b82f6);
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: .6rem .9rem;
+            border-radius: .5rem;
+            box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(59,130,246,0.16); }
+
+        /* Mensajes de error (reusa clases del proyecto) */
+        .error-message { color: #dc2626; font-size: 0.875rem; margin-top: .4rem; }
+
+        /* Centrar el footer pequeño */
+        .login-footer {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-align: center;
+            padding: .8rem 1rem;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            background: #fff;
+        }
+    </style>
 </head>
 <body>
-<main class="container mt-5">
-    <h1 class="mb-4">Accés</h1>
-    <form action="#" th:action="@{/login}" th:object="${user}" method="post">
+<div class="page-wrap">
+    <!-- Sidebar visual igual que en dashboard, pero sin navegación activa -->
+    <nav id="sidebar" class="bg-white border-end shadow-sm flex-column p-4 d-flex" style="width: var(--sidebar-width); min-height:100vh;">
+        <div class="d-flex align-items-center mb-4 px-2 pt-2 text-primary">
+            <i data-lucide="shield-check" class="me-2"></i>
+            <span class="fs-4 fw-bold">SGOVI</span>
+        </div>
+        <p class="text-muted small">Gestió d'OVI — Interfície d'administració</p>
+        <div class="mt-auto text-muted small">&copy; 2026 SGOVI</div>
+    </nav>
 
-        <div class="row mb-3">
-            <label for="email" class="col-sm-2 col-form-label">Email:</label>
-            <div class="col-sm-3">
-                <input id="email" class="form-control" type="text" th:field="*{email}" />
+    <!-- Panel principal con tarjeta de login -->
+    <main class="login-panel">
+        <div class="card login-card">
+            <div class="login-hero d-flex align-items-center">
+                <div class="logo-square">SG</div>
+                <div>
+                    <h2 class="login-title">Accés a SGOVI</h2>
+                    <p class="login-subtitle">Introdueix les teves credencials per continuar</p>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+
+            <div class="card-body p-4">
+                <form action="#" th:action="@{/login}" th:object="${user}" method="post" novalidate>
+                    <div class="mb-3" th:classappend="${#fields.hasErrors('email') ? 'has-error' : ''}">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" class="form-control" type="email" th:field="*{email}" placeholder="correu@exemple.com" required>
+                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></div>
+                    </div>
+
+                    <div class="mb-3" th:classappend="${#fields.hasErrors('password') ? 'has-error' : ''}">
+                        <label for="password" class="form-label">Contrasenya</label>
+                        <input id="password" class="form-control" type="password" th:field="*{password}" placeholder="••••••••" required>
+                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></div>
+                    </div>
+
+                    <div class="mb-3" th:classappend="${#fields.hasErrors('rol') ? 'has-error' : ''}">
+                        <label for="rol" class="form-label">Tipus d'usuari</label>
+                        <select id="rol" class="form-select" th:field="*{rol}" required>
+                            <option value="" disabled selected>Selecciona un tipus...</option>
+                            <option value="PA">PA</option>
+                            <option value="OviUser">OviUser</option>
+                            <option value="Tecnico">Tecnico</option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}" class="error-message"></div>
+                    </div>
+
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-login">Accedir <i data-lucide="log-in" class="ms-2" style="width:16px;"></i></button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="login-footer">
+                Si tens problemes per accedir, contacta amb l'administrador.
             </div>
         </div>
+    </main>
+</div>
 
-        <div class="row mb-3">
-            <label for="password" class="col-sm-2 col-form-label">Contrasenya:</label>
-            <div class="col-sm-3">
-                <input id="password" class="form-control" type="password" th:field="*{password}" />
-            </div>
-            <div class="col-sm-4">
-                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <label for="rol" class="col-sm-2 col-form-label">Tipus d'usuari:</label>
-            <div class="col-sm-3">
-                <select id="rol" class="form-select" th:field="*{rol}">
-                    <option value="" disabled selected>Selecciona un tipus...</option>
-                    <option value="PA">PA</option>
-                    <option value="OviUser">OviUser</option>
-                    <option value="Tecnico">Tècnic</option>
-                </select>
-            </div>
-            <div class="col-sm-4">
-                <div th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}" class="text-danger"></div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-3 offset-sm-2">
-                <button type="submit" class="btn btn-primary">Accedir</button>
-            </div>
-        </div>
-    </form>
-</main>
+<script>
+    // Renderiza icones Lucide (igual que el dashboard)
+    document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+    });
+</script>
 </body>
 </html>

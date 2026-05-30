@@ -22,7 +22,7 @@ import java.util.stream.IntStream;
 public class OviUserController {
 
     private OviUserDao oviUserDao;
-    private int pageLength = 10;
+    private int pageLength = 5;
 
 
     @Autowired

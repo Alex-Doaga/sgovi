@@ -52,13 +52,16 @@
                     <td>
                         <div class="d-flex gap-2">
                             <th:block th:if="${currentState == 'pending'}">
-                                <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post">
+                                <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post" class="m-0">
                                     <button type="submit" class="btn btn-success btn-sm">
                                         <i class="bi bi-check-lg"></i> Acceptar
                                     </button>
                                 </form>
                                 <a th:href="@{/pa/reject/{id}(id=${pa.idPa})}" class="btn btn-danger btn-sm">
                                     <i class="bi bi-x-lg"></i> Rebutjar
+                                </a>
+                                <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-eye me-1"></i> Revisar
                                 </a>
                             </th:block>
 
@@ -67,12 +70,15 @@
                                     <i class="bi bi-eye"></i> Veure Perfil
                                 </a>
                             </th:block>
-
-                        <th:block th:if="${currentState == 'pending'}">
-                            <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-eye me-1"></i> Revisar
-                            </a>
-                        </th:block>
+                        </div>
+                    </td>
+                </tr> <tr th:if="${#lists.isEmpty(pas)}">
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No hi ha cap assistent personal en aquest estat.
+                    </td>
+                </tr>
+                </tbody>
+            </table> </div>
 
         <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
             <ul class="pagination justify-content-center">
@@ -84,13 +90,11 @@
                 </li>
             </ul>
         </nav>
-    </div>
-
-    <div class="mt-4">
-        <a th:href="@{/technical/dashboard}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Tornar
-        </a>
-    </div>
+    </div> <div class="mt-4">
+    <a th:href="@{/technical/dashboard}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Tornar
+    </a>
+</div>
 </main>
 </body>
 </html>

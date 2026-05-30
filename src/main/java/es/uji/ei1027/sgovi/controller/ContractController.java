@@ -24,7 +24,7 @@ import java.util.Set;
 public class ContractController {
 
     private ContractDao contractDao;
-    private int pageLength = 10;
+    private int pageLength = 5;
     private RequestDao requestDao;
     private PaDao paDao;
 

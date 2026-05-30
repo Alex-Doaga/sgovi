@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @RequestMapping("/activity")
 public class ActivityController {
     private ActivityDao activityDao;
-    private int pageLength = 10;
+    private int pageLength = 5;
 
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
@@ -77,4 +77,13 @@ public class ActivityController {
         activityDao.deleteActivity(id);
         return "redirect:../list";
     }
+
+    @RequestMapping("/certificado/{id}")
+    public String showCertificate(Model model, @PathVariable int id) {
+        Activity activity = activityDao.getActivity(id);
+
+        model.addAttribute("activity", activity);
+        return "activity/certificado";
+    }
 }
+

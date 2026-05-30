@@ -187,6 +187,6 @@ public class TechnicalController {
             OviUser oviUser = oviUserDao.getOviUserByEmail(user.getEmail());
             model.addAttribute("oviUser", oviUser);
 
-            return "ovi-user/dashboard";
+            return "technical/dashboard";
     }
 }

@@ -18,29 +18,8 @@ import java.util.stream.IntStream;
 @RequestMapping("/instructor")
 public class InstructorController {
 
-    private void preparePagination(Model model, List<Instructor> instructors, Optional<Integer> page) {
-        ArrayList<ArrayList<Instructor>> instructorsPaged = new ArrayList<>();
-        if (!instructors.isEmpty()) {
-            int ini = 0;
-            while (ini < instructors.size()) {
-                int fin = Math.min(ini + pageLength, instructors.size());
-                instructorsPaged.add(new ArrayList<>(instructors.subList(ini, fin)));
-                ini += pageLength;
-            }
-        }
-        model.addAttribute("instructorsPaged", instructorsPaged);
-
-        int totalPages = instructorsPaged.size();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-        model.addAttribute("selectedPage", page.orElse(0));
-    }
     private InstructorDao instructorDao;
-    private int pageLength = 10;
+    private int pageLength = 5;
 
     @Autowired
     public void setInstructorDao(InstructorDao instructorDao) {

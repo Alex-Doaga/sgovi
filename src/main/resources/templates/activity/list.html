@@ -44,6 +44,10 @@
                     <a th:href="@{/activity/delete/{id}(id=${activity.idActivity})}"
                        class="btn btn-danger btn-sm">Esborra</a>
                 </td>
+                <td>
+                    <a th:href="@{/activity/certificado/{id}(id=${activity.idActivity})}"
+                       class="btn btn-danger btn-sm">Ver certificado</a>
+                </td>
             </tr>
             <tr th:if="${#lists.isEmpty(activities)}">
                 <td colspan="9" class="text-center py-4 text-muted">No hi ha activitats en aquesta pàgina.</td>

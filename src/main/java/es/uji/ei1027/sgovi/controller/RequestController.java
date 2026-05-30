@@ -21,7 +21,7 @@ public class RequestController {
 
     @Autowired
     private RequestDao requestDao;
-    private int pageLength = 1;
+    private int pageLength = 5;
 
     @Autowired
     public void setRequestDao(RequestDao requestDao) {
