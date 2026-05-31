@@ -67,7 +67,7 @@
                 </a>
 
                 <th:block th:if="${currentState == 'accepted'}">
-                  <a th:href="@{/request/candidates/{id}(id=${req.idRequest})}" class="btn btn-sm btn-info text-white">
+                  <a th:href="@{/request/candidates/withoutNegotiation/{id}(id=${req.idRequest})}" class="btn btn-sm btn-info text-white">
                     <i class="bi bi-people me-1"></i> Veure candidats
                   </a>
                 </th:block>
