@@ -43,7 +43,7 @@ public class NegotiationController {
         this.requestDao = requestDao;
     }
 
-    @RequestMapping("/list/{oviUserId}")
+    @RequestMapping("/list/oviuser/{oviUserId}")
     public String listNegotiationsOviUser(@PathVariable int oviUserId, Model model) {
 
         List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByOviUser(oviUserId);
@@ -55,7 +55,7 @@ public class NegotiationController {
         return "negotiation/list";
     }
 
-    @RequestMapping("/list/{paId}")
+    @RequestMapping("/list/pa/{paId}")
     public String listNegotiationsPA(@PathVariable int paId, Model model) {
 
         List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByPA(paId);
