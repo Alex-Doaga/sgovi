@@ -174,13 +174,11 @@
                         </div>
 
                     </div>
-
                 </div>
-
             </div>
 
-            <th:block th:if="${session.userType == 'ovi_user'}">
-                <!-- FORMULARI ENVIAMENT -->
+            <th:block th:if="${sender == 'ovi_user'}">
+                <!-- FORMULARI ENVIAMENT OVI USER-->
                 <form method="post"
                       th:action="@{/negotiation/message/oviuser}"
                       class="mt-4">
@@ -209,8 +207,8 @@
                 </form>
             </th:block>
 
-            <th:block th:if="${session.userType == 'pa'}">
-                <!-- FORMULARI ENVIAMENT -->
+            <th:block th:if="${sender == 'pa'}">
+                <!-- FORMULARI PA -->
                 <form method="post"
                       th:action="@{/negotiation/message/pa}"
                       class="mt-4">
