@@ -11,16 +11,16 @@
 
 <body>
 <main class="container mt-4">
-    <h1>Llista de candidats per a la sol·licitud <span th:text="${requestId}"></span></h1>
+    <h1>Llistat de candidats per a la sol·licitud <span th:text="${requestId}"></span></h1>
     <div class="mb-3">
-        <a th:href="@{/technical/candidates/list/{reqId}(reqId=${requestId})}" class="btn btn-sm"
-           th:classappend="${currentState == 'all' ? 'btn-secondary' : 'btn-outline-secondary'}">Tots</a>
+        <a th:href="@{/request/candidates/withoutNegotiation/{reqId}(reqId=${requestId})}" class="btn btn-sm"
+           th:classappend="${currentState == 'withoutNegotiation' ? 'btn-primary' : 'btn-outline-primary'}">Sense negociació</a>
 
-        <a th:href="@{/technical/candidates/withContract/{reqId}(reqId=${requestId})}" class="btn btn-sm"
+        <a th:href="@{/request/candidates/withNegotiation/{reqId}(reqId=${requestId})}" class="btn btn-sm"
+           th:classappend="${currentState == 'withNegotiation' ? 'btn-secondary' : 'btn-outline-secondary'}">Amb negociació oberta</a>
+
+        <a th:href="@{/request/candidates/withContract/{reqId}(reqId=${requestId})}" class="btn btn-sm"
            th:classappend="${currentState == 'withContract' ? 'btn-primary' : 'btn-outline-primary'}">Amb contracte</a>
-
-        <a th:href="@{/technical/candidates/withoutContract/{reqId}(reqId=${requestId})}" class="btn btn-sm"
-           th:classappend="${currentState == 'withoutContract' ? 'btn-secondary' : 'btn-outline-secondary'}">Sense contracte</a>
     </div>
 
 
@@ -31,13 +31,14 @@
             <th>Cognoms</th>
             <th>Ciutat</th>
             <th>Contacte</th>
-            <th th:if="${currentState != 'withContract'}">
+            <th th:if="${currentState == 'withNegotiation'}">
                 Estat negociació
             </th>
-            <th th:if="${currentState != 'withoutContract'}">
+            <th th:if="${currentState == 'withContract'}">
                 <span>Estat contracte</span>
             </th>
-            <th>Accions</th> </tr>
+            <th>Accions</th>
+        </tr>
         </thead>
         <tbody>
         <tr th:each="candidate : ${candidates}">
@@ -49,14 +50,19 @@
                 <small class="text-muted" th:text="${candidate.getPa().getPhone()}"></small>
             </td>
 
-            <td th:if="${currentState != 'withContract'}" th:text="${candidate.getNegotiationState() == '' ? 'Sin hablar' : candidate.getNegotiationState() }"></td>
-            <td th:if="${currentState != 'withoutContract'}" th:text="${candidate.getContractState()}"></td>
+            <td th:if="${currentState == 'withNegotiation'}" th:text="${candidate.getNegotiationState()}"></td>
+            <td th:if="${currentState == 'withContract'}" th:text="${candidate.getContractState()}"></td>
 
             <td>
                 <button type="button" class="btn btn-sm btn-outline-primary"
                         data-bs-toggle="modal"
                         th:data-bs-target="'#modalPersonalData' + ${candidate.getPa().getIdPa()}">
                     <i class="bi bi-plus me-1"></i> Més dades
+                </button>
+                <button th:if="${currentState == 'withoutNegotiation'}" type="button" class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle= "modal"
+                        th:data-bs-target="'#modalOpenNegotiation' + ${candidate.getPa().getIdPa()}">
+                    <i class="bi bi-dots me-1"></i> Obrir negociació
                 </button>
 
                 <div class="modal fade" th:id="'modalPersonalData' + ${candidate.getPa().getIdPa()}" tabindex="-1" aria-hidden="true">
@@ -82,6 +88,39 @@
                                 </p>
                                 <hr>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" th:id="'modalOpenNegotiation' + ${candidate.getPa().getIdPa()}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title">Obrir negociació</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="mb-3">
+                                    Estàs a punt d'iniciar una nova conversa amb:
+                                </p>
+                                <strong th:text="${candidate.pa.name + ' ' + candidate.pa.surname}">
+                                    Nom candidat
+                                </strong>
+                                <p class="mt-3">Una vegada creada la negociació podràs enviar missatges i consultar l'historial de la conversa.</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Cancel·lar
+                                </button>
+                                <form th:action="@{/negotiation/start/{requestId}/{paId}(requestId=${requestId},paId=${candidate.pa.idPa})}" method="post">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-chat-left-text me-1"></i>
+                                        Iniciar conversa
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>

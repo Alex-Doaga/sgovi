@@ -196,24 +196,6 @@ public class OviUserController {
         return "redirect:list";
     }
 
-
-    // ==========================================
-    //   CANDIDATOS SOLICITUD OVI USER
-    // ==========================================
-
-
-    // Listar los candidatos de una solicitud aceptada
-    @RequestMapping("/candidates/list/{requestId}")
-    public String listCandidates(Model model, @PathVariable int requestId) {
-        System.out.println("REQUEST ID listCandidates " + requestId);
-        model.addAttribute("currentState", "all");
-        model.addAttribute("requestId", requestId);
-        List<PACandidate> candidates = requestDao.findCandidatesForRequest(requestId);
-        model.addAttribute("candidates", candidates);
-
-        return "request/candidates";
-    }
-
     // ==========================================
     //   DASHBOARD
     // ==========================================

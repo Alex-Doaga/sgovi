@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li role="listitem">
-                    <a th:href="@{/negotiation/list}" class="nav-link">
+                    <a th:href="@{/negotiation/list/{id}(id=${oviUser.idOviUser})}" class="nav-link">
                         <i class="bi bi-people-fill" aria-hidden="true"></i> Negociacions
                     </a>
                 </li>
@@ -170,7 +170,7 @@
                             </div>
                             <p class="card-desc">Revisa les teues negociacions amb els assistents.</p>
                             <div class="mt-auto pt-2">
-                                <a th:href="@{/negotiation/list}"
+                                <a th:href="@{/negotiation/list/{id}(id=${oviUser.idOviUser})}"
                                    class="card-cta"
                                    aria-label="Revisar les meves negociacions">
                                     Revisar
