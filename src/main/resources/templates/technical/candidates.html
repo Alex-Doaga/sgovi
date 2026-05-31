@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ca">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
     <title>Candidats</title>
@@ -11,7 +12,6 @@
 <body>
 <main class="container mt-4">
     <h1>Llista de candidats per a la sol·licitud <span th:text="${requestId}"></span></h1>
-    <span th:text="${candidates.size()}"></span>
     <div class="mb-3">
         <a th:href="@{/technical/candidates/list/{reqId}(reqId=${requestId})}" class="btn btn-sm"
            th:classappend="${currentState == 'all' ? 'btn-secondary' : 'btn-outline-secondary'}">Tots</a>

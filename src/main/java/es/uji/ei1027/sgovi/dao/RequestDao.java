@@ -1,7 +1,6 @@
 package es.uji.ei1027.sgovi.dao;
 
-import es.uji.ei1027.sgovi.dto.PACandidateDTO;
-import es.uji.ei1027.sgovi.modelo.PA;
+import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.Request;
 import es.uji.ei1027.sgovi.modelo.enums.StateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,7 +160,7 @@ public class RequestDao {
     }
 
     //TODO: descomentar las restricciones
-    public List<PACandidateDTO> findCandidatesWithContract(int idRequest) {
+    public List<PACandidate> findCandidatesWithContract(int idRequest) {
         try {
             Request req = getRequest(idRequest);
             /*return jdbcTemplate.query(
@@ -170,18 +169,18 @@ public class RequestDao {
                             "JOIN contract AS c " +
                             "ON c.id_pa = pa.id_pa " +
                             "ORDER BY pa.surname",
-                    new PACandidateDTORowMapper()
+                    new PACandidateRowMapper()
             );*/
             //Restricciones correctas
-            return jdbcTemplate.query(
-                    "SELECT pa.*, null AS negotiation_state, 'FIRMADO' AS contract_state " +
+                return jdbcTemplate.query(
+                    "SELECT pa.*, null AS negotiation_state, c.contract_state " +
                     //"SELECT pa.*, null AS negotiation_state, c.contract_state " +
                             "FROM pa " +
                             "JOIN contract AS c " +
                             "ON c.id_pa = pa.id_pa AND c.id_request = ? " +
                             WHERE_CLAUSE_CANDIDATES +
                             "ORDER BY pa.surname",
-                    new PACandidateDTORowMapper(),
+                    new PACandidateRowMapper(),
                     idRequest,
                     req.getCity().toString(),
                     req.getEducation().toString(),
@@ -198,7 +197,7 @@ public class RequestDao {
         }
     }
 
-    public List<PACandidateDTO> findCandidatesWithoutContract(int idRequest) {
+    public List<PACandidate> findCandidatesWithoutContract(int idRequest) {
         try {
             Request req = getRequest(idRequest);
             /*return jdbcTemplate.query(
@@ -207,18 +206,17 @@ public class RequestDao {
                             "JOIN negotiation AS n " +
                             "ON n.id_pa = pa.id_pa " +
                             "ORDER BY pa.surname",
-                    new PACandidateDTORowMapper()
+                    new PACandidateRowMapper()
             );*/
-
+            //Restricciones correctas
             return jdbcTemplate.query(
-                    "SELECT pa.*, 'HABLANDO' AS negotiation_state, null AS contract_state " +
-                    //"SELECT pa.*, n.negotiation_state, null AS contract_state " +
+                    "SELECT pa.*, n.negotiation_state, null AS contract_state " +
                             "FROM pa " +
-                            "JOIN negotiation AS n " +
+                            "LEFT JOIN negotiation AS n " +
                             "ON n.id_pa = pa.id_pa AND n.id_request = ? " +
                             WHERE_CLAUSE_CANDIDATES +
                             "ORDER BY pa.surname",
-                    new PACandidateDTORowMapper(),
+                    new PACandidateRowMapper(),
                     idRequest,
                     req.getCity().toString(),
                     req.getEducation().toString(),
@@ -236,7 +234,7 @@ public class RequestDao {
     }
 
     // Filtra los posibles candidatos PA para una request pasada por parámetro
-    public List<PACandidateDTO> findCandidatesForRequest(int idRequest) {
+    public List<PACandidate> findCandidatesForRequest(int idRequest) {
         try {
             Request req = getRequest(idRequest);
 
@@ -248,18 +246,18 @@ public class RequestDao {
                             "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa " +
                             "LEFT JOIN contract AS c ON c.id_pa = pa.id_pa " +
                             "ORDER BY surname",
-                    new PACandidateDTORowMapper()
+                    new PACandidateRowMapper()
             );*/
 
             //Restricciones correctas
             return jdbcTemplate.query(
-                    "SELECT pa.*, 'HABLANDO' AS negotiation_state, 'FIRMADO' AS contract_state " +
+                    "SELECT pa.*, n.negotiation_state, c.contract_state " +
                             "FROM pa " +
                             "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa AND n.id_request = ? " +
                             "LEFT JOIN contract AS c ON c.id_pa = pa.id_pa AND c.id_request = ? " +
                             WHERE_CLAUSE_CANDIDATES +
                             "ORDER BY surname",
-                    new PACandidateDTORowMapper(),
+                    new PACandidateRowMapper(),
                     idRequest,
                     idRequest,
                     req.getCity().toString(),

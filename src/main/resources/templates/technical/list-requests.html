@@ -58,6 +58,33 @@
                                     <button type="button" class="btn btn-sm btn-danger"
                                             data-bs-toggle="modal"
                                             th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>Data Petició</th>
+                    <th>Inici Servei</th>
+                    <th>Duració</th>
+                    <th>Ciutat</th>
+                    <th>Tipus PA</th>
+                    <th>Gènere</th>
+                    <th>Accions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="req : ${requests}">
+                    <td th:text="${req.getRequestDate()}">--</td>
+                    <td th:text="${req.getStartDate()}">--</td>
+                    <td th:text="${req.getDuration()} + ' mesos'">--</td>
+                    <td th:text="${req.getCity().getLabel()}">--</td>
+                    <td th:text="${req.getTypePa()}">--</td>
+                    <td th:text="${req.getRequiredGender().getLabel()}">--</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <th:block th:if="${currentState == 'pending'}">
+                                <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white my-auto">Acceptar</a>
+                                <button type="button" class="btn btn-sm btn-danger my-auto"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
                                         Rebutjar
                                     </button>
 

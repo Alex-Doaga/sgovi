@@ -1,8 +1,6 @@
-package es.uji.ei1027.sgovi.dto;
+package es.uji.ei1027.sgovi.modelo;
 
-import es.uji.ei1027.sgovi.modelo.PA;
-
-public class PACandidateDTO {
+public class PACandidate {
     private PA pa;
     private String negotiationState;
     private String contractState;
