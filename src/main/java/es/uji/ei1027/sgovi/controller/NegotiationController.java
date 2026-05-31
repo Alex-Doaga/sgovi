@@ -89,8 +89,8 @@ public class NegotiationController {
 
     // Visualizar los detalles de una negociación entre el usuario ovi y el candidato PA de una request
     @RequestMapping("/details/{paId}/{requestId}")
-    public String negotiationDetails(@PathVariable int paId,
-                                     @PathVariable int requestId,
+    public String negotiationDetails(@PathVariable int paId, @PathVariable int requestId,
+                                     @RequestParam(required = false) String sender,
                                      Model model) {
 
         Negotiation negotiation = negotiationDao.getNegotiationByPaInRequest(paId, requestId);
@@ -108,6 +108,7 @@ public class NegotiationController {
         model.addAttribute("messages", messages);
         model.addAttribute("pa", pa);
         model.addAttribute("request", req);
+        model.addAttribute("sender", sender);
 
         return "negotiation/details";
     }
@@ -133,7 +134,7 @@ public class NegotiationController {
 
         negotiationDao.updateNegotiationState(idNegotiation, NegotiationStateEnum.hablando.toString());
 
-        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest();
+        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=ovi";
     }
 
     // Enviar un mensaje
@@ -157,7 +158,7 @@ public class NegotiationController {
 
         negotiationDao.updateNegotiationState(idNegotiation, NegotiationStateEnum.hablando.toString());
 
-        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest();
+        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=pa";
     }
 
 }
