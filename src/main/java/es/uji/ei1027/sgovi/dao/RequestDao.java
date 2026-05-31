@@ -137,7 +137,7 @@ public class RequestDao {
     public List<Request> getRequestsByOviUserAndState(int oviUserId, String state) {
         try {
             return jdbcTemplate.query(
-                    "SELECT * FROM request WHERE ovi_user_id = ? AND state = CAST(? AS state_enum) " +
+                    "SELECT * FROM request WHERE ovi_user_id = ? AND state = ?::state_enum " +
                             "ORDER BY request_date DESC",
                     new RequestRowMapper(),
                     oviUserId,
@@ -285,6 +285,53 @@ public class RequestDao {
                             "ORDER BY r.request_date DESC",
                     new RequestRowMapper(),
                     oviUserId
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Filtra los posibles candidatos PA sin negociaciones para una request pasada por parámetro
+    public List<PACandidate> findCandidatesWithoutNegotiation(int idRequest) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT pa.*, null AS negotiation_state, null AS contract_state " +
+                            "FROM pa " +
+                            "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa AND n.id_request = ? " +
+                            "WHERE n.id_negotiation IS NULL;",
+                    new PACandidateRowMapper(),
+                    idRequest
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Filtra los candidatos PA con negociaciones abiertas para una request pasada por parámetro
+    public List<PACandidate> findCandidatesWithNegotiation(int idRequest) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT pa.*, null AS negotiation_state, null AS contract_state " +
+                            "FROM pa " +
+                            "LEFT JOIN negotiation AS n ON n.id_pa = pa.id_pa AND n.id_request = ? " +
+                            "WHERE n.id_negotiation IS NOT NULL;",
+                    new PACandidateRowMapper(),
+                    idRequest
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Filtra los candidatos PA con contrato para una request pasada por parámetro
+    public List<PACandidate> findCandidatesWithNegotiationAndContract(int idRequest) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT pa.*, null AS negotiation_state, c.contract_state " +
+                            "FROM pa " +
+                            "LEFT JOIN contract AS c ON c.id_pa = pa.id_pa AND c.id_request = ?;",
+                    new PACandidateRowMapper(),
+                    idRequest
             );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();

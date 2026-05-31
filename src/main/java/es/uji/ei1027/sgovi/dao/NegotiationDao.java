@@ -1,6 +1,8 @@
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.modelo.Negotiation;
+import es.uji.ei1027.sgovi.modelo.PACandidate;
+import es.uji.ei1027.sgovi.modelo.PACandidateNegotiation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,15 +67,21 @@ public class NegotiationDao {
         }
     }
 
-    /* Obtiene todas las negociaciones. Devuelve una lista vacía si no hay negociaciones */
-    public List<Negotiation> getNegotiations() {
+    /* Obtiene todas las negociaciones de un usuario Ovi. Devuelve una lista vacía si no hay negociaciones */
+    public List<PACandidateNegotiation> getNegotiationsByOviUser(int idOviUser) {
         try {
             return jdbcTemplate.query(
-                    "SELECT * FROM negotiation",
-                    new NegotiationRowMapper()
+                    "SELECT pa.*, n.negotiation_state, null as contract_state, r.id_request " +
+                            "FROM negotiation AS n " +
+                            "INNER JOIN request AS r ON r.id_request = n.id_request " +
+                            "INNER JOIN pa ON pa.id_pa = n.id_pa " +
+                            "WHERE r.ovi_user_id = ? " +
+                            "ORDER BY n.start_date DESC",
+                    new PACandidateNegotiationRowMapper(),
+                    idOviUser
             );
         } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<Negotiation>();
+            return new ArrayList<>();
         }
     }
 
@@ -82,7 +90,7 @@ public class NegotiationDao {
         try {
             return jdbcTemplate.query(
                     "SELECT * FROM negotiation WHERE id_request = ? " +
-                            "ORDER BY start_date DESC",
+                            "ORDER BY start_date DESC;",
                     new NegotiationRowMapper(),
                     idRequest
             );
@@ -106,17 +114,18 @@ public class NegotiationDao {
     }
 
     // Negociación de un asistente personal en una solicitud concreta
-    public List<Negotiation> getNegotiationByPaInRequest(int idPa, int idRequest) {
+    // Devuelve una única negociación o null si no existe (restricción UNIQUE en BD)
+    public Negotiation getNegotiationByPaInRequest(int idPa, int idRequest) {
         try {
-            return jdbcTemplate.query(
-                    "SELECT * FROM negotiation WHERE id_pa = ?, id_request = ? " +
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM negotiation WHERE id_pa = ? AND id_request = ? " +
                             "ORDER BY start_date DESC",
                     new NegotiationRowMapper(),
                     idPa,
                     idRequest
             );
         } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<>();
+            return null;
         }
     }
 

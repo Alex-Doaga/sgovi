@@ -1,11 +1,12 @@
 package es.uji.ei1027.sgovi.controller;
 
+import es.uji.ei1027.sgovi.dao.MessageDao;
 import es.uji.ei1027.sgovi.dao.NegotiationDao;
 import es.uji.ei1027.sgovi.dao.OviUserDao;
+import es.uji.ei1027.sgovi.dao.PaDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
 import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.OviUser;
-import es.uji.ei1027.sgovi.modelo.PA;
 import es.uji.ei1027.sgovi.modelo.Request;
 import es.uji.ei1027.sgovi.modelo.UserDetails;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ public class TechnicalController {
     public void setOviUserDao(OviUserDao oviUserDao) {
         this.oviUserDao = oviUserDao;
     }
+
     @Autowired
     public void setRequestDao(RequestDao requestDao) {
         this.requestDao = requestDao;
@@ -117,7 +119,6 @@ public class TechnicalController {
     @RequestMapping("/candidates/list/{requestId}")
     public String listCandidates(Model model, @PathVariable int requestId,
                                  @RequestParam("page") Optional<Integer> page) {
-        System.out.println("REQUEST ID listCandidates " + requestId);
         model.addAttribute("currentState", "all");
         model.addAttribute("requestId", requestId);
 
@@ -193,7 +194,7 @@ public class TechnicalController {
                 return "redirect:/login";
             }
 
-            // 3. ¡SOLUCIÓN! En lugar de cast, buscamos el perfil completo por email
+            // En lugar de cast, buscamos el perfil completo por email
             // Usamos el email que viene en el objeto UserDetails de la sesión
             OviUser oviUser = oviUserDao.getOviUserByEmail(user.getEmail());
             model.addAttribute("oviUser", oviUser);
