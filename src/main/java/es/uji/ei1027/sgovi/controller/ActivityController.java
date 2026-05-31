@@ -52,10 +52,13 @@ public class ActivityController {
         Paginador.paginate(model, activities, page, pageLength, "activitiesPaged");
 
         if ("Tecnico".equals(user.getRol())) {
-            return "activity//list-tecnico";
+            return "activity/list-tecnico";
         }
-        return "activity/list";
-
+        if (user.getRol().equals("OviUser"))
+            return "activity/list-ovi";
+        else if(user.getRol().equals("Tecnico"))
+            return "activity/list-tecnico";
+        return "activity/list-pa";
     }
     @RequestMapping("/join/{id}")
     public String joinActivity(@PathVariable int id, HttpSession session) {
