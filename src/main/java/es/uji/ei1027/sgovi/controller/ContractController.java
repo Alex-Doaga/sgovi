@@ -3,7 +3,7 @@ package es.uji.ei1027.sgovi.controller;
 import es.uji.ei1027.sgovi.dao.ContractDao;
 import es.uji.ei1027.sgovi.dao.PaDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
-import es.uji.ei1027.sgovi.dto.PACandidateDTO;
+import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.Contract;
 import es.uji.ei1027.sgovi.modelo.PA;
 import es.uji.ei1027.sgovi.modelo.Request;
@@ -85,8 +85,8 @@ public class ContractController {
         List<Request> requests = requestDao.getRequestsWithoutContractByOviUser(idUser);
         Set<PA> candidatePAs = new HashSet<>();
         for (Request req : requests) {
-            List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(req.getIdRequest());
-            for (PACandidateDTO cand : candidates) {
+            List<PACandidate> candidates = requestDao.findCandidatesForRequest(req.getIdRequest());
+            for (PACandidate cand : candidates) {
                 candidatePAs.add(cand.getPa());
             }
         }
@@ -111,8 +111,8 @@ public class ContractController {
             List<Request> requests = requestDao.getRequestsWithoutContractByOviUser(idUser);
             Set<PA> candidatePAs = new HashSet<>();
             for (Request req : requests) {
-                List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(req.getIdRequest());
-                for (PACandidateDTO cand : candidates) {
+                List<PACandidate> candidates = requestDao.findCandidatesForRequest(req.getIdRequest());
+                for (PACandidate cand : candidates) {
                     candidatePAs.add(cand.getPa());
                 }
             }

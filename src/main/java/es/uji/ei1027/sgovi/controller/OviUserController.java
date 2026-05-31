@@ -1,6 +1,8 @@
 package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.OviUserDao;
+import es.uji.ei1027.sgovi.dao.RequestDao;
+import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.OviUser;
 import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
@@ -24,6 +26,12 @@ public class OviUserController {
     private OviUserDao oviUserDao;
     private int pageLength = 5;
 
+    private RequestDao requestDao;
+
+    @Autowired
+    public void setRequestDao(RequestDao requestDao) {
+        this.requestDao = requestDao;
+    }
 
     @Autowired
     public void setOviUserDao(OviUserDao oviUserDao) {
@@ -186,6 +194,24 @@ public class OviUserController {
             @ModelAttribute("oviUser") OviUser oviUser) {
         oviUserDao.deleteOviUser(oviUser.getIdOviUser());
         return "redirect:list";
+    }
+
+
+    // ==========================================
+    //   CANDIDATOS SOLICITUD OVI USER
+    // ==========================================
+
+
+    // Listar los candidatos de una solicitud aceptada
+    @RequestMapping("/candidates/list/{requestId}")
+    public String listCandidates(Model model, @PathVariable int requestId) {
+        System.out.println("REQUEST ID listCandidates " + requestId);
+        model.addAttribute("currentState", "all");
+        model.addAttribute("requestId", requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesForRequest(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "request/candidates";
     }
 
     // ==========================================

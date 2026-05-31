@@ -1,20 +1,20 @@
 package es.uji.ei1027.sgovi.dao;
 
-import es.uji.ei1027.sgovi.dto.PACandidateDTO;
+import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.PA;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PACandidateDTORowMapper implements RowMapper<PACandidateDTO> {
+public class PACandidateRowMapper implements RowMapper<PACandidate> {
 
     @Override
-    public PACandidateDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public PACandidate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
         PA pa = new PARowMapper().mapRow(rs, rowNum);
 
-        PACandidateDTO dto = new PACandidateDTO();
+        PACandidate dto = new PACandidate();
 
         dto.setPa(pa);
         dto.setNegotiationState(rs.getString("negotiation_state"));
