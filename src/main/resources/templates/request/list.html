@@ -94,9 +94,14 @@
   </div>
 
   <div class="mt-3">
-    <a th:href="@{/ovi-user/dashboard}" class="btn btn-link text-decoration-none">
-      <i class="bi bi-arrow-left"></i> Tornar al Dashboard
-    </a>
+   <span class="ms-2">
+    <a th:if="${session.user != null and #strings.equalsIgnoreCase(session.user.rol,'PA')}"
+       th:href="@{/pa/dashboard}" class="btn btn-secondary">Tornar</a>
+
+    <a th:if="${session.user != null and #strings.equalsIgnoreCase(session.user.rol,'OviUser')}"
+       th:href="@{/ovi-user/dashboard}" class="btn btn-secondary">Tornar</a>
+
+</span>
   </div>
 </div>
 </body>
