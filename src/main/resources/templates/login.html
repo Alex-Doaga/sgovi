@@ -168,6 +168,20 @@
                         <button type="submit" class="btn btn-login">Accedir <i data-lucide="log-in" class="ms-2" style="width:16px;"></i></button>
                     </div>
                 </form>
+                <div class="mt-3 text-center">
+                    <p class="small text-muted mb-2">O crea un compte nou:</p>
+                    <div class="d-flex gap-2 justify-content-center flex-wrap">
+                        <a th:href="@{/ovi-user/add}" class="btn btn-outline-primary d-inline-flex align-items-center">
+                            <i data-lucide="user-plus" class="me-1" style="width:16px;height:16px;"></i>
+                            Registre d'un nou OVI User
+                        </a>
+
+                        <a th:href="@{/pa/add}" class="btn btn-outline-secondary d-inline-flex align-items-center">
+                            <i data-lucide="users" class="me-1" style="width:16px;height:16px;"></i>
+                            Registre PA
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div class="login-footer">

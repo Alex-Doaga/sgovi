@@ -20,7 +20,7 @@ public class LoginController {
     private UserDao userDao;
 
 
-    @RequestMapping("/login")
+    @RequestMapping("/")
     public String login(Model model) {
         model.addAttribute("user", new UserDetails());
         return "login";
