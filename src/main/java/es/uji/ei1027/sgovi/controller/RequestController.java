@@ -1,7 +1,10 @@
 package es.uji.ei1027.sgovi.controller;
 
+import es.uji.ei1027.sgovi.dao.MessageDao;
+import es.uji.ei1027.sgovi.dao.NegotiationDao;
+import es.uji.ei1027.sgovi.dao.PaDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
-import es.uji.ei1027.sgovi.modelo.Request;
+import es.uji.ei1027.sgovi.modelo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +22,6 @@ import java.util.stream.IntStream;
 @RequestMapping("/request")
 public class RequestController {
 
-    @Autowired
     private RequestDao requestDao;
     private int pageLength = 5;
 
@@ -67,11 +69,27 @@ public class RequestController {
         List<Request> requests = requestDao.getRequestsByOviUserAndState(id, state);
         Paginador.paginate(model, requests, page, pageLength, "requestsPaged");
 
+        model.addAttribute("requests", requestDao.getRequestsByOviUserAndState(id, state));
+
         model.addAttribute("userId", id);
         model.addAttribute("currentState", state);
         return "request/list";
     }
 
+    // ==========================================
+    //   VER DETALLE DE REQUEST
+    // ==========================================
+
+    //Mostrat una request
+    @RequestMapping("/view/{id}")
+    public String viewRequest(Model model, @PathVariable int id,
+                              @RequestParam(value = "review", required = false, defaultValue = "false") boolean review) {
+
+        model.addAttribute("request", requestDao.getRequest(id));
+        model.addAttribute("isReviewMode", review);
+
+        return "request/view";
+    }
     // ==========================================
     //   CREAR/AÑADIR Request
     // ==========================================
@@ -161,5 +179,56 @@ public class RequestController {
     }
 
 
+
+    // ==========================================
+    //   CANDIDATOS SOLICITUD OVI USER
+    // ==========================================
+
+    // Listar los candidatos de una solicitud aceptada
+    @RequestMapping("/candidates/list/{requestId}")
+    public String listCandidates(Model model, @PathVariable int requestId) {
+        model.addAttribute("currentState", "all");
+        model.addAttribute("requestId", requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesForRequest(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "request/candidates";
+    }
+
+    // Listar los candidatos que no tienen una negociación
+    @RequestMapping("/candidates/withoutNegotiation/{requestId}")
+    public String listCandidatesWithoutNegotiation(Model model, @PathVariable int requestId) {
+
+        model.addAttribute("currentState", "withoutNegotiation");
+        model.addAttribute("requestId", requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesWithoutNegotiation(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "request/candidates";
+    }
+
+    // Listar los candidatos que tienen una negociación abierta
+    @RequestMapping("/candidates/withNegotiation/{requestId}")
+    public String listCandidatesWithNegotiation(Model model, @PathVariable int requestId) {
+
+        model.addAttribute("currentState", "withNegotiation");
+        model.addAttribute("requestId", requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesWithNegotiation(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "request/candidates";
+    }
+
+    // Listar los candidatos que tienen contrato
+    @RequestMapping("/candidates/withContract/{requestId}")
+    public String listCandidatesWithContract(Model model, @PathVariable int requestId) {
+
+        model.addAttribute("currentState", "withContract");
+        model.addAttribute("requestId", requestId);
+        List<PACandidate> candidates = requestDao.findCandidatesWithNegotiationAndContract(requestId);
+        model.addAttribute("candidates", candidates);
+
+        return "request/candidates";
+    }
 }
 
