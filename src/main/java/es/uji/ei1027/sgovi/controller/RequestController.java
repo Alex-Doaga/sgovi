@@ -75,7 +75,7 @@ public class RequestController {
         model.addAttribute("currentState", state);
         return "request/list";
     }
-
+    
     // ==========================================
     //   CREAR/AÑADIR Request
     // ==========================================
@@ -116,8 +116,7 @@ public class RequestController {
 
     // 1. Ver detalle de la solicitud en modo revisión
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String viewRequest(Model model, @PathVariable int id,
-                              @RequestParam(value="review", defaultValue="false") boolean review) {
+    public String viewRequest(Model model, @PathVariable int id, @RequestParam(value="review", defaultValue="false") boolean review) {
         Request request = requestDao.getRequest(id); // Asumiendo que existe getRequest en tu DAO
         model.addAttribute("request", request);
 
