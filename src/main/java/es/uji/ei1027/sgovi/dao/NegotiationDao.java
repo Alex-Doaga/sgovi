@@ -85,6 +85,24 @@ public class NegotiationDao {
         }
     }
 
+    /* Obtiene todas las negociaciones de un usuario Ovi. Devuelve una lista vacía si no hay negociaciones */
+    public List<PACandidateNegotiation> getNegotiationsByPA(int idPa) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT pa.*, n.negotiation_state, null as contract_state, r.id_request " +
+                            "FROM negotiation AS n " +
+                            "INNER JOIN request AS r ON r.id_request = n.id_request " +
+                            "INNER JOIN pa ON pa.id_pa = n.id_pa " +
+                            "WHERE n.id_pa = ? " +
+                            "ORDER BY n.start_date DESC",
+                    new PACandidateNegotiationRowMapper(),
+                    idPa
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
     // Todas las negociaciones de una solicitud concreta
     public List<Negotiation> getNegotiationsByRequest(int idRequest) {
         try {

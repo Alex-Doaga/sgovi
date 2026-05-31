@@ -142,7 +142,7 @@
               </div>
               <p class="card-desc">Revisa l'estat de les negociacions en curs i les noves propostes.</p>
               <div class="mt-auto pt-2">
-                <a th:href="@{/negotiation/list}"
+                <a th:href="@{/negotiation/list/pa/{id}(id=${pa.getIdPa()})}"
                    class="card-cta"
                    aria-label="Revisar les meves negociacions">
                   Revisar
