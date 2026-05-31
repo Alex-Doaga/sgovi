@@ -164,4 +164,24 @@ public class ContractController {
         return "redirect:/contract/list/user/" + request.getOviUserId();
     }
 
+    // ==========================================
+    //   LISTAR CONTRACTES D'UN PA
+    // ==========================================
+    @RequestMapping(value = "/list/pa/{id}", method = RequestMethod.GET)
+    public String listContractsByPa(Model model, @PathVariable int id) {
+
+        // 1. Buscamos la lista de contratos de ese PA específico en la base de datos.
+        // (Asegúrate de que este método se llame así en tu ContractDao, o cámbialo por el nombre correcto)
+        model.addAttribute("contracts", contractDao.getContractsByPa(id));
+
+        // 2. Pasamos esta variable a false para que la vista 'list.html' sepa qué botones mostrar
+        model.addAttribute("isUserView", false);
+
+        // Opcional: Si quieres que el botón "Tornar" vuelva al dashboard del PA
+        model.addAttribute("isPaView", true);
+
+        // 3. Devolvemos la plantilla HTML (templates/contract/list.html)
+        return "contract/list";
+    }
+
 }

@@ -25,13 +25,6 @@
     </div>
 
     <ul class="nav nav-pills flex-column mb-auto" role="list">
-      <li class="nav-item" role="listitem">
-        <!-- WAVE: aria-current per indicar la pàgina activa -->
-        <a th:href="@{/pa/update/{id}(id=${pa.idPa})}"
-           class="nav-link active" aria-current="page">
-          <i class="bi bi-person-circle" aria-hidden="true"></i> El meu perfil
-        </a>
-      </li>
 
       <th:block th:if="${pa.paState.name() == 'ACCEPTED'}">
         <li role="listitem">
@@ -95,27 +88,6 @@
         </div>
 
         <div class="row g-4">
-
-          <!-- El meu Perfil -->
-          <div class="col-12 col-md-6 col-xl-3">
-            <div class="card h-100 border-0 shadow-sm card-accent-slate">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h2 class="card-section-title">El meu Perfil</h2>
-                <span class="icon-box ib-slate" aria-hidden="true">
-                                    <i class="bi bi-person-gear"></i>
-                                </span>
-              </div>
-              <p class="card-desc">Actualitza les teves dades personals i informació de contacte.</p>
-              <div class="mt-auto pt-2">
-                <a th:href="@{/pa/update/{id}(id=${pa.idPa})}"
-                   class="card-cta"
-                   aria-label="Modificar les meves dades de perfil">
-                  Modificar dades
-                  <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
-          </div>
 
           <!-- Contractes -->
           <div class="col-12 col-md-6 col-xl-3">

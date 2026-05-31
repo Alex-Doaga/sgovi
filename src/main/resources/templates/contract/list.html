@@ -12,7 +12,10 @@
         <div>
             <a th:if="${isUserView}" th:href="@{/contract/add/user/{id}(id=${userId})}" class="btn btn-primary me-2">Afegir Contracte</a>
             <a th:if="${isUserView}" th:href="@{/ovi-user/dashboard}" class="btn btn-secondary">Tornar al Dashboard</a>
-            <a th:unless="${isUserView}" th:href="@{/ovi-user/list/accepted}" class="btn btn-secondary">Tornar a Usuaris</a>
+
+            <a th:if="${isPaView}" th:href="@{/pa/dashboard}" class="btn btn-secondary">Tornar al Dashboard</a>
+
+            <a th:if="${!isUserView and !isPaView}" th:href="@{/pa/list/accepted}" class="btn btn-secondary">Tornar a la Llista</a>
         </div>
     </div>
 
