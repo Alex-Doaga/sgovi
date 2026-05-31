@@ -73,21 +73,6 @@ public class RequestController {
     }
 
     // ==========================================
-    //   VER DETALLE DE REQUEST
-    // ==========================================
-
-    //Mostrat una request
-    @RequestMapping("/view/{id}")
-    public String viewRequest(Model model, @PathVariable int id,
-                              @RequestParam(value = "review", required = false, defaultValue = "false") boolean review) {
-
-        model.addAttribute("request", requestDao.getRequest(id));
-        model.addAttribute("isReviewMode", review);
-
-        return "request/view";
-    }
-
-    // ==========================================
     //   CREAR/AÑADIR Request
     // ==========================================
 
@@ -120,4 +105,61 @@ public class RequestController {
         requestDao.addRequest(request);
         return "redirect:/request/list/user/" + request.getOviUserId();
     }
+
+    // ==========================================
+//   ACCIONES DE REVISIÓN TÉCNICA (Aceptar / Rechazar)
+// ==========================================
+
+    // 1. Ver detalle de la solicitud en modo revisión
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public String viewRequest(Model model, @PathVariable int id,
+                              @RequestParam(value="review", defaultValue="false") boolean review) {
+        Request request = requestDao.getRequest(id); // Asumiendo que existe getRequest en tu DAO
+        model.addAttribute("request", request);
+
+        // Activamos el modo revisión si viene el parámetro 'review' y la solicitud está pendiente
+        boolean isReviewMode = review && "PENDING".equalsIgnoreCase(String.valueOf(request.getState()));
+        model.addAttribute("isReviewMode", isReviewMode);
+
+        return "request/view";
+    }
+
+    // 2. Mostrar pantalla de confirmación antes de aceptar
+    @RequestMapping(value = "/accept/confirm/{id}", method = RequestMethod.GET)
+    public String confirmAcceptRequest(Model model, @PathVariable int id) {
+        Request request = requestDao.getRequest(id);
+        model.addAttribute("request", request);
+        return "request/confirm-accept";
+    }
+
+    // 3. Procesar la aceptación definitiva (POST)
+    @RequestMapping(value = "/accept/{id}", method = RequestMethod.POST)
+    public String processAcceptRequest(@PathVariable int id) {
+        // Actualizamos el estado a 'accepted'. Ajusta el método según tu RequestDao
+        requestDao.updateRequestState(id, "accepted", null);
+        return "redirect:/technical/list-requests/state/pending";
+    }
+
+    // 4. Mostrar formulario de rechazo
+    @RequestMapping(value = "/reject/{id}", method = RequestMethod.GET)
+    public String rejectRequest(Model model, @PathVariable int id) {
+        Request request = requestDao.getRequest(id);
+        model.addAttribute("request", request);
+        return "request/reject";
+    }
+
+    // 5. Procesar el formulario de rechazo (POST)
+    @RequestMapping(value = "/reject", method = RequestMethod.POST)
+    public String processRejectSubmit(@ModelAttribute("request") Request request) {
+        // Guardamos el motivo del rechazo en el campo 'comments' tal como pide list-requests.html
+        requestDao.updateRequestState(
+                request.getIdRequest(),
+                "refused",
+                request.getComments()
+        );
+        return "redirect:/technical/list-requests/state/pending";
+    }
+
+
 }
+

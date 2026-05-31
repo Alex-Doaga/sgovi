@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+  <meta charset="UTF-8"/>
+  <title>SGOVI - Rebutjar Sol·licitud</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="bg-light">
+<main class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow border-0">
+    <div class="card-header bg-danger text-white py-3">
+      <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Rebutjar Sol·licitud</h5>
+    </div>
+    <div class="card-body p-4">
+      <p class="text-muted">
+        Indica el motiu pel qual es denega la sol·licitud de servei amb ID
+        <strong th:text="'#' + ${request.idRequest}"></strong>:
+      </p>
+      <hr>
+
+      <form th:action="@{/request/reject}" th:object="${request}" method="post">
+        <input type="hidden" th:field="*{idRequest}"/>
+
+        <div class="mb-4">
+          <label for="rejectionReason" class="form-label fw-bold text-dark">Motiu del rebuig</label>
+          <textarea class="form-control" id="rejectionReason" rows="4"
+                    th:field="*{comments}"
+                    placeholder="Escriu de manera detallada el motiu del rebuig..." required></textarea>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a th:href="@{/technical/list-requests/state/pending}" class="btn btn-outline-secondary">Cancel·lar</a>
+          <button type="submit" class="btn btn-danger">Confirmar Rebuig</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

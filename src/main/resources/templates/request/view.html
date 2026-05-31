@@ -14,13 +14,6 @@
         <h2 class="fw-bold text-primary">
             <i class="bi bi-file-earmark-text me-2"></i>Detalls de la Sol·licitud
         </h2>
-
-
-
-
-
-
-        <!-- CAMBIAR CUANDO ESTÉN HECHOS LOS LOGIN: OVIUSER, PA, TÉCNICO -->
         <a href="javascript:history.back()" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-1"></i> Tornar a la llista
         </a>
@@ -29,12 +22,6 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 text-muted">Informació General</h5>
-            <!--
-                  th:classappend="${request.getState() == 'ACCEPTED' ? 'bg-success' : (request.getState() == 'REFUSED' ? 'bg-danger' : 'bg-warning')}"
--->
-            <span class="badge px-3 py-2"
-                  th:classappend="${request.getState().name() == 'ACCEPTED' ? 'bg-success' : (request.getState().name() == 'REFUSED' ? 'bg-danger' : 'bg-warning')}"
-             <span th:text="${request.getState()}"></span>
         </div>
         <div class="card-body p-4">
             <div class="row g-4">
@@ -93,6 +80,23 @@
             <p class="mb-0 italic" th:text="${request.getComments()} ?: 'Sense comentaris addicionals.'"></p>
         </div>
     </div>
+
+    <div th:if="${isReviewMode}" class="mt-4 p-3 bg-light rounded border d-flex gap-2 align-items-center">
+        <h5 class="w-100 mb-0 text-muted">
+            <i class="bi bi-shield-shaded me-2"></i>Accions de revisió tècnica:
+        </h5>
+
+        <a th:href="@{/request/accept/confirm/{id}(id=${request.idRequest})}" class="btn btn-success text-nowrap">
+            <i class="bi bi-check-circle me-1"></i> Acceptar Sol·licitud
+        </a>
+
+        <a th:href="@{/request/reject/{id}(id=${request.idRequest})}" class="btn btn-danger text-nowrap">
+            <i class="bi bi-x-circle me-1"></i> Rebutjar Sol·licitud
+        </a>
+    </div>
+
+
+
 </div>
 
 </body>

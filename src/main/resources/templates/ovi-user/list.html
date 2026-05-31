@@ -48,14 +48,6 @@
                     <td>
                         <div class="d-flex gap-2">
                             <th:block th:if="${currentState == 'pending'}">
-                                <form th:action="@{/ovi-user/accept/{id}(id=${oviUser.idOviUser})}" method="post" class="m-0">
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="bi bi-check-lg"></i> Acceptar
-                                    </button>
-                                </form>
-                                <a th:href="@{/ovi-user/reject/{id}(id=${oviUser.idOviUser})}" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-x-lg"></i> Rebutjar
-                                </a>
                                 <a th:href="@{/ovi-user/view/{id}(id=${oviUser.idOviUser}, review=true)}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-eye me-1"></i> Revisar
                                 </a>

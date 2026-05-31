@@ -52,14 +52,6 @@
                     <td>
                         <div class="d-flex gap-2">
                             <th:block th:if="${currentState == 'pending'}">
-                                <form th:action="@{/pa/accept/{id}(id=${pa.idPa})}" method="post" class="m-0">
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="bi bi-check-lg"></i> Acceptar
-                                    </button>
-                                </form>
-                                <a th:href="@{/pa/reject/{id}(id=${pa.idPa})}" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-x-lg"></i> Rebutjar
-                                </a>
                                 <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-eye me-1"></i> Revisar
                                 </a>
@@ -69,6 +61,32 @@
                                 <a th:href="@{/pa/view/{id}(id=${pa.idPa})}" class="btn btn-info btn-sm text-white">
                                     <i class="bi bi-eye"></i> Veure Perfil
                                 </a>
+                            </th:block>
+                            <th:block th:if="${currentState == 'refused'}">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="'#modalMotivo' + ${pa.idPa}">
+                                    <i class="bi bi-chat-left-text"></i> Ver Motiu
+                                </button>
+
+                                <div class="modal fade" th:id="'modalMotivo' + ${pa.idPa}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Motiu del Rebuig</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>Usuari:</strong> <span th:text="${pa.name + ' ' + pa.surname}"></span></p>
+                                                <hr>
+                                                <p th:text="${pa.rejectionReason} ?: 'No s\'ha especificat cap motiu.'"></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tancar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </th:block>
                         </div>
                     </td>

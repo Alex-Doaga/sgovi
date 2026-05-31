@@ -45,55 +45,30 @@
                     </thead>
                     <tbody>
                     <tr th:each="req : ${requests}">
-                        <td th:text="${req.requestDate}">--</td>
-                        <td th:text="${req.startDate}">--</td>
-                        <td th:text="${req.duration} + ' mesos'">--</td>
-                        <td th:text="${req.city}">--</td>
-                        <td th:text="${req.typePa}">--</td>
-                        <td th:text="${req.requiredGender}">--</td>
+                        <td th:text="${req.getRequestDate()}">--</td>
+                        <td th:text="${req.getStartDate()}">--</td>
+                        <td th:text="${req.getDuration()} + ' mesos'">--</td>
+                        <td th:text="${req.getCity() != null ? req.getCity().getLabel() : '--'}">--</td>
+                        <td th:text="${req.getTypePa()}">--</td>
+                        <td th:text="${req.getRequiredGender() != null ? req.getRequiredGender().getLabel() : '--'}">--</td>
                         <td>
                             <div class="d-flex gap-2">
                                 <th:block th:if="${currentState == 'pending'}">
-                                    <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white">Acceptar</a>
-                                    <button type="button" class="btn btn-sm btn-danger"
-                                            data-bs-toggle="modal"
-                                            th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                <tr>
-                    <th>Data Petició</th>
-                    <th>Inici Servei</th>
-                    <th>Duració</th>
-                    <th>Ciutat</th>
-                    <th>Tipus PA</th>
-                    <th>Gènere</th>
-                    <th>Accions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="req : ${requests}">
-                    <td th:text="${req.getRequestDate()}">--</td>
-                    <td th:text="${req.getStartDate()}">--</td>
-                    <td th:text="${req.getDuration()} + ' mesos'">--</td>
-                    <td th:text="${req.getCity().getLabel()}">--</td>
-                    <td th:text="${req.getTypePa()}">--</td>
-                    <td th:text="${req.getRequiredGender().getLabel()}">--</td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <th:block th:if="${currentState == 'pending'}">
-                                <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white my-auto">Acceptar</a>
-                                <button type="button" class="btn btn-sm btn-danger my-auto"
-                                        data-bs-toggle="modal"
-                                        th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
-                                        Rebutjar
-                                    </button>
+
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <a th:if="${#strings.toString(req.state) == 'PENDING' or currentState == 'pending'}"
+                                           th:href="@{/request/view/{id}(id=${req.idRequest}, review=true)}"
+                                           class="btn btn-sm btn-primary">
+                                            <i class="bi bi-shield-shaded"></i> Revisar
+                                        </a>
+                                    </div>
 
                                     <div class="modal fade" th:id="'modalExplicarMotivo' + ${req.idRequest}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-danger text-white">
                                                     <h5 class="modal-title">Especificar el motiu del rebuig</h5>
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss=\"modal\" aria-label="Close"></button>
                                                 </div>
 
                                                 <form th:action="@{/technical/list-requests/pending/refuse/{req_id}(req_id=${req.idRequest})}" method="post">
