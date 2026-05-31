@@ -57,7 +57,11 @@ public class RequestController {
         model.addAttribute("currentState", state);
         return "request/list";
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> origin/master
     // ==========================================
     //   CREAR/AÑADIR Request
     // ==========================================
@@ -90,9 +94,14 @@ public class RequestController {
 
     // Se mantiene esta versión que unifica la vista normal y la de revisión
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+<<<<<<< HEAD
     public String viewRequest(Model model, @PathVariable int id,
                               @RequestParam(value="review", defaultValue="false") boolean review) {
         Request request = requestDao.getRequest(id);
+=======
+    public String viewRequest(Model model, @PathVariable int id, @RequestParam(value="review", defaultValue="false") boolean review) {
+        Request request = requestDao.getRequest(id); // Asumiendo que existe getRequest en tu DAO
+>>>>>>> origin/master
         model.addAttribute("request", request);
 
         // Activamos el modo revisión si viene el parámetro 'review' y la solicitud está pendiente
@@ -172,3 +181,6 @@ public class RequestController {
         return "request/candidates";
     }
 }
+
+    public String viewRequest(Model model, @PathVariable int id, @RequestParam(value="review", defaultValue="false") boolean review) {
+        Request request = requestDao.getRequest(id); // Asumiendo que existe getRequest en tu DAO
