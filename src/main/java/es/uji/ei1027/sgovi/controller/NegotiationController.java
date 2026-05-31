@@ -44,11 +44,24 @@ public class NegotiationController {
     }
 
     @RequestMapping("/list/{oviUserId}")
-    public String listNegotiations(@PathVariable int oviUserId, Model model) {
+    public String listNegotiationsOviUser(@PathVariable int oviUserId, Model model) {
 
         List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByOviUser(oviUserId);
 
         model.addAttribute("oviUserId", oviUserId);
+        model.addAttribute("paId", null);
+        model.addAttribute("negotiations", negotiations);
+
+        return "negotiation/list";
+    }
+
+    @RequestMapping("/list/{paId}")
+    public String listNegotiationsPA(@PathVariable int paId, Model model) {
+
+        List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByPA(paId);
+
+        model.addAttribute("oviUserId", null);
+        model.addAttribute("paId", paId);
         model.addAttribute("negotiations", negotiations);
 
         return "negotiation/list";
@@ -100,8 +113,8 @@ public class NegotiationController {
     }
 
     // Enviar un mensaje
-    @PostMapping("/message")
-    public String sendMessage(@RequestParam int idNegotiation,
+    @PostMapping("/message/oviuser")
+    public String sendMessageOviUser(@RequestParam int idNegotiation,
                               @RequestParam String messageText) {
 
         Negotiation negotiation = negotiationDao.getNegotiation(idNegotiation);
@@ -114,6 +127,30 @@ public class NegotiationController {
 
         message.setIdNegotiation(idNegotiation);
         message.setSenderType(Message.SENDER_OVI_USER);
+        message.setMessageText(messageText);
+
+        messageDao.addMessage(message);
+
+        negotiationDao.updateNegotiationState(idNegotiation, NegotiationStateEnum.hablando.toString());
+
+        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest();
+    }
+
+    // Enviar un mensaje
+    @PostMapping("/message/pa")
+    public String sendMessagePA(@RequestParam int idNegotiation,
+                              @RequestParam String messageText) {
+
+        Negotiation negotiation = negotiationDao.getNegotiation(idNegotiation);
+
+        if (negotiation == null) {
+            return "redirect:/";
+        }
+
+        Message message = new Message();
+
+        message.setIdNegotiation(idNegotiation);
+        message.setSenderType(Message.SENDER_PA);
         message.setMessageText(messageText);
 
         messageDao.addMessage(message);

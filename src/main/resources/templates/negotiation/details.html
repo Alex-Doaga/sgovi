@@ -179,16 +179,16 @@
 
             </div>
 
-            <!-- FORMULARI ENVIAMENT -->
-            <form method="post"
-                  th:action="@{/negotiation/message}"
-                  class="mt-4">
+            <th:block th:if="${session.userType == 'ovi_user'}">
+                <!-- FORMULARI ENVIAMENT -->
+                <form method="post"
+                      th:action="@{/negotiation/message/oviuser}"
+                      class="mt-4">
+                    <input type="hidden"
+                           name="idNegotiation"
+                           th:value="${negotiation.idNegotiation}"/>
 
-                <input type="hidden"
-                       name="idNegotiation"
-                       th:value="${negotiation.idNegotiation}"/>
-
-                <div class="mb-3">
+                    <div class="mb-3">
 
                     <textarea class="form-control"
                               name="messageText"
@@ -198,15 +198,46 @@
                               required>
                     </textarea>
 
-                </div>
+                    </div>
 
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-send me-1"></i>
-                        Enviar missatge
-                    </button>
-                </div>
-            </form>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-1"></i>
+                            Enviar missatge
+                        </button>
+                    </div>
+                </form>
+            </th:block>
+
+            <th:block th:if="${session.userType == 'pa'}">
+                <!-- FORMULARI ENVIAMENT -->
+                <form method="post"
+                      th:action="@{/negotiation/message/pa}"
+                      class="mt-4">
+                    <input type="hidden"
+                           name="idNegotiation"
+                           th:value="${negotiation.idNegotiation}"/>
+
+                    <div class="mb-3">
+
+                    <textarea class="form-control"
+                              name="messageText"
+                              rows="4"
+                              maxlength="1000"
+                              placeholder="Escriu el teu missatge..."
+                              required>
+                    </textarea>
+
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-1"></i>
+                            Enviar missatge
+                        </button>
+                    </div>
+                </form>
+            </th:block>
         </div>
     </div>
 </div>
