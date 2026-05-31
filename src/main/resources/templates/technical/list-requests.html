@@ -46,17 +46,17 @@
                 </thead>
                 <tbody>
                 <tr th:each="req : ${requests}">
-                    <td th:text="${req.requestDate}">--</td>
-                    <td th:text="${req.startDate}">--</td>
-                    <td th:text="${req.duration} + ' mesos'">--</td>
-                    <td th:text="${req.city}">--</td>
-                    <td th:text="${req.typePa}">--</td>
-                    <td th:text="${req.requiredGender}">--</td>
+                    <td th:text="${req.getRequestDate()}">--</td>
+                    <td th:text="${req.getStartDate()}">--</td>
+                    <td th:text="${req.getDuration()} + ' mesos'">--</td>
+                    <td th:text="${req.getCity().getLabel()}">--</td>
+                    <td th:text="${req.getTypePa()}">--</td>
+                    <td th:text="${req.getRequiredGender().getLabel()}">--</td>
                     <td>
                         <div class="d-flex gap-2">
                             <th:block th:if="${currentState == 'pending'}">
-                                <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white">Acceptar</a>
-                                <button type="button" class="btn btn-sm btn-danger"
+                                <a th:href="@{/technical/list-requests/pending/accept/{req_id}(req_id=${req.idRequest})}" class="btn btn-sm btn-success text-white my-auto">Acceptar</a>
+                                <button type="button" class="btn btn-sm btn-danger my-auto"
                                         data-bs-toggle="modal"
                                         th:data-bs-target="'#modalExplicarMotivo' + ${req.idRequest}">
                                         Rebutjar
@@ -99,7 +99,7 @@
                                 </div>
                             </th:block>
 
-                            <a th:href="@{/request/view/{id}(id=${req.idRequest})}" class="btn btn-sm btn-outline-primary" >
+                            <a th:href="@{/request/view/{id}(id=${req.idRequest})}" class="btn btn-sm btn-outline-primary my-auto" >
                                 <i class="bi bi-eye"></i> Detalls
                             </a>
 

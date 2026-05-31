@@ -37,21 +37,9 @@ public class TechnicalController {
     //  SOLICITUDES ASISTENTES PERSONALES (AP)
     // ==========================================
 
-    // Listar todas las solicitudes
-    @RequestMapping("/list-requests")
-    public String listRequests(Model model) {
-        int id = 1;
-        model.addAttribute("requests", requestDao.getRequests());
-        //model.addAttribute("requests", requestDao.getRequestsByOviUser(id));
-        model.addAttribute("userId", id);
-        // Indicamos que estamos en "Todas las solicitudes"
-        model.addAttribute("currentState", "all");
-        return "technical/list-requests";
-    }
-
     // Listar solicitudes por estado
     @RequestMapping("/list-requests/state/{state}")
-    public String listByState(Model model, @PathVariable String state) {
+    public String listRequestsByState(Model model, @PathVariable String state) {
         model.addAttribute("requests", requestDao.getRequestsByState(state)); // O el nombre que tenga tu método en el DAO
         model.addAttribute("currentState", state);
         return "technical/list-requests";

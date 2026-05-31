@@ -29,34 +29,37 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 text-muted">Informació General</h5>
+            <!--
+                  th:classappend="${request.getState() == 'ACCEPTED' ? 'bg-success' : (request.getState() == 'REFUSED' ? 'bg-danger' : 'bg-warning')}"
+-->
             <span class="badge px-3 py-2"
-                  th:classappend="${request.state == 'accepted' ? 'bg-success' : (request.state == 'refused' ? 'bg-danger' : 'bg-warning')}"
-                  th:text="${#strings.toUpperCase(request.state)}">ESTAT</span>
+                  th:classappend="${request.getState().name() == 'ACCEPTED' ? 'bg-success' : (request.getState().name() == 'REFUSED' ? 'bg-danger' : 'bg-warning')}"
+             <span th:text="${request.getState()}"></span>
         </div>
         <div class="card-body p-4">
             <div class="row g-4">
                 <div class="col-md-6">
                     <label class="text-muted small text-uppercase fw-bold">Data de Petició</label>
-                    <p class="fs-5" th:text="${request.requestDate}">--</p>
+                    <p class="fs-5" th:text="${request.getRequestDate()}">--</p>
 
                     <label class="text-muted small text-uppercase fw-bold">Inici del Servei</label>
-                    <p class="fs-5" th:text="${request.startDate}">--</p>
+                    <p class="fs-5" th:text="${request.getStartDate()}">--</p>
 
                     <label class="text-muted small text-uppercase fw-bold">Duració</label>
-                    <p class="fs-5" th:text="${request.duration} + ' mesos'">--</p>
+                    <p class="fs-5" th:text="${request.getDuration()} + ' mesos'">--</p>
 
                     <label class="text-muted small text-uppercase fw-bold">Ciutat</label>
-                    <p class="fs-5" th:text="${request.city}">--</p>
+                    <p class="fs-5" th:text="${request.getCity().getLabel()}">--</p>
                 </div>
                 <div class="col-md-6">
                     <label class="text-muted small text-uppercase fw-bold">Tipus de PA</label>
-                    <p class="fs-5" th:text="${request.typePa}">--</p>
+                    <p class="fs-5" th:text="${request.getTypePa()}">--</p>
 
                     <label class="text-muted small text-uppercase fw-bold">Gènere Requerit</label>
-                    <p class="fs-5" th:text="${request.requiredGender}">--</p>
+                    <p class="fs-5" th:text="${request.getRequiredGender().getLabel()}">--</p>
 
                     <label class="text-muted small text-uppercase fw-bold">Edat aproximada PA</label>
-                    <p class="fs-5" th:text="${request.agePa} + ' anys'">--</p>
+                    <p class="fs-5" th:text="${request.getAgePa()} + ' anys'">--</p>
                 </div>
             </div>
         </div>
@@ -69,15 +72,15 @@
         <div class="card-body p-4">
             <div class="mb-3">
                 <label class="text-muted small text-uppercase fw-bold">Formació</label>
-                <p th:text="${request.education} ?: 'No especificada'"></p>
+                <p th:text="${request.getEducation().getLabel()} ?: 'No especificada'"></p>
             </div>
             <div class="mb-3">
                 <label class="text-muted small text-uppercase fw-bold">Experiència</label>
-                <p th:text="${request.experience} ?: 'No especificada'"></p>
+                <p th:text="${request.getExperience()} ?: 'No especificada'"></p>
             </div>
             <div class="mb-0">
-                <label class="text-muted small text-uppercase fw-bold">Aficions / Hobbies</label>
-                <p th:text="${request.hobbies} ?: 'Cap afició especificada'"></p>
+                <label class="text-muted small text-uppercase fw-bold">Afició</label>
+                <p th:text="${request.getHobbies().getLabel()} ?: 'Cap afició especificada'"></p>
             </div>
         </div>
     </div>
@@ -87,7 +90,7 @@
             <h5 class="mb-0 text-muted">Comentaris o Motius</h5>
         </div>
         <div class="card-body p-4">
-            <p class="mb-0 italic" th:text="${request.comments} ?: 'Sense comentaris addicionals.'"></p>
+            <p class="mb-0 italic" th:text="${request.getComments()} ?: 'Sense comentaris addicionals.'"></p>
         </div>
     </div>
 </div>

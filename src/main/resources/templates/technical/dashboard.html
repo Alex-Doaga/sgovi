@@ -6,7 +6,6 @@
     <title>Tecnico - Dashboard del Tècnic</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -24,29 +23,28 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
                 <a th:href="@{/ovi-user/update/{id}(id=${oviUser.idOviUser})}" class="nav-link active">
-                    <i data-lucide="user"></i> Gestió formadors
+                    <i data-lucide="graduation-cap"></i> Gestió formadors
                 </a>
             </li>
 
             <li>
                 <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="nav-link">
-                    <i data-lucide="file-text"></i> Gestió activitats
+                    <i data-lucide="square-activity"></i> Gestió activitats
                 </a>
             </li>
             <li>
-<!--                <a th:href="@{/request/list/user/{id}(id=${oviUser.idOviUser})}" class="nav-link">-->
-                    <a th:href="@{/technical/list-requests}" class="nav-link">
+                <a th:href="@{/technical/list-requests/state/pending}" class="nav-link">
                     <i data-lucide="clipboard-list"></i> Sol·licituds AP
                 </a>
             </li>
             <li>
                 <a th:href="@{/ovi-user/list/pending}" class="nav-link">
-                    <i data-lucide="handshake"></i> Nous registres d'usuaris OVI
+                    <i data-lucide="user-plus"></i> Nous registres d'usuaris OVI
                 </a>
             </li>
             <li>
                 <a th:href="@{/pa/list/pending}" class="nav-link">
-                    <i data-lucide="search"></i> Nous registres d'assistens personals
+                    <i data-lucide="heart-plus"></i> Nous registres d'AP
                 </a>
             </li>
         </ul>
@@ -75,59 +73,55 @@
         </header>
 
         <main class="p-4">
+            <div class="mb-4">
+                <h1>Dashboard Tècnics</h1>
+                <h3 class="h3 fw-bold">Benvingut/da, <span th:text="${oviUser.name}">Nom</span>!</h3>
+            </div>
 
-            <div>
-                <div class="mb-4">
-                    <h1>Dahsboard Tècnics</h1>
-                    <h3 class="h3 fw-bold">Benvingut/da, <span th:text="${oviUser.name}">Nom</span>!</h3>
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted mb-0">Gestió formadors</h6>
+                            <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="graduation-cap"></i></span>
+                        </div>
+                        <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>
+                    </div>
                 </div>
-
-                <div class="row g-4">
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Gestió formadors</h6>
-                                <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="file-check-2"></i></span>
-                            </div>
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted mb-0">Gestió d'activitats</h6>
+                            <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="square-activity"></i></span>
                         </div>
+                        <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Gestió d'activitats</h6>
-                                <span class="badge bg-primary-subtle text-primary p-2"><i data-lucide="file-check-2"></i></span>
-                            </div>
-                            <a th:href="@{/contract/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Veure contractes</a>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted mb-0">Sol·licituds AP</h6>
+                            <span class="badge bg-warning-subtle text-warning p-2"><i data-lucide="clipboard-list"></i></span>
                         </div>
+                        <a th:href="@{/technical/list-requests/state/pending}" class="text-decoration-none text-primary small fw-bold">Veure</a>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Sol·licituds AP</h6>
-                                <span class="badge bg-warning-subtle text-warning p-2"><i data-lucide="clipboard-list"></i></span>
-                            </div>
-<!--                            <a th:href="@{/list-requests/list/user/{id}(id=${oviUser.idOviUser})}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>-->
-                            <a th:href="@{/technical/list-requests}" class="text-decoration-none text-primary small fw-bold">Gestionar</a>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted mb-0">Nous registres d'usuaris OVI</h6>
+                            <span class="badge bg-success-subtle text-success p-2"><i data-lucide="user-plus"></i></span>
                         </div>
+                        <a th:href="@{/ovi-user/list/pending}" class="text-decoration-none text-primary small fw-bold">Revisar</a>
                     </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Nous registres d'usuaris OVI</h6>
-                                <span class="badge bg-success-subtle text-success p-2"><i data-lucide="calendar"></i></span>
-                            </div>
-                            <a th:href="@{/ovi-user/list/pending}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
+                </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-muted mb-0">Nous registres d'assistents personals</h6>
+                            <span class="badge bg-success-subtle text-success p-2"><i data-lucide="heart-plus"></i></span>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-xl-3">
-                        <div class="card h-100 border-0 shadow-sm p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-muted mb-0">Nous registres d'assistents personals</h6>
-                                <span class="badge bg-success-subtle text-success p-2"><i data-lucide="calendar"></i></span>
-                            </div>
-                            <a th:href="@{/pa/list/pending}" class="text-decoration-none text-primary small fw-bold">Explorar</a>
-                        </div>
+                        <a th:href="@{/pa/list/pending}" class="text-decoration-none text-primary small fw-bold">Revisar</a>
                     </div>
                 </div>
             </div>
@@ -136,10 +130,8 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
         // Dibuixem les icones
         lucide.createIcons();
-    });
 </script>
 
 </body>
