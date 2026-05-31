@@ -134,7 +134,7 @@ public class NegotiationController {
 
         negotiationDao.updateNegotiationState(idNegotiation, NegotiationStateEnum.hablando.toString());
 
-        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=ovi";
+        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=ovi-user";
     }
 
     // Enviar un mensaje
