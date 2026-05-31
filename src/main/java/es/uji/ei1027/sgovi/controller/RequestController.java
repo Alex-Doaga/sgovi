@@ -77,20 +77,6 @@ public class RequestController {
     }
 
     // ==========================================
-    //   VER DETALLE DE REQUEST
-    // ==========================================
-
-    //Mostrat una request
-    @RequestMapping("/view/{id}")
-    public String viewRequest(Model model, @PathVariable int id,
-                              @RequestParam(value = "review", required = false, defaultValue = "false") boolean review) {
-
-        model.addAttribute("request", requestDao.getRequest(id));
-        model.addAttribute("isReviewMode", review);
-
-        return "request/view";
-    }
-    // ==========================================
     //   CREAR/AÑADIR Request
     // ==========================================
 
