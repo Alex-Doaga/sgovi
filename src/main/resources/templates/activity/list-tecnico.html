@@ -37,12 +37,12 @@
                 <td th:text="${activity.numberOfParticipants}"></td>
                 <td th:text="${activity.idInstructor}"></td>
                 <td>
-                    <a th:href="@{/activity/join/{id}(id=${activity.idActivity})}"
-                       class="btn btn-primary btn-sm">Apuntar-se</a>
+                    <a th:href="@{/activity/update/{id}(id=${activity.idActivity})}"
+                       class="btn btn-warning btn-sm">Edita</a>
                 </td>
                 <td>
-                    <a th:href="@{/activity/certificado/{id}(id=${activity.idActivity})}"
-                       class="btn btn-info btn-sm text-white">Certificat</a>
+                    <a th:href="@{/activity/delete/{id}(id=${activity.idActivity})}"
+                       class="btn btn-danger btn-sm">Esborra</a>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(activities)}">
@@ -64,7 +64,8 @@
     </div>
 
     <div class="mt-4">
-        <a th:href="@{/}" class="btn btn-secondary">Tornar</a>
+        <a th:href="@{/activity/add}" class="btn btn-success">Afegeix activitat</a>
+        <a th:href="@{/}" class="btn btn-secondary ms-2">Tornar</a>
     </div>
 </main>
 </body>
