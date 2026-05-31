@@ -274,4 +274,20 @@ public class RequestDao {
             return new ArrayList<>();
         }
     }
+
+    // Obtiene solicitudes de un usuario que no tienen contrato y están aceptadas
+    public List<Request> getRequestsWithoutContractByOviUser(int oviUserId) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT r.* FROM request r " +
+                            "LEFT JOIN contract c ON r.id_request = c.id_request " +
+                            "WHERE r.ovi_user_id = ? AND r.state = 'accepted'::state_enum " +
+                            "ORDER BY r.request_date DESC",
+                    new RequestRowMapper(),
+                    oviUserId
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
 }

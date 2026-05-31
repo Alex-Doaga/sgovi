@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Rechazar Solicitud</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
 </head>
-<body>
-<main class="container mt-4">
-    <h1>Rechazar Solicitud de Usuario OVI</h1>
+<body class="bg-light">
+<main class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h1 class="h3 text-danger mb-3">Rechazar Solicitud de Usuario OVI</h1>
 
-    <div class="alert alert-warning" role="alert">
-        Por favor, indica el motivo por el cual se rechaza esta solicitud.
-    </div>
+            <p class="text-muted">
+                Por favor, indica el motivo por el cual se rechaza esta solicitud.
+            </p>
+            <hr>
 
-    <form th:action="@{/ovi-user/reject}" th:object="${oviUser}" method="post">
-        <input type="hidden" th:field="*{idOviUser}"/>
+            <form th:action="@{/ovi-user/reject}" th:object="${oviUser}" method="post">
+                <input type="hidden" th:field="*{idOviUser}"/>
 
-        <div class="mb-3">
-            <label for="rejectionReason" class="form-label">Motiu del rebuig</label>
-            <textarea class="form-control" id="rejectionReason" rows="4"
-                      th:field="*{rejectionReason}" required></textarea>
+                <div class="mb-3">
+                    <label for="rejectionReason" class="form-label fw-bold">Motiu del rebuig</label>
+                    <textarea class="form-control" id="rejectionReason" rows="4"
+                              th:field="*{rejectionReason}"
+                              placeholder="Escriu aquí el motiu..." required></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/ovi-user/list/pending}" class="btn btn-light">Cancel·lar</a>
+                    <button type="submit" class="btn btn-danger">Confirmar Rebuig</button>
+                </div>
+            </form>
         </div>
-
-        <button type="submit" class="btn btn-danger">Confirmar Rebuig</button>
-        <a th:href="@{/ovi-user/list/pending}" class="btn btn-secondary ms-2">Cancel·lar</a>
-    </form>
+    </div>
 </main>
 </body>
 </html>

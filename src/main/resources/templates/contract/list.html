@@ -9,7 +9,11 @@
 <main class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Contractes</h1>
-        <a th:href="@{/ovi-user/list/accepted}" class="btn btn-secondary">Tornar a Usuaris</a>
+        <div>
+            <a th:if="${isUserView}" th:href="@{/contract/add/user/{id}(id=${userId})}" class="btn btn-primary me-2">Afegir Contracte</a>
+            <a th:if="${isUserView}" th:href="@{/ovi-user/dashboard}" class="btn btn-secondary">Tornar al Dashboard</a>
+            <a th:unless="${isUserView}" th:href="@{/ovi-user/list/accepted}" class="btn btn-secondary">Tornar a Usuaris</a>
+        </div>
     </div>
 
     <table class="table table-hover">
@@ -29,7 +33,11 @@
         <tr th:each="contract : ${contracts}">
             <td th:text="${contract.idContract}"></td>
             <td th:text="${contract.idRequest}"></td>
-            <td th:text="${contract.idPa}"></td>
+            <td>
+                <span th:with="pa=${paDao.getPA(contract.idPa)}"
+                      th:text="${pa.name + ' ' + pa.surname}">
+                </span>
+            </td>
             <td th:text="${contract.startDate}"></td>
             <td th:text="${contract.endDate}"></td>
             <td>
@@ -38,15 +46,13 @@
                 </span>
             </td>
             <td>
-                <a th:if="${contract.contractDocument}" th:href="${contract.contractDocument}" target="_blank">Veure DOC</a>
-                <span th:unless="${contract.contractDocument}" class="text-muted">No pujat</span>
-            </td>
+                <span
+                th:text="${contract.contractDocument}">
+                </span>
             <td>
                 <a th:href="@{/contract/update/{id}(id=${contract.idContract})}"
                    class="btn btn-warning btn-sm">Editar</a>
 
-                <a th:href="@{/contract/delete/{id}(id=${contract.idContract})}"
-                   class="btn btn-danger btn-sm">Eliminar</a>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(contracts)}">

@@ -13,13 +13,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import es.uji.ei1027.sgovi.modelo.UserDetails;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/ovi-user")
 public class OviUserController {
 
     private OviUserDao oviUserDao;
+    private int pageLength = 10;
+
     private RequestDao requestDao;
 
     @Autowired
@@ -40,18 +46,21 @@ public class OviUserController {
 
     // Operación listar todos los oviUsers
     @RequestMapping("/list")
-    public String list(Model model) {
-        model.addAttribute("oviUsers", oviUserDao.getOviUsers());
+    public String list(Model model, @RequestParam("page") Optional<Integer> page) {
+        List<OviUser> oviUsers = oviUserDao.getOviUsers();
+        Paginador.paginate(model, oviUsers, page, pageLength, "oviUsersPaged");
+
         model.addAttribute("currentState", "all");
         return "ovi-user/list";
     }
 
     // Operación listar los oviUsers por estado
     @RequestMapping("/list/{state}")
-    public String listByState(Model model, @PathVariable String state) {
-        model.addAttribute("oviUsers", oviUserDao.getOviUsersByState(state)); // O el nombre que tenga tu método en el DAO
-        model.addAttribute("currentState", state); // <-- Añadimos esto
-        return "ovi-user/list"; // <-- Ahora TODOS devuelven la misma vista
+    public String listByState(Model model, @PathVariable String state, @RequestParam("page") Optional<Integer> page) {
+        List<OviUser> oviUsers = oviUserDao.getOviUsersByState(state);
+        Paginador.paginate(model, oviUsers, page, pageLength, "oviUsersPaged");
+        model.addAttribute("currentState", state);
+        return "ovi-user/list";
     }
 
     // ==========================================
@@ -135,9 +144,9 @@ public class OviUserController {
     // ==========================================
 
     // Aceptar solicitud directamente
-    @RequestMapping(value = "/accept/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/accept/{id}", method = RequestMethod.GET)
     public String acceptOviUser(@PathVariable int id) {
-        oviUserDao.updateOviUserState(id, "accepted", "");
+        oviUserDao.updateOviUserState(id, "accepted", null);
         return "redirect:/ovi-user/list/pending";
     }
 
@@ -159,6 +168,13 @@ public class OviUserController {
                 oviUser.getRejectionReason()
         );
         return "redirect:/ovi-user/list/pending";
+    }
+
+    // Vista de confirmación antes de aceptar
+    @RequestMapping(value = "/accept/confirm/{id}", method = RequestMethod.GET)
+    public String confirmAcceptOviUser(Model model, @PathVariable int id) {
+        model.addAttribute("oviUser", oviUserDao.getOviUser(id));
+        return "ovi-user/confirm-accept";
     }
 
     // ==========================================
@@ -216,5 +232,17 @@ public class OviUserController {
         model.addAttribute("oviUser", oviUser);
 
         return "ovi-user/dashboard";
+    }
+
+    // Ver perfil de un usuario OVI
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public String viewOviUser(Model model, @PathVariable int id, @RequestParam(value="review", defaultValue="false") boolean review) {
+        OviUser oviUser = oviUserDao.getOviUser(id); // O como se llame tu método en el DAO
+        model.addAttribute("oviUser", oviUser);
+
+        // Si necesitas pasar una bandera para activar los botones de acción:
+        model.addAttribute("isReviewMode", review);
+
+        return "ovi-user/view";
     }
 }

@@ -51,6 +51,8 @@ public class LoginController {
         // Torna a la pàgina principal
         if (user.getRol().equals("OviUser"))
             return "redirect:/ovi-user/dashboard";
+        else if(user.getRol().equals("Tecnico"))
+            return "redirect:/technical/dashboard";
         return "redirect:/pa/dashboard";
     }
 

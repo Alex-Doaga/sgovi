@@ -248,4 +248,17 @@ public class PA {
                 ", availabilityEndDate=" + availabilityEndDate +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PA pa = (PA) o;
+        return idPa != null && idPa.equals(pa.idPa);
+    }
+
+    @Override
+    public int hashCode() {
+        return idPa != null ? idPa.hashCode() : 0;
+    }
 }

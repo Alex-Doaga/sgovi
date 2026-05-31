@@ -27,7 +27,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "obligatori", "La contrasenya no pot estar buida");
         }
 
-        if (userDetails.getRol()==null || userDetails.getRol().trim().isEmpty() || (!userDetails.getRol().equals("OviUser") && !userDetails.getRol().equals("PA"))){
+        if (userDetails.getRol()==null || userDetails.getRol().trim().isEmpty() || (!userDetails.getRol().equals("OviUser") && !userDetails.getRol().equals("PA") && !userDetails.getRol().equals("Tecnico"))){
             errors.rejectValue("rol","obligatori","l'usuari té que ser OviUser o PA");
         }
     }
