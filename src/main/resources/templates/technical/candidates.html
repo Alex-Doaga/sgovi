@@ -23,104 +23,79 @@
            th:classappend="${currentState == 'withoutContract' ? 'btn-secondary' : 'btn-outline-secondary'}">Sense contracte</a>
     </div>
 
-    <!-- CAMBIO 1: Envoltura th:with para fragmentar los candidatos en páginas -->
     <div th:with="candidates=${#lists.isEmpty(candidatesPaged) ? {} : candidatesPaged[__${selectedPage}__]}">
         <table class="table table-striped align-middle">
-            <thead>
+            <thead class="table-dark">
             <tr>
                 <th>Nom</th>
                 <th>Cognoms</th>
                 <th>Ciutat</th>
                 <th>Contacte</th>
-                <th>Estat negociació</th>
-                <th>Accions</th> </tr>
+                <th th:if="${currentState != 'withContract'}">Estat negociació</th>
+                <th th:if="${currentState != 'withoutContract'}">Estat contracte</th>
+                <th>Accions</th>
+            </tr>
             </thead>
             <tbody>
             <tr th:each="candidate : ${candidates}">
-                <td th:text="${candidate.name}"></td>
-                <td th:text="${candidate.surname}"></td>
-                <td th:text="${candidate.city}"></td>
+                <td th:text="${candidate.getPa().getName()}"></td>
+                <td th:text="${candidate.getPa().getSurname()}"></td>
+                <td th:text="${candidate.getPa().getCity()}"></td>
                 <td>
-                    <div th:text="${candidate.email}"></div>
-                    <small class="text-muted" th:text="${candidate.phone}"></small>
+                    <div th:text="${candidate.getPa().getEmail()}"></div>
+                    <small class="text-muted" th:text="${candidate.getPa().getPhone()}"></small>
                 </td>
 
-    <table class="table table-striped align-middle">
-        <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Cognoms</th>
-            <th>Ciutat</th>
-            <th>Contacte</th>
-            <th th:if="${currentState != 'withContract'}">
-                Estat negociació
-            </th>
-            <th th:if="${currentState != 'withoutContract'}">
-                <span>Estat contracte</span>
-            </th>
-            <th>Accions</th> </tr>
-        </thead>
-        <tbody>
-        <tr th:each="candidate : ${candidates}">
-            <td th:text="${candidate.getPa().getName()}"></td>
-            <td th:text="${candidate.getPa().getSurname()}"></td>
-            <td th:text="${candidate.getPa().getCity()}"></td>
-            <td>
-                <div th:text="${candidate.getPa().getEmail()}"></div>
-                <small class="text-muted" th:text="${candidate.getPa().getPhone()}"></small>
-            </td>
+                <td th:if="${currentState != 'withContract'}" th:text="${candidate.getNegotiationState()}"></td>
+                <td th:if="${currentState != 'withoutContract'}" th:text="${candidate.getContractState()}"></td>
 
-            <td th:if="${currentState != 'withContract'}" th:text="${candidate.getNegotiationState()}"></td>
-            <td th:if="${currentState != 'withoutContract'}" th:text="${candidate.getContractState()}"></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            th:data-bs-target="'#modalPersonalData' + ${candidate.getPa().getIdPa()}">
+                        <i class="bi bi-plus me-1"></i> Més dades
+                    </button>
 
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-primary"
-                        data-bs-toggle="modal"
-                        th:data-bs-target="'#modalPersonalData' + ${candidate.getPa().getIdPa()}">
-                    <i class="bi bi-plus me-1"></i> Més dades
-                </button>
-
-                <div class="modal fade" th:id="'modalPersonalData' + ${candidate.getPa().getIdPa()}" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary text-white">
-                                <h5 class="modal-title">Dades de <span th:text="${candidate.getPa().getName() + ' ' + candidate.getPa().getSurname()}"></span></h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Gènere: </strong><span th:text="${candidate.getPa().getGender().getLabel()}"></span>.</p>
-                                <p><strong>Cumpleanys: </strong><span th:text="${candidate.getPa().getBirthDate()}"></span>.</p>
-                                <p><strong>Direcció: </strong><span th:text="${candidate.getPa().getAddress()}"></span>.</p>
-                                <p><strong>Ciutat: </strong><span th:text="${candidate.getPa().getCity().getLabel()}"></span>.</p>
-                                <p><strong>Codi postal: </strong><span th:text="${candidate.getPa().getPostalCode()}"></span>.</p>
-                                <p><strong>Títol acadèmic: </strong><span th:text="${candidate.getPa().getEducation().getLabel()}"></span>.</p>
-                                <p><strong>Experiència: </strong><span th:text="${candidate.getPa().getExperience()}"></span> anys.</p>
-                                <p><strong>Aficions: </strong><span th:text="${candidate.getPa().getHobbies().getLabel()}"></span>.</p>
-                                <p><strong>Disponibilitat:</strong> Des del
-                                    <span th:text="${candidate.getPa().getAvailabilityStartDate()}"></span>
-                                    fins el
-                                    <span th:text="${candidate.getPa().getAvailabilityEndDate()}"></span>.
-                                </p>
-                                <hr>
+                    <div class="modal fade" th:id="'modalPersonalData' + ${candidate.getPa().getIdPa()}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title">Dades de <span th:text="${candidate.getPa().getName() + ' ' + candidate.getPa().getSurname()}"></span></h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Gènere: </strong><span th:text="${candidate.getPa().getGender().getLabel()}"></span>.</p>
+                                    <p><strong>Cumpleanys: </strong><span th:text="${candidate.getPa().getBirthDate()}"></span>.</p>
+                                    <p><strong>Direcció: </strong><span th:text="${candidate.getPa().getAddress()}"></span>.</p>
+                                    <p><strong>Ciutat: </strong><span th:text="${candidate.getPa().getCity().getLabel()}"></span>.</p>
+                                    <p><strong>Codi postal: </strong><span th:text="${candidate.getPa().getPostalCode()}"></span>.</p>
+                                    <p><strong>Títol acadèmic: </strong><span th:text="${candidate.getPa().getEducation().getLabel()}"></span>.</p>
+                                    <p><strong>Experiència: </strong><span th:text="${candidate.getPa().getExperience()}"></span> anys.</p>
+                                    <p><strong>Aficions: </strong><span th:text="${candidate.getPa().getHobbies().getLabel()}"></span>.</p>
+                                    <p><strong>Disponibilitat:</strong> Des del
+                                        <span th:text="${candidate.getPa().getAvailabilityStartDate()}"></span>
+                                        fins el
+                                        <span th:text="${candidate.getPa().getAvailabilityEndDate()}"></span>.
+                                    </p>
+                                    <hr>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </td>
             </tr>
-            <!-- Mensaje si la lista de candidatos está vacía en esta página -->
             <tr th:if="${#lists.isEmpty(candidates)}">
-                <td colspan="6" class="text-center py-4 text-muted">No hi ha candidats en aquesta pàgina.</td>
+                <td colspan="7" class="text-center py-4 text-muted">No hi ha candidats en aquesta pàgina.</td>
             </tr>
             </tbody>
         </table>
 
-        <!-- CAMBIO 2: Barra de navegación para cambiar de página manteniendo el requestId -->
         <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:each="pageNumber : ${pageNumbers}"
                     th:classappend="${pageNumber == selectedPage + 1} ? 'active'">
                     <a class="page-link"
-                       th:href="@{/technical/candidates/list/{id}(id=${requestId}, page=${pageNumber - 1})}"
+                       th:href="@{'/technical/candidates/' + ${currentState == 'all' ? 'list/' : (currentState == 'withContract' ? 'withContract/' : 'withoutContract/')} + ${requestId}(page=${pageNumber - 1})}"
                        th:text="${pageNumber}"></a>
                 </li>
             </ul>

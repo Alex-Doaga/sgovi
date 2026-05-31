@@ -115,43 +115,52 @@ public class TechnicalController {
 //       return "technical/candidates";
 //    }
     @RequestMapping("/candidates/list/{requestId}")
-    public String listCandidates(Model model, @PathVariable int requestId) {
+    public String listCandidates(Model model, @PathVariable int requestId,
+                                 @RequestParam("page") Optional<Integer> page) {
         System.out.println("REQUEST ID listCandidates " + requestId);
         model.addAttribute("currentState", "all");
         model.addAttribute("requestId", requestId);
-        List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(requestId);
-        model.addAttribute("candidates", candidates);
 
-       return "technical/candidates";
+        List<PACandidateDTO> candidates = requestDao.findCandidatesForRequest(requestId);
+
+        Paginador.paginate(model, candidates, page, pageLength, "candidatesPaged");
+
+        return "technical/candidates";
     }
 
     // Listar los candidatos que no tienen un contrato
     @RequestMapping("/candidates/withoutContract/{requestId}")
-    public String listCandidatesWithoutContract(Model model, @PathVariable int requestId) {
+    public String listCandidatesWithoutContract(Model model, @PathVariable int requestId,
+                                                @RequestParam("page") Optional<Integer> page) {
         System.out.println("REQUEST ID listCandidatesWithoutContract " + requestId);
 
         model.addAttribute("currentState", "withoutContract");
         model.addAttribute("requestId", requestId);
+
         List<PACandidateDTO> candidates = requestDao.findCandidatesWithoutContract(requestId);
-        model.addAttribute("candidates", candidates);
+
+        Paginador.paginate(model, candidates, page, pageLength, "candidatesPaged");
 
         return "technical/candidates";
     }
 
     // Listar los candidatos que tienen contrato
     @RequestMapping("/candidates/withContract/{requestId}")
-    public String listCandidatesWithContract(Model model, @PathVariable int requestId) {
+    public String listCandidatesWithContract(Model model, @PathVariable int requestId,
+                                             @RequestParam("page") Optional<Integer> page) {
         System.out.println("REQUEST ID listCandidatesWithContract " + requestId);
 
         model.addAttribute("currentState", "withContract");
         model.addAttribute("requestId", requestId);
+
         List<PACandidateDTO> candidates = requestDao.findCandidatesWithContract(requestId);
-        model.addAttribute("candidates", candidates);
+
+        // Reutilizamos el paginador con la sublista filtrada
+        Paginador.paginate(model, candidates, page, pageLength, "candidatesPaged");
 
         return "technical/candidates";
     }
 
-    //TODO Noemí: de momento es una prueba
     // Visualizar los detalles de una negociación entra el usuario ovi y el candidato PA de una request
     @RequestMapping("/candidates/negotiation-details/{paId}/{requestId}")
     public String listCandidates(Model model, @PathVariable int paId, @PathVariable int requestId) {
