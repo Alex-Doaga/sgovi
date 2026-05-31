@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 public class PaController {
 
     private PaDao paDao;
-    private int pageLength = 10;
+    private int pageLength = 5;
 
     @Autowired
     public void setPaDao(PaDao paDao) {

@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Gestió d'Activitats</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
 </head>
 <body>
 <main class="container mt-4">
@@ -13,43 +14,54 @@
     <hr>
 
     <div th:with="activities=${#lists.isEmpty(activitiesPaged) ? {} : activitiesPaged[__${selectedPage}__]}">
-        <table class="table table-striped align-middle">
-            <thead class="table-dark">
-            <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Tipus</th>
-                <th scope="col">Descripció</th>
-                <th scope="col">Data</th>
-                <th scope="col">Lloc</th>
-                <th scope="col">Participants</th>
-                <th scope="col">ID Formador</th>
-                <th scope="col">Accions</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="activity : ${activities}">
-                <td th:text="${activity.name}"></td>
-                <td th:text="${activity.typeActivity}"></td>
-                <td th:text="${activity.description}"></td>
-                <td th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></td>
-                <td th:text="${activity.place}"></td>
-                <td th:text="${activity.numberOfParticipants}"></td>
-                <td th:text="${activity.idInstructor}"></td>
-                <td>
-                    <a th:href="@{/activity/update/{id}(id=${activity.idActivity})}"
-                       class="btn btn-warning btn-sm">Edita</a>
-                </td>
-                <td>
-                    <a th:href="@{/activity/delete/{id}(id=${activity.idActivity})}"
-                       class="btn btn-danger btn-sm">Esborra</a>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(activities)}">
-                <td colspan="9" class="text-center py-4 text-muted">No hi ha activitats en aquesta pàgina.</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Tipus</th>
+                    <th>Descripció</th>
+                    <th>Data</th>
+                    <th>Lloc</th>
+                    <th>Participants</th>
+                    <th>ID Formador</th>
+                    <th>Accions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="activity : ${activities}">
+                    <td th:text="${activity.name}"></td>
+                    <td th:text="${activity.typeActivity}"></td>
+                    <td th:text="${activity.description}"></td>
+                    <td th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${activity.place}"></td>
+                    <td th:text="${activity.numberOfParticipants}"></td>
+                    <td th:text="${activity.idInstructor}"></td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a th:href="@{/activity/update/{id}(id=${activity.idActivity})}"
+                               class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Edita
+                            </a>
+                            <a th:href="@{/activity/certificado/{id}(id=${activity.idActivity})}"
+                               class="btn btn-info btn-sm text-white">
+                                <i class="bi bi-file-earmark-pdf"></i> Certificat
+                            </a>
+                            <a th:href="@{/activity/delete/{id}(id=${activity.idActivity})}"
+                               class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Esborra
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(activities)}">
+                    <td colspan="8" class="text-center text-muted py-4">
+                        No hi ha activitats en aquesta pàgina.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
         <nav aria-label="Selecció de pàgina" class="mt-4" th:if="${not #lists.isEmpty(pageNumbers)}">
             <ul class="pagination justify-content-center">
@@ -64,8 +76,12 @@
     </div>
 
     <div class="mt-4">
-        <a th:href="@{/activity/add}" class="btn btn-success">Afegeix activitat</a>
-        <a th:href="@{/}" class="btn btn-secondary ms-2">Tornar</a>
+        <a th:href="@{/activity/add}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Afegeix activitat
+        </a>
+        <a th:href="@{/}" class="btn btn-secondary ms-2">
+            <i class="bi bi-arrow-left"></i> Tornar
+        </a>
     </div>
 </main>
 </body>

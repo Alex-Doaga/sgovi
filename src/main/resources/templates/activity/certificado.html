@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado de Actividad</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .diploma-box {
+            border: 8px double #1a365d;
+            padding: 60px;
+            background-color: #fcfbf7;
+            font-family: 'Georgia', serif;
+        }
+        .diploma-title {
+            color: #1a365d;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container my-5">
+    <div class="mb-4 text-end">
+        <a th:href="@{/activity/list}" class="btn btn-secondary">Volver al listado</a>
+    </div>
+
+    <div class="diploma-box text-center shadow-sm bg-white rounded">
+        <h1 class="display-4 diploma-title">Certificado de Finalización</h1>
+        <p class="lead mt-4">Por la presente se hace constar que se ha completado con éxito la actividad:</p>
+
+        <h2 class="display-6 my-4 text-primary" th:text="${activity?.name}">Nombre de la Actividad</h2>
+
+        <p class="italic text-muted" th:text="${activity?.description}">Descripción de la actividad...</p>
+
+        <p class="lead">Código de registro oficial: <strong th:text="${activity?.idActivity}">0</strong></p>
+
+        <p class="lead" th:if="${activity?.place != null}">
+            Celebrada en: <span th:text="${activity.place}">Lugar</span>
+        </p>
+
+        <p class="lead" th:if="${activity?.date != null}">
+            Fecha de expedición:
+            <span th:text="${#temporals.format(activity.date, 'dd MMMM yyyy')}">30 Mayo 2026</span>
+        </p>
+
+        <div class="mt-5 pt-4 border-top">
+            <p class="text-muted small mb-0">Generado automáticamente por el Sistema SGCOVI</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
