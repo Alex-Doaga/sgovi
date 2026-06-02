@@ -1,8 +1,8 @@
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.modelo.Negotiation;
-import es.uji.ei1027.sgovi.modelo.PACandidate;
 import es.uji.ei1027.sgovi.modelo.PACandidateNegotiation;
+import es.uji.ei1027.sgovi.modelo.PANegotiation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -85,17 +85,17 @@ public class NegotiationDao {
         }
     }
 
-    /* Obtiene todas las negociaciones de un usuario Ovi. Devuelve una lista vacía si no hay negociaciones */
-    public List<PACandidateNegotiation> getNegotiationsByPA(int idPa) {
+    /* Obtiene todas las negociaciones de un PA. Devuelve una lista vacía si no hay negociaciones */
+    public List<PANegotiation> getNegotiationsByPA(int idPa) {
         try {
             return jdbcTemplate.query(
-                    "SELECT pa.*, n.negotiation_state, null as contract_state, r.id_request " +
-                            "FROM negotiation AS n " +
-                            "INNER JOIN request AS r ON r.id_request = n.id_request " +
-                            "INNER JOIN pa ON pa.id_pa = n.id_pa " +
+                    "SELECT n.*, r.*, u.* " +
+                            "FROM negotiation n " +
+                            "INNER JOIN request r ON r.id_request = n.id_request " +
+                            "INNER JOIN ovi_user u ON u.id_ovi_user = r.ovi_user_id " +
                             "WHERE n.id_pa = ? " +
                             "ORDER BY n.start_date DESC",
-                    new PACandidateNegotiationRowMapper(),
+                    new PANegotiationRowMapper(),
                     idPa
             );
         } catch (EmptyResultDataAccessException e) {

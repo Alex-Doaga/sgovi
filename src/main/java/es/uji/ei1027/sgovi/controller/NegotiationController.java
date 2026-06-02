@@ -44,42 +44,33 @@ public class NegotiationController {
         this.requestDao = requestDao;
     }
 
-    @RequestMapping("/list/oviuser/{oviUserId}")
-    public String listNegotiationsOviUser(@PathVariable int oviUserId, Model model) {
-
-        List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByOviUser(oviUserId);
-
-        model.addAttribute("oviUserId", oviUserId);
-        model.addAttribute("rol", null);
-        model.addAttribute("negotiations", negotiations);
-
-        return "negotiation/list";
-    }
-
-    @RequestMapping("/list/{userId}")
-    public String listNegotiations(@PathVariable int userId, Model model, HttpSession session) {
+    //Listar las negociaciones vinculadas a un usuario (oviUser)
+    @RequestMapping("/list/oviuser/{userId}")
+    public String listNegotiationsOviUser(@PathVariable int userId, Model model, HttpSession session) {
 
         List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByOviUser(userId);
 
-        model.addAttribute("oviUserId", userId);
-        model.addAttribute("rol", session.getAttribute("rol"));
+        model.addAttribute("userId", userId);
+        model.addAttribute("userSession", session.getAttribute("user"));
         model.addAttribute("negotiations", negotiations);
 
-        return "negotiation/list";
+        return "negotiation/list-ovi";
     }
 
-    @RequestMapping("/list/pa/{paId}")
-    public String listNegotiationsPA(@PathVariable int paId, Model model) {
+    //Listar las negociaciones vinculadas a un usuario PA
+    @RequestMapping("/list/pa/{userId}")
+    public String listNegotiationsPA(@PathVariable int userId, Model model, HttpSession session) {
 
-        List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByPA(paId);
+        List<PANegotiation> negotiations = negotiationDao.getNegotiationsByPA(userId);
 
-        model.addAttribute("oviUserId", null);
-        model.addAttribute("paId", paId);
+        model.addAttribute("userId", userId);
+        model.addAttribute("userSession", session.getAttribute("user"));
         model.addAttribute("negotiations", negotiations);
 
-        return "negotiation/list";
+        return "negotiation/list-pa";
     }
 
+    //Crear una nueva negociación
     @PostMapping("/start/{requestId}/{paId}")
     public String startNegotiation(@PathVariable int requestId,
                                    @PathVariable int paId) {
@@ -104,7 +95,8 @@ public class NegotiationController {
     @RequestMapping("/details/{paId}/{requestId}")
     public String negotiationDetails(@PathVariable int paId, @PathVariable int requestId,
                                      @RequestParam(required = false) String sender,
-                                     Model model) {
+                                     Model model,
+                                     HttpSession session) {
 
         Negotiation negotiation = negotiationDao.getNegotiationByPaInRequest(paId, requestId);
         Request req = requestDao.getRequest(requestId);
@@ -121,7 +113,7 @@ public class NegotiationController {
         model.addAttribute("messages", messages);
         model.addAttribute("pa", pa);
         model.addAttribute("request", req);
-        model.addAttribute("sender", sender);
+        model.addAttribute("userSession", session.getAttribute("user"));
 
         return "negotiation/details";
     }
@@ -133,12 +125,6 @@ public class NegotiationController {
 
         Negotiation negotiation = negotiationDao.getNegotiation(idNegotiation);
         UserDetails user = (UserDetails) session.getAttribute("user");
-
-        System.out.println("session.getAttributeNames()-------------------");
-        System.out.println(session.getAttributeNames());
-        System.out.println("NEGOTIATION SESSION = " + session.getId());
-
-        System.out.println(session.getAttribute("user"));
 
         if (negotiation == null) {
             return "redirect:/";
@@ -160,6 +146,6 @@ public class NegotiationController {
 
         negotiationDao.updateNegotiationState(idNegotiation, NegotiationStateEnum.hablando.toString());
 
-        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=ovi-user";
+        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=" + user.getRol();
     }
 }

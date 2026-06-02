@@ -38,7 +38,7 @@
           </a>
         </li>
         <li role="listitem">
-          <a th:href="@{/negotiation/list/{id}(id=${pa.getIdPa()})}" class="nav-link">
+          <a th:href="@{/negotiation/list/pa/{id}(id=${pa.getIdPa()})}" class="nav-link">
             <i class="bi bi-people-fill" aria-hidden="true"></i> Negociacions
           </a>
         </li>
@@ -142,7 +142,7 @@
               </div>
               <p class="card-desc">Revisa l'estat de les negociacions en curs i les noves propostes.</p>
               <div class="mt-auto pt-2">
-                <a th:href="@{/negotiation/list/{id}(id=${pa.getIdPa()})}"
+                <a th:href="@{/negotiation/list/pa/{id}(id=${pa.getIdPa()})}"
                    class="card-cta"
                    aria-label="Revisar les meves negociacions">
                   Revisar
