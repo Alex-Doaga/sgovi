@@ -1,0 +1,109 @@
+/* Ajustes puntuales para el login, basados en la estética del dashboard */
+html, body {
+    height: 100%;
+}
+
+.page-wrap {
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Oculta el sidebar en pantallas pequeñas para centrado */
+@media (max-width: 767.98px) {
+    #sidebar {
+        display: none;
+    }
+}
+
+/* Contenedor central del login: usa las mismas sombras/borders que las cards del dashboard */
+.login-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    width: 100%;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.08);
+}
+
+.login-hero {
+    background: linear-gradient(135deg, rgba(13,110,253,0.06), rgba(13,110,253,0.02));
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.logo-square {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0d6efd, #5aa0ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    box-shadow: 0 6px 14px rgba(13,110,253,0.12);
+}
+
+.login-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f1720;
+}
+
+.login-subtitle {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.card-body form .form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.btn-login {
+    width: 100%;
+    background: linear-gradient(90deg,#0d6efd,#3b82f6);
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: .6rem .9rem;
+    border-radius: .5rem;
+    box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(59,130,246,0.16);
+}
+
+/* Mensajes de error (reusa clases del proyecto) */
+.error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: .4rem;
+}
+
+/* Centrar el footer pequeño */
+.login-footer {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-align: center;
+    padding: .8rem 1rem;
+    border-top: 1px solid rgba(0,0,0,0.03);
+    background: #fff;
+}
