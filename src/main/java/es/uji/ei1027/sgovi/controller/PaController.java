@@ -73,7 +73,8 @@ public class PaController {
         // Si todo está perfecto y el DNI es nuevo, lo guardamos en la BD
         paDao.addPA(pa);
 
-        return "redirect:/pa/list";
+        return "redirect:/";
+
     }
 
     // ==========================================
