@@ -70,7 +70,15 @@
             Conversació
         </h2>
 
-        <a th:href="@{/negotiation/list/{id}(id=${request.getOviUserId()})}"
+        <a th:if="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'PA')}"
+           th:href="@{/negotiation/list/pa/{id}(id=${pa.getIdPa()})}"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Tornar
+        </a>
+
+        <a th:if="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'OviUser')}"
+           th:href="@{/negotiation/list/oviuser/{id}(id=${request.getOviUserId()})}"
            class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i>
             Tornar
@@ -113,8 +121,14 @@
 
                 </div>
 
-                <div class="col-md-3">
-                    <strong>PA:</strong><br>
+                <div th:if="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'PA')}" class="col-md-3">
+                    <strong>Usuari OVI:</strong><br>
+                    <span th:text="${request.getOviUserId()}"></span>
+                </div>
+
+
+                <div th:if="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'OviUser')}" class="col-md-3">
+                    <strong>Assistent personal:</strong><br>
                     <span th:text="${pa.name + ' ' + pa.surname}"></span>
                 </div>
 
@@ -148,9 +162,9 @@
 
                     <!-- MISSATGE OVI -->
                     <div th:if="${message.senderType == 'ovi_user'}"
-                         class="message-right">
+                         th:classappend="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'OviUser') ? 'message-right' : 'message-left'}">
 
-                        <div class="bubble-right"
+                        <div th:classappend="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'OviUser') ? 'bubble-right' : 'bubble-left'}"
                              th:text="${message.messageText}">
                         </div>
 
@@ -161,12 +175,11 @@
                     </div>
 
                     <!-- MISSATGE PA -->
-
                     <div th:if="${message.senderType == 'pa'}"
-                         class="message-left">
+                         th:classappend="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'PA') ? 'message-right' : 'message-left'}">
 
-                        <div class="bubble-left"
-                             th:text="${message.messageText}">
+                        <div th:classappend="${userSession != null and #strings.equalsIgnoreCase(userSession.rol,'PA') ? 'bubble-right' : 'bubble-left'}"
+                            th:text="${message.messageText}">
                         </div>
 
                         <div class="message-date"
@@ -177,65 +190,33 @@
                 </div>
             </div>
 
-            <th:block th:if="${sender == 'ovi-user'}">
-                <!-- FORMULARI ENVIAMENT OVI USER-->
-                <form method="post"
-                      th:action="@{/negotiation/message/oviuser}"
-                      class="mt-4">
-                    <input type="hidden"
-                           name="idNegotiation"
-                           th:value="${negotiation.idNegotiation}"/>
+            <!-- FORMULARI ENVIAMENT-->
+            <form method="post"
+                  th:action="@{/negotiation/message}"
+                  class="mt-4">
+                <input type="hidden"
+                       name="idNegotiation"
+                       th:value="${negotiation.idNegotiation}"/>
 
-                    <div class="mb-3">
+                <div class="mb-3">
 
-                    <textarea class="form-control"
-                              name="messageText"
-                              rows="4"
-                              maxlength="1000"
-                              placeholder="Escriu el teu missatge..."
-                              required>
-                    </textarea>
+                <textarea class="form-control"
+                          name="messageText"
+                          rows="4"
+                          maxlength="1000"
+                          placeholder="Escriu el teu missatge..."
+                          required>
+                </textarea>
 
-                    </div>
+                </div>
 
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-send me-1"></i>
-                            Enviar missatge
-                        </button>
-                    </div>
-                </form>
-            </th:block>
-
-            <th:block th:if="${sender == 'pa'}">
-                <!-- FORMULARI PA -->
-                <form method="post"
-                      th:action="@{/negotiation/message/pa}"
-                      class="mt-4">
-                    <input type="hidden"
-                           name="idNegotiation"
-                           th:value="${negotiation.idNegotiation}"/>
-
-                    <div class="mb-3">
-
-                    <textarea class="form-control"
-                              name="messageText"
-                              rows="4"
-                              maxlength="1000"
-                              placeholder="Escriu el teu missatge..."
-                              required>
-                    </textarea>
-
-                    </div>
-
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-send me-1"></i>
-                            Enviar missatge
-                        </button>
-                    </div>
-                </form>
-            </th:block>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send me-1"></i>
+                        Enviar missatge
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

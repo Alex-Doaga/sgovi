@@ -174,13 +174,13 @@ public class ContractController {
         // (Asegúrate de que este método se llame así en tu ContractDao, o cámbialo por el nombre correcto)
         model.addAttribute("contracts", contractDao.getContractsByPa(id));
 
-        // 2. Pasamos esta variable a false para que la vista 'list.html' sepa qué botones mostrar
+        // 2. Pasamos esta variable a false para que la vista 'list-ovi.html' sepa qué botones mostrar
         model.addAttribute("isUserView", false);
 
         // Opcional: Si quieres que el botón "Tornar" vuelva al dashboard del PA
         model.addAttribute("isPaView", true);
 
-        // 3. Devolvemos la plantilla HTML (templates/contract/list.html)
+        // 3. Devolvemos la plantilla HTML (templates/contract/list-ovi.html)
         return "contract/list";
     }
 

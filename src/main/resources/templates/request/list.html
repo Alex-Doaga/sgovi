@@ -19,9 +19,6 @@
   </div>
 
   <div class="mb-3">
-    <a th:href="@{/request/list/user/{id}(id=${userId})}" class="btn btn-sm"
-       th:classappend="${currentState == 'all' ? 'btn-secondary' : 'btn-outline-secondary'}">Totes</a>
-
     <a th:href="@{/request/list/user/{id}/pending(id=${userId})}" class="btn btn-sm"
        th:classappend="${currentState == 'pending' ? 'btn-warning' : 'btn-outline-warning'}">Pendents</a>
 
