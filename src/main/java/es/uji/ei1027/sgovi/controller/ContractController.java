@@ -66,6 +66,8 @@ public class ContractController {
                                     @RequestParam("page") Optional<Integer> page) {
         List<Contract> contracts = contractDao.getContractsByUserId(id);
 
+        model.addAttribute("contracts", contracts);
+
         Paginador.paginate(model, contracts, page, pageLength, "contractsPaged");
 
         model.addAttribute("userId", id);
