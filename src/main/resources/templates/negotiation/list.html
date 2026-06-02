@@ -16,6 +16,7 @@
         <thead class="table-dark">
         <tr>
             <th>Candidat</th>
+            <th>Solicitud</th>
             <th>Estat negociació</th>
             <th>Estat contracte</th>
             <th>Accions</th>
@@ -27,6 +28,7 @@
         <tr th:each="negotiation : ${negotiations}">
 
             <td th:text="${negotiation.getPa().getName() + ' ' + negotiation.getPa().getSurname()}"></td>
+            <td th:text="${negotiation.getRequestId()}"></td>
 
             <td>
                 <span th:if="${negotiation.getNegotiationState() == 'hablando'}" class="badge bg-success">
@@ -53,7 +55,7 @@
             </td>
 
             <td>
-                <a class="btn btn-outline-primary btn-sm" th:href="@{/negotiation/details/{idPa}/{idRequest}(idPa=${negotiation.getPa().getIdPa()}, idRequest=${negotiation.getRequestId()})}">
+                <a class="btn btn-outline-primary btn-sm" th:if="${negotiation.getNegotiationState() == 'hablando'}" th:href="@{/negotiation/details/{idPa}/{idRequest}(idPa=${negotiation.getPa().getIdPa()}, idRequest=${negotiation.getRequestId()})}">
                     <i class="bi bi-chat-dots"></i>
                     Veure conversació
                 </a>

@@ -6,6 +6,7 @@ import es.uji.ei1027.sgovi.dao.PaDao;
 import es.uji.ei1027.sgovi.dao.RequestDao;
 import es.uji.ei1027.sgovi.modelo.*;
 import es.uji.ei1027.sgovi.modelo.enums.NegotiationStateEnum;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +50,19 @@ public class NegotiationController {
         List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByOviUser(oviUserId);
 
         model.addAttribute("oviUserId", oviUserId);
-        model.addAttribute("paId", null);
+        model.addAttribute("rol", null);
+        model.addAttribute("negotiations", negotiations);
+
+        return "negotiation/list";
+    }
+
+    @RequestMapping("/list/{userId}")
+    public String listNegotiations(@PathVariable int userId, Model model, HttpSession session) {
+
+        List<PACandidateNegotiation> negotiations = negotiationDao.getNegotiationsByOviUser(userId);
+
+        model.addAttribute("oviUserId", userId);
+        model.addAttribute("rol", session.getAttribute("rol"));
         model.addAttribute("negotiations", negotiations);
 
         return "negotiation/list";
@@ -114,11 +127,18 @@ public class NegotiationController {
     }
 
     // Enviar un mensaje
-    @PostMapping("/message/oviuser")
-    public String sendMessageOviUser(@RequestParam int idNegotiation,
-                              @RequestParam String messageText) {
+    @PostMapping("/message")
+    public String sendMessage(@RequestParam int idNegotiation, @RequestParam String messageText,
+                                    HttpSession session) {
 
         Negotiation negotiation = negotiationDao.getNegotiation(idNegotiation);
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        System.out.println("session.getAttributeNames()-------------------");
+        System.out.println(session.getAttributeNames());
+        System.out.println("NEGOTIATION SESSION = " + session.getId());
+
+        System.out.println(session.getAttribute("user"));
 
         if (negotiation == null) {
             return "redirect:/";
@@ -127,7 +147,13 @@ public class NegotiationController {
         Message message = new Message();
 
         message.setIdNegotiation(idNegotiation);
-        message.setSenderType(Message.SENDER_OVI_USER);
+
+        if (user.getRol().equals("OviUser")) {
+            message.setSenderType(Message.SENDER_OVI_USER);
+        }
+        else if (user.getRol().equals("PA")) {
+            message.setSenderType(Message.SENDER_PA);
+        }
         message.setMessageText(messageText);
 
         messageDao.addMessage(message);
@@ -136,29 +162,4 @@ public class NegotiationController {
 
         return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=ovi-user";
     }
-
-    // Enviar un mensaje
-    @PostMapping("/message/pa")
-    public String sendMessagePA(@RequestParam int idNegotiation,
-                              @RequestParam String messageText) {
-
-        Negotiation negotiation = negotiationDao.getNegotiation(idNegotiation);
-
-        if (negotiation == null) {
-            return "redirect:/";
-        }
-
-        Message message = new Message();
-
-        message.setIdNegotiation(idNegotiation);
-        message.setSenderType(Message.SENDER_PA);
-        message.setMessageText(messageText);
-
-        messageDao.addMessage(message);
-
-        negotiationDao.updateNegotiationState(idNegotiation, NegotiationStateEnum.hablando.toString());
-
-        return "redirect:/negotiation/details/" + negotiation.getIdPa() + "/" + negotiation.getIdRequest() + "?sender=pa";
-    }
-
 }
