@@ -1,0 +1,12 @@
+.diploma-box {
+    border: 8px double #1a365d;
+    padding: 60px;
+    background-color: #fcfbf7;
+    font-family: 'Georgia', serif;
+}
+
+.diploma-title {
+    color: #1a365d;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
